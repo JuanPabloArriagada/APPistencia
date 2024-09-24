@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Clases Registradas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="day-buttons">
+    <ion-button expand="full" (click)="selectDay('Lunes')">L</ion-button>
+    <ion-button expand="full" (click)="selectDay('Martes')">M</ion-button>
+    <ion-button expand="full" (click)="selectDay('Miércoles')">X</ion-button>
+    <ion-button expand="full" (click)="selectDay('Jueves')">J</ion-button>
+    <ion-button expand="full" (click)="selectDay('Viernes')">V</ion-button>
+  </div>
+
+  <div *ngIf="selectedDay" class="class-list">
+    <h2>Clases para {{ selectedDay }}</h2>
+    <ion-list>
+      <ion-item *ngFor="let clase of clasesRegistradas[selectedDay]">
+        <ion-label>
+          <h3>{{ clase.classCode }} - {{ clase.room }}</h3>
+          <p>{{ clase.startTime }} - {{ clase.endTime }}</p>
+          <button>Generar qr</button>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="full" (click)="clearSelection()">Volver a seleccionar</ion-button>
+  </div>
+</ion-content>

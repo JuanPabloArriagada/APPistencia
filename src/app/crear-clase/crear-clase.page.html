@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear Clase</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="onSubmit()" #classForm="ngForm">
+    <ion-item>
+      <ion-label position="floating">Código de Clase</ion-label>
+      <ion-input type="text" required [(ngModel)]="classData.classCode" name="classCode"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Código Sección</ion-label>
+      <ion-input type="text" required [(ngModel)]="classData.sectionCode" name="sectionCode"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Cantidad Alumnos</ion-label>
+      <ion-input type="number" required [(ngModel)]="classData.studentCount" name="studentCount"></ion-input>
+    </ion-item>
+
+    <div *ngFor="let session of classData.sessions; let i = index" class="session">
+      <h3>Día y Sala {{ i + 1 }}</h3>
+      <ion-item>
+        <ion-label position="floating">Sala</ion-label>
+        <ion-input type="text" required [(ngModel)]="session.room" name="room{{i}}"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="floating">Día</ion-label>
+        <ion-select required [(ngModel)]="session.day" name="day{{i}}">
+          <ion-select-option value="Lunes">Lunes</ion-select-option>
+          <ion-select-option value="Martes">Martes</ion-select-option>
+          <ion-select-option value="Miércoles">Miércoles</ion-select-option>
+          <ion-select-option value="Jueves">Jueves</ion-select-option>
+          <ion-select-option value="Viernes">Viernes</ion-select-option>
+        </ion-select>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="floating">Inicio</ion-label>
+        <ion-input type="time" required [(ngModel)]="session.startTime" name="startTime{{i}}"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="floating">Fin</ion-label>
+        <ion-input type="time" required [(ngModel)]="session.endTime" name="endTime{{i}}"></ion-input>
+      </ion-item>
+      
+      <ion-button expand="full" (click)="removeSession(i)">Eliminar</ion-button>
+    </div>
+
+    <ion-button expand="full" (click)="addSession()">Añadir Día y Sala</ion-button>
+
+    <ion-button type="submit" expand="full" [disabled]="!classForm.valid">Guardar</ion-button>
+  </form>
+</ion-content>

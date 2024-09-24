@@ -19,6 +19,22 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   },
+  {
+    path: 'crear-clase',
+    loadChildren: () => import('./crear-clase/crear-clase.module').then( m => m.CrearClasePageModule)
+  },
+  {
+    path: 'clases',
+    loadChildren: () => import('./generarQr/clases/clases.module').then( m => m.ClasesPageModule)
+  },
+  {
+    path: 'generar-qr',
+    loadChildren: () => import('./generarQr/generar-qr/generar-qr.module').then( m => m.GenerarQRPageModule)
+  },
+  {
+    path: 'horario',
+    loadChildren: () => import('./horario/horario.module').then( m => m.HorarioPageModule)
+  },
 ];
 
 @NgModule({

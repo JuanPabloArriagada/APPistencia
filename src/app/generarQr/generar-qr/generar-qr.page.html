@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registro de Asistencia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qr-container">
+    <img src="assets/qr-code.png" alt="Código QR" /> <!-- Reemplaza con la ruta de tu imagen QR -->
+  </div>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Total de Alumnos: {{ totalAlumnos }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Confirmados: {{ confirmados }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Inasistentes: {{ inasistentes }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Alumnos Faltantes por Escanear:</ion-label>
+    </ion-item>
+    <ion-item *ngFor="let alumno of alumnosFaltantes">
+      <ion-label>{{ alumno }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" (click)="finalizarRegistro()">Finalizar</ion-button>
+</ion-content>
