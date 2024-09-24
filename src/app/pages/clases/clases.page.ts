@@ -36,6 +36,7 @@ export class ClasesPage implements OnInit {
   }
 
   showGenerateQR: boolean = false;
+  titulo: string = 'Clases';
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
@@ -43,6 +44,7 @@ export class ClasesPage implements OnInit {
     // Lee el parámetro de la ruta
     this.route.data.subscribe(data => {
       this.showGenerateQR = data['showGenerateQR'] || false;
+      this.titulo = data['titulo'] || 'Clases';
     });
   }
   generarQR() {
