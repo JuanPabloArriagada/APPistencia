@@ -25,7 +25,12 @@ const routes: Routes = [
   },
   {
     path: 'clases',
-    loadChildren: () => import('./pages/clases/clases.module').then( m => m.ClasesPageModule)
+    loadChildren: () => import('./pages/clases/clases.module').then(m => m.ClasesPageModule)
+  },
+  {
+    path: 'crear-qr',
+    loadChildren: () => import('./pages/clases/clases.module').then(m => m.ClasesPageModule),
+    data: { showGenerateQR: true }
   },
   {
     path: 'generar-qr',
