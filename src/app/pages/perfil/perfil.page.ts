@@ -24,11 +24,6 @@ export class PerfilPage implements OnInit {
     console.log('Perfil cerrado');
   }
 
-  // Método para volver atrás
-  goBack() {
-    this.navCtrl.back();
-  }
-
   ngOnInit() {
   }
 }
