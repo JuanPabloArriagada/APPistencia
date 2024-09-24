@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>cambiar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #reestablecerForm="ngForm" (ngSubmit)="cambiarContrasena()">
+    <ion-item>
+      <ion-label position="floating">Nueva Contraseña</ion-label>
+      <ion-input type="password" name="nuevaContrasena" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Confirmar Contraseña</ion-label>
+      <ion-input type="password" name="confirmarContrasena" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" [disabled]="!reestablecerForm.form.valid">Restablecer Contraseña</ion-button>
+  </form>
+</ion-content>

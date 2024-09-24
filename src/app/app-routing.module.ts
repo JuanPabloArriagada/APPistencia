@@ -56,6 +56,10 @@ const routes: Routes = [
     path: 'verificar',
     loadChildren: () => import('./pages/verificar/verificar.module').then( m => m.VerificarPageModule)
   },
+  {
+    path: 'cambiar',
+    loadChildren: () => import('./pages/cambiar/cambiar.module').then( m => m.CambiarPageModule)
+  },
 
 ];
 

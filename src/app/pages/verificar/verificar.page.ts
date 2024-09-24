@@ -20,7 +20,7 @@ export class VerificarPage implements OnInit {
     // Aquí verificas el código con el servidor
     console.log('Código:', this.codigo);
     console.log('Método de Verificación:', this.metodoVerificacion);
-
+    this.router.navigate(['/cambiar'])
     // Si el código es correcto, redirige al usuario a la página de cambio de contraseña
     // this.router.navigate(['/cambiar-contraseña']);
   }
