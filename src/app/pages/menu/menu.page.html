@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button>Perfil</ion-button>
+      <ion-button routerLink="/perfil">Perfil</ion-button> <!-- Ruta a perfil -->
     </ion-buttons>
     <ion-title>Menu</ion-title>
   </ion-toolbar>
@@ -14,26 +14,26 @@
       <!-- Botones para el tipo de usuario 'Docente' -->
       <ng-container *ngIf="userType === 'Docente'">
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Generar >QR</ion-button>
+          <ion-button class="mb-3 w-100" routerLink="/crear-qr">Generar QR</ion-button> <!-- Ruta a Generar QR -->
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Clases registradas</ion-button>
+          <ion-button class="mb-3 w-100" routerLink="/clases">Clases registradas</ion-button> <!-- Ruta a Clases registradas -->
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="w-100">Crear clases</ion-button>
+          <ion-button class="w-100" routerLink="/crear-clase">Crear clases</ion-button> <!-- Ruta a Crear clases -->
         </div>
       </ng-container>
 
       <!-- Botones para el tipo de usuario 'Alumno' -->
       <ng-container *ngIf="userType === 'Alumno'">
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Horario</ion-button>
+          <ion-button class="mb-3 w-100" routerLink="/horario">Horario</ion-button> <!-- Ruta a Horario -->
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Escanear QR</ion-button>
+          <ion-button class="mb-3 w-100" routerLink="/escaner">Escanear QR</ion-button> <!-- Ruta a Escanear QR -->
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="w-100">Asistencia</ion-button>
+          <ion-button class="w-100" routerLink="/asistencia">Asistencia</ion-button> <!-- Ruta a Asistencia -->
         </div>
       </ng-container>
     </div>

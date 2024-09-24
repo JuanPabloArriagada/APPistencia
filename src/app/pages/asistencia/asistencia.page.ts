@@ -22,7 +22,4 @@ export class AsistenciaPage {
 
   constructor(private navCtrl: NavController) {}
 
-  goBack() {
-    this.navCtrl.back();
-  }
 }

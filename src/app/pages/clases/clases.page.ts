@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 type DayOfWeek = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes';
 
 @Component({
@@ -34,7 +35,19 @@ export class ClasesPage implements OnInit {
     this.selectedDay = null;
   }
 
-  ngOnInit() {
-  }
+  showGenerateQR: boolean = false;
+  titulo: string = 'Clases';
 
+  constructor(private route: ActivatedRoute, private router: Router) { }
+
+  ngOnInit() {
+    // Lee el parámetro de la ruta
+    this.route.data.subscribe(data => {
+      this.showGenerateQR = data['showGenerateQR'] || false;
+      this.titulo = data['titulo'] || 'Clases';
+    });
+  }
+  generarQR() {
+    this.router.navigate(['/generar-qr']);
+  }
 }

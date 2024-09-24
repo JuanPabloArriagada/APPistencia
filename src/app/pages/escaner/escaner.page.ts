@@ -12,10 +12,6 @@ export class EscanerPage implements OnInit {
 
   constructor(private navCtrl: NavController) {}
 
-  goBack() {
-    this.navCtrl.back();
-  }
-
   simulateScan() {
     this.scannedData = "Datos del código QR: Clase 101, Profesor: Juan Pérez";
   }
