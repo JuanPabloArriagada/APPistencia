@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>recuperar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #recuperarForm="ngForm" (ngSubmit)="recuperar()">
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Método de Verificación</ion-label>
+      <ion-select [(ngModel)]="metodoVerificacion" name="metodoVerificacion" required>
+        <ion-select-option value="correo" (click)="setCode(321)">Correo</ion-select-option>
+        <ion-select-option value="sms" (click)="setCode(123)">SMS</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button expand="block" type="submit">Enviar</ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,16 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>verificar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #verificarForm="ngForm" (ngSubmit)="verificar()">
+    <ion-item>
+      <ion-label position="floating">Código</ion-label>
+      <ion-input type="text" [(ngModel)]="codigo" name="codigo" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit">Verificar</ion-button>
+  </form>
+</ion-content>

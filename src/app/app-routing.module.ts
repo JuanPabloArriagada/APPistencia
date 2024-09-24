@@ -48,7 +48,15 @@ const routes: Routes = [
   {
     path: 'escaner',
     loadChildren: () => import('./pages/escaner/escaner.module').then( m => m.EscanerPageModule)
+  },  {
+    path: 'recuperar',
+    loadChildren: () => import('./pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
   },
+  {
+    path: 'verificar',
+    loadChildren: () => import('./pages/verificar/verificar.module').then( m => m.VerificarPageModule)
+  },
+
 ];
 
 @NgModule({
