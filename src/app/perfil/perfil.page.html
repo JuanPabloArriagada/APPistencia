@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">Volver Atrás</ion-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding text-center">
+  <img [src]="profile.imageUrl" alt="Imagen de Perfil" class="profile-image" />
+  
+  <h2>{{ profile.name }}</h2>
+  <p>Email: {{ profile.email }}</p>
+  <p>RUT: {{ profile.rut }}</p>
+  <p>Rol: {{ profile.role }}</p>
+
+  <ion-button expand="full" (click)="closeProfile()">Cerrar Perfil</ion-button>
+</ion-content>

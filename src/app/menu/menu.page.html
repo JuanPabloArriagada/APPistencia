@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button>Perfil</ion-button>
+    </ion-buttons>
+    <ion-title>Menu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="d-flex justify-content-center align-items-center" style="height: 100%;">
+  <div class="container my-5">
+    <div class="row text-center">
+      <!-- Botones para el tipo de usuario 'admin' -->
+      <ng-container *ngIf="userType === 'admin'">
+        <div class="col-12 col-md-4">
+          <ion-button class="mb-3 w-100">Botón Admin 1</ion-button>
+        </div>
+        <div class="col-12 col-md-4">
+          <ion-button class="mb-3 w-100">Botón Admin 2</ion-button>
+        </div>
+        <div class="col-12 col-md-4">
+          <ion-button class="w-100">Botón Admin 3</ion-button>
+        </div>
+      </ng-container>
+
+      <!-- Botones para el tipo de usuario 'usuario' -->
+      <ng-container *ngIf="userType === 'usuario'">
+        <div class="col-12 col-md-4">
+          <ion-button class="mb-3 w-100">Botón Usuario 1</ion-button>
+        </div>
+        <div class="col-12 col-md-4">
+          <ion-button class="mb-3 w-100">Botón Usuario 2</ion-button>
+        </div>
+        <div class="col-12 col-md-4">
+          <ion-button class="w-100">Botón Usuario 3</ion-button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ion-content>
