@@ -1,38 +1,42 @@
 <ion-header>
+  <app-header>
+  </app-header>
   <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/perfil">Perfil</ion-button> <!-- Ruta a perfil -->
+    <ion-buttons slot="end" color="secondary">
+      <ion-button color ="secondary" routerLink="/perfil">
+        <ion-icon name="person-circle-outline">Perfil</ion-icon>
+      </ion-button> <!-- Ruta a perfil -->
     </ion-buttons>
-    <ion-title>Menu</ion-title>
-  </ion-toolbar>
+  <ion-title>Menu</ion-title>
+</ion-toolbar>
 </ion-header>
 
-<ion-content class="d-flex justify-content-center align-items-center" style="height: 100%;">
+<ion-content class="ion-padding" style="height: 100%;">
   <p>User Type: {{ userType }}</p>
-  <div class="container my-5">
-    <div class="row text-center">
+  <div class="ion-text-center">
+    <div>
       <!-- Botones para el tipo de usuario 'Docente' -->
       <ng-container *ngIf="userType === 'Docente'">
-        <div class="col-12 col-md-4">
+        <div >
           <ion-button class="mb-3 w-100" routerLink="/crear-qr">Generar QR</ion-button> <!-- Ruta a Generar QR -->
         </div>
-        <div class="col-12 col-md-4">
+        <div >
           <ion-button class="mb-3 w-100" routerLink="/clases">Clases registradas</ion-button> <!-- Ruta a Clases registradas -->
         </div>
-        <div class="col-12 col-md-4">
+        <div >
           <ion-button class="w-100" routerLink="/crear-clase">Crear clases</ion-button> <!-- Ruta a Crear clases -->
         </div>
       </ng-container>
 
       <!-- Botones para el tipo de usuario 'Alumno' -->
       <ng-container *ngIf="userType === 'Alumno'">
-        <div class="col-12 col-md-4">
+        <div >
           <ion-button class="mb-3 w-100" routerLink="/horario">Horario</ion-button> <!-- Ruta a Horario -->
         </div>
-        <div class="col-12 col-md-4">
+        <div>
           <ion-button class="mb-3 w-100" routerLink="/escaner">Escanear QR</ion-button> <!-- Ruta a Escanear QR -->
         </div>
-        <div class="col-12 col-md-4">
+        <div >
           <ion-button class="w-100" routerLink="/asistencia">Asistencia</ion-button> <!-- Ruta a Asistencia -->
         </div>
       </ng-container>

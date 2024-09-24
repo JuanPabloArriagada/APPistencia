@@ -1,9 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title></ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-list>
     <form #miform="ngForm" (ngSubmit)="enviar()">
@@ -16,12 +10,12 @@
       <ion-button type="submit" expand="block" fill="solid" (click)="setUserType('Alumno')">
         Iniciar sesión Alumno
       </ion-button>
-      <ion-button type="submit" expand="block" fill="clear" shape="round" (click)="setUserType('Docente')">
+      <ion-button color='secondary' type="submit" expand="block" fill="clear" shape="round" (click)="setUserType('Docente')">
         Iniciar sesion Docente
       </ion-button>
     </form>
   </ion-list>
-    <ion-button (click)="recuperar()" expand="block" fill="clear" shape="round">
+    <ion-button color='secondary' (click)="recuperar()" expand="block" fill="clear" shape="round">
       Olvide la contraseña
     </ion-button>
 </ion-content>
