@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
 @Component({
@@ -16,11 +17,12 @@ export class PerfilPage implements OnInit {
     imageUrl: 'https://via.placeholder.com/150', // URL de la imagen de perfil
   };
 
-  constructor(private navCtrl: NavController) {}
+  constructor(private navCtrl: NavController, private router:Router) {}
 
   // Método para cerrar el perfil
   closeProfile() {
     // Aquí puedes agregar la lógica para cerrar la sesión o redirigir a otra página
+    this.router.navigate(['/home'])
     console.log('Perfil cerrado');
   }
 
