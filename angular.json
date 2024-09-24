@@ -33,8 +33,8 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"],
+              "src/theme/variables.scss"
+              ],
             "scripts": []
           },
           "configurations": {
@@ -81,7 +81,7 @@
               "buildTarget": "app:build:development"
             },
             "ci": {
-              "progress": false
+              
             }
           },
           "defaultConfiguration": "development"

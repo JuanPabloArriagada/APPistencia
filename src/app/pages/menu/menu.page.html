@@ -8,31 +8,32 @@
 </ion-header>
 
 <ion-content class="d-flex justify-content-center align-items-center" style="height: 100%;">
+  <p>User Type: {{ userType }}</p>
   <div class="container my-5">
     <div class="row text-center">
-      <!-- Botones para el tipo de usuario 'admin' -->
-      <ng-container *ngIf="userType === 'admin'">
+      <!-- Botones para el tipo de usuario 'Docente' -->
+      <ng-container *ngIf="userType === 'Docente'">
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Botón Admin 1</ion-button>
+          <ion-button class="mb-3 w-100">Generar >QR</ion-button>
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Botón Admin 2</ion-button>
+          <ion-button class="mb-3 w-100">Clases registradas</ion-button>
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="w-100">Botón Admin 3</ion-button>
+          <ion-button class="w-100">Crear clases</ion-button>
         </div>
       </ng-container>
 
-      <!-- Botones para el tipo de usuario 'usuario' -->
-      <ng-container *ngIf="userType === 'usuario'">
+      <!-- Botones para el tipo de usuario 'Alumno' -->
+      <ng-container *ngIf="userType === 'Alumno'">
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Botón Usuario 1</ion-button>
+          <ion-button class="mb-3 w-100">Horario</ion-button>
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="mb-3 w-100">Botón Usuario 2</ion-button>
+          <ion-button class="mb-3 w-100">Escanear QR</ion-button>
         </div>
         <div class="col-12 col-md-4">
-          <ion-button class="w-100">Botón Usuario 3</ion-button>
+          <ion-button class="w-100">Asistencia</ion-button>
         </div>
       </ng-container>
     </div>

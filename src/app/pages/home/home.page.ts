@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  constructor() { }
+  userType: string = '';
+
+  constructor(private router:Router) { }
 
   ngOnInit() {
+  }
+
+  enviar(){
+    this.router.navigate(['/menu' , { userType: this.userType }])
+  }
+
+  setUserType(type: string) {
+    this.userType = type;
+    
+    console.log(this.userType);
   }
 
 }

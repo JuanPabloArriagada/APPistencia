@@ -1,13 +1,24 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list>
+    <form #miform="ngForm" (ngSubmit)="enviar()">
+      <ion-item>
+        <ion-input required type="text" label="Nombre de Usuario" labelPlacement="floating" placeholder="Usuario"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input required type="password" label="Contraseña de Usuario" labelPlacement="floating" placeholder="Contraseña"></ion-input>
+      </ion-item>
+      <ion-button type="submit" expand="block" fill="solid" (click)="setUserType('Alumno')">
+        Iniciar sesión Alumno
+      </ion-button>
+      <ion-button type="submit" expand="block" fill="clear" shape="round" (click)="setUserType('Docente')">
+        Iniciar sesion Docente
+      </ion-button>
+    </form>
+  </ion-list>
 </ion-content>
