@@ -25,4 +25,7 @@ export class HomePage implements OnInit {
     console.log(this.userType);
   }
 
+  recuperar(){
+    this.router.navigate(['/recuperar'])
+  }
 }
