@@ -12,24 +12,36 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'dashboard',
-    loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+    path: 'menu',
+    loadChildren: () => import('./menu/menu.module').then( m => m.MenuPageModule)
   },
   {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+    path: 'perfil',
+    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
-    path: 'profile',
-    loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
+    path: 'crear-clase',
+    loadChildren: () => import('./crear-clase/crear-clase.module').then( m => m.CrearClasePageModule)
+  },
+  {
+    path: 'clases',
+    loadChildren: () => import('./generarQr/clases/clases.module').then( m => m.ClasesPageModule)
+  },
+  {
+    path: 'generar-qr',
+    loadChildren: () => import('./generarQr/generar-qr/generar-qr.module').then( m => m.GenerarQRPageModule)
   },
   {
     path: 'horario',
-    loadChildren: () => import('./pages/horario/horario.module').then( m => m.HorarioPageModule)
+    loadChildren: () => import('./horario/horario.module').then( m => m.HorarioPageModule)
   },
   {
-    path: 'asistencias',
-    loadChildren: () => import('./pages/asistencias/asistencias.module').then( m => m.AsistenciasPageModule)
+    path: 'asistencia',
+    loadChildren: () => import('./asistencia/asistencia.module').then( m => m.AsistenciaPageModule)
+  },
+  {
+    path: 'escaner',
+    loadChildren: () => import('./Escanearqr/escaner/escaner.module').then( m => m.EscanerPageModule)
   },
 ];
 
