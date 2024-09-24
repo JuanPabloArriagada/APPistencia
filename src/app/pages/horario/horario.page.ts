@@ -35,6 +35,7 @@ export class HorarioPage implements OnInit {
   }
 
   ngOnInit() {
+    this.selectDay('L');
   }
 
 }
