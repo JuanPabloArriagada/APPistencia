@@ -1,23 +1,30 @@
-<ion-content [fullscreen]="true">
-  <app-header></app-header>
-
-  <ion-list>
-    <form #miform="ngForm" (ngSubmit)="enviar()">
-      <ion-item>
-        <ion-input required type="text" label="Nombre de Usuario" labelPlacement="floating" placeholder="Usuario"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input required type="password" label="Contraseña de Usuario" labelPlacement="floating" placeholder="Contraseña"></ion-input>
-      </ion-item>
-      <ion-button type="submit" expand="block" fill="solid" (click)="setUserType('Alumno')">
-        Iniciar sesión Alumno
-      </ion-button>
-      <ion-button color='secondary' type="submit" expand="block" fill="clear" shape="round" (click)="setUserType('Docente')">
-        Iniciar sesion Docente
-      </ion-button>
-    </form>
-  </ion-list>
-    <ion-button color='secondary' (click)="recuperar()" expand="block" fill="clear" shape="round">
-      Olvide la contraseña
-    </ion-button>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="col-12 col-md-6 col-lg-4 contenedor-login">
+      <div class="card p-4 bg-transparent">
+        <form #miform="ngForm" (ngSubmit)="enviar()">
+          <ion-list>
+            <ion-item>
+              <ion-input required type="text" label="Nombre de Usuario" labelPlacement="floating" placeholder="Usuario">
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input required type="password" label="Contraseña de Usuario" labelPlacement="floating"
+                placeholder="Contraseña">
+              </ion-input>
+            </ion-item>
+            <ion-button type="submit" expand="block" fill="solid" (click)="setUserType('Alumno')">
+              Iniciar sesión Alumno
+            </ion-button>
+            <ion-button type="submit" expand="block" fill="clear" shape="round" (click)="setUserType('Docente')">
+              Iniciar sesión Docente
+            </ion-button>
+          </ion-list>
+        </form>
+        <ion-button (click)="recuperar()" expand="block" fill="clear" shape="round">
+          Olvidé la contraseña
+        </ion-button>
+      </div>
+    </div>
+  </div>
 </ion-content>
