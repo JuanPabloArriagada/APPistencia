@@ -48,7 +48,8 @@ const routes: Routes = [
   {
     path: 'escaner',
     loadChildren: () => import('./pages/escaner/escaner.module').then( m => m.EscanerPageModule)
-  },  {
+  },
+  {
     path: 'recuperar',
     loadChildren: () => import('./pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
   },
@@ -59,6 +60,10 @@ const routes: Routes = [
   {
     path: 'cambiar',
     loadChildren: () => import('./pages/cambiar/cambiar.module').then( m => m.CambiarPageModule)
+  },
+  {
+    path: 'registro',
+    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
   },
 
 ];

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LocalDBService } from '../../services/dbstorage.service';
+import { Usuario } from 'src/app/interfaces/usuario';
 
 @Component({
   selector: 'app-home',
@@ -8,24 +10,30 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit {
 
-  userType: string = '';
+  usuario: Usuario={
+    rut:'',
+    Nombre:'',
+    correo:'',
+    rol:'',
+    foto:'',
+    contrasena:'',
+  }
 
-  constructor(private router:Router) { }
+  constructor(
+    private router:Router,
+    private db:LocalDBService,
+  ) { }
 
   ngOnInit() {
   }
 
-  enviar(){
-    this.router.navigate(['/menu' , { userType: this.userType }])
-  }
-
-  setUserType(type: string) {
-    this.userType = type;
-    
-    console.log(this.userType);
-  }
-
-  recuperar(){
-    this.router.navigate(['/recuperar'])
+  login(){
+    /* Verificar si existe el ususario */
+    let buscado=this.db.login(this.usuario.rut)
+    buscado.then(datos=>{
+      if(datos!==null){
+        this.router.navigate(['/menu'])
+      }
+    })
   }
 }

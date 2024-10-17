@@ -2,22 +2,19 @@
   <app-header></app-header>
 
   <ion-list>
-    <form #miform="ngForm" (ngSubmit)="enviar()">
+    <form  #loginForm="ngForm" (ngSubmit)="login()">
       <ion-item>
-        <ion-input required type="text" label="Nombre de Usuario" labelPlacement="floating" placeholder="Usuario"></ion-input>
+        <ion-input [(ngModel)]="usuario.rut" name="rut" required type="text" label="Nombre de Usuario" labelPlacement="floating" placeholder="Usuario"></ion-input>
       </ion-item>
       <ion-item>
         <ion-input required type="password" label="Contraseña de Usuario" labelPlacement="floating" placeholder="Contraseña"></ion-input>
       </ion-item>
-      <ion-button type="submit" expand="block" fill="solid" (click)="setUserType('Alumno')">
-        Iniciar sesión Alumno
-      </ion-button>
-      <ion-button color='secondary' type="submit" expand="block" fill="clear" shape="round" (click)="setUserType('Docente')">
-        Iniciar sesion Docente
+      <ion-button type="submit" expand="block" fill="solid">
+        Iniciar sesión
       </ion-button>
     </form>
-  </ion-list>
-    <ion-button color='secondary' (click)="recuperar()" expand="block" fill="clear" shape="round">
-      Olvide la contraseña
+    <ion-button href="registro" type="submit" expand="block" fill="solid">
+      Registrarse
     </ion-button>
+  </ion-list>
 </ion-content>
