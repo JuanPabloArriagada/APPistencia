@@ -7,17 +7,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="text-center">
-      <img [src]="profile.imageUrl" alt="Imagen de Perfil" class="profile-image mb-3 rounded-circle" style="width: 150px; height: 150px;" />
-      
-      <h2>{{ profile.name }}</h2>
-      <p>Email: {{ profile.email }}</p>
-      <p>RUT: {{ profile.rut }}</p>
-      <p>Rol: {{ profile.role }}</p>
+<ion-content class="ion-padding text-center">
+  <img [src]="profile.imageUrl" alt="Imagen de Perfil" class="profile-image" />
+  
+  <h2>{{ profile.name }}</h2>
+  <p>Email: {{ profile.email }}</p>
+  <p>RUT: {{ profile.rut }}</p>
+  <p>Rol: {{ profile.role }}</p>
 
-      <ion-button expand="full" (click)="closeProfile()">Cerrar Perfil</ion-button>
-    </div>
-  </div>
+  <ion-button expand="full" (click)="closeProfile()">Cerrar Perfil</ion-button>
 </ion-content>
