@@ -33,10 +33,9 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "src/theme/variables.scss"
               ],
-            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
+            "scripts": []
           },
           "configurations": {
             "production": {
