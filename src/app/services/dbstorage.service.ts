@@ -1,7 +1,6 @@
-import { Key } from './../../../node_modules/ngx-indexed-db/lib/ngx-indexed-db.meta.d';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { NgxIndexedDBModule } from 'ngx-indexed-db';
+
 
 
 @Injectable({
@@ -27,7 +26,7 @@ export class LocalDBService {
     this._storage?.set(key, value);
   }
 
-  public async login(key: string){
+  public async obtener(key: string){
     const valor = await this._storage?.get(key);
     return valor
   }

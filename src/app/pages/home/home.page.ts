@@ -29,10 +29,12 @@ export class HomePage implements OnInit {
 
   login(){
     /* Verificar si existe el ususario */
-    let buscado=this.db.login(this.usuario.rut)
+    let buscado = this.db.obtener(this.usuario.rut)
     buscado.then(datos=>{
-      if(datos!==null){
-        this.router.navigate(['/menu'])
+      if(datos !== null){
+        if(datos.rut===this.usuario.rut && datos.contrasena===this.usuario.contrasena){
+          this.router.navigate(['/menu' , { rut: this.usuario.rut }])
+        }
       }
     })
   }
