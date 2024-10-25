@@ -27,7 +27,11 @@ export class HomePage implements OnInit {
 
   async login() {
     const datos = await this.db.obtenerUsuarioPorRut(this.usuario.rut);
-
+  
+    // Log de datos obtenidos y contraseña ingresada
+    console.log('Datos obtenidos:', datos);
+    console.log('Contraseña ingresada:', this.usuario.contrasena);
+  
     if (datos && datos.contrasena === this.usuario.contrasena) {
       this.router.navigate(['/menu', { rut: this.usuario.rut }]);
     } else {

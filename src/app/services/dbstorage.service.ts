@@ -20,10 +20,14 @@ export class LocalDBService {
   // Registrar un usuario nuevo
   public async registro(usuario: Usuario) {
     await this._storage?.set(usuario.rut, usuario);
+    console.log('Usuario registrado:', usuario); // Agrega este log
   }
+
 
   // Obtener un usuario por RUT
   public async obtenerUsuarioPorRut(rut: string): Promise<Usuario | null> {
-    return (await this._storage?.get(rut)) || null;
+    const usuario = await this._storage?.get(rut);
+    console.log('Usuario obtenido:', usuario); // Agrega este log
+    return usuario || null;
   }
 }
