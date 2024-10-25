@@ -7,14 +7,24 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./menu.page.scss'],
 })
 export class MenuPage implements OnInit {
+  rut: string = '';
+  rol: string = '';
+  usuarioActual: Usuario | null = null;
 
-  userType: string = '';
+  constructor(
+    private route: ActivatedRoute,
+    private db:LocalDBService,
+  ) {}
 
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
+  async ngOnInit() {
     // Recoger el parámetro de la ruta
-    this.userType = this.route.snapshot.paramMap.get('userType') || ''; 
-    console.log('Tipo de Usuario:', this.userType);
+    this.rut = this.route.snapshot.paramMap.get('rut') || ''; 
+
+    /* Busca al usuario */
+    let buscado = this.db.obtener(this.rut)
+    buscado.then(datos =>{
+      this.rol = (datos.rol)
+    })
+    }
   }
 }

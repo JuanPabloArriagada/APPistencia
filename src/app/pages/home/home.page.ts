@@ -9,31 +9,29 @@ import { Usuario } from 'src/app/interfaces/usuario';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-
-  usuario: Usuario={
-    rut:'',
-    Nombre:'',
-    correo:'',
-    rol:'',
-    foto:'',
-    contrasena:'',
-  }
+  usuario: Usuario = {
+    rut: '',
+    Nombre: '',
+    correo: '',
+    rol: '',
+    foto: '',
+    contrasena: '',
+  };
 
   constructor(
-    private router:Router,
-    private db:LocalDBService,
-  ) { }
+    private router: Router,
+    private db: LocalDBService
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  login(){
-    /* Verificar si existe el ususario */
-    let buscado=this.db.login(this.usuario.rut)
-    buscado.then(datos=>{
-      if(datos!==null){
-        this.router.navigate(['/menu'])
-      }
-    })
+  async login() {
+    const datos = await this.db.obtenerUsuarioPorRut(this.usuario.rut);
+
+    if (datos && datos.contrasena === this.usuario.contrasena) {
+      this.router.navigate(['/menu', { rut: this.usuario.rut }]);
+    } else {
+      console.log('Credenciales incorrectas');
+    }
   }
 }

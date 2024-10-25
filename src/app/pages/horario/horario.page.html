@@ -20,10 +20,11 @@
     </ion-item>
     <ion-item *ngFor="let clase of clasesRegistradas[selectedDay]">
       <ion-label>
-        {{ clase.classCode }} - {{ clase.room }} ({{ clase.startTime }} - {{ clase.endTime }})
+        Sala: {{ clase.codigoSala }} 
+        ({{ clase.horaInicio }} - {{ clase.horaFin }})
       </ion-label>
     </ion-item>
-    <ion-item *ngIf="clasesRegistradas[selectedDay].length === 0">
+    <ion-item *ngIf="clasesRegistradas[selectedDay]?.length === 0">
       <ion-label>No hay clases registradas para este día.</ion-label>
     </ion-item>
   </ion-list>

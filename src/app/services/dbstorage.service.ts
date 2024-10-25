@@ -1,34 +1,29 @@
-import { Key } from './../../../node_modules/ngx-indexed-db/lib/ngx-indexed-db.meta.d';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
-import { NgxIndexedDBModule } from 'ngx-indexed-db';
-
+import { Usuario } from '../interfaces/usuario';
 
 @Injectable({
   providedIn: 'root'
 })
-
-
 export class LocalDBService {
-
   private _storage: Storage | null = null;
 
   constructor(private storage: Storage) {
-    this.init(); 
+    this.init();
   }
 
   async init() {
-    // If using, define drivers here: await this.storage.defineDriver(/*...*/);
     const storage = await this.storage.create();
     this._storage = storage;
   }
 
-  public registro(key: string, value:any){
-    this._storage?.set(key, value);
+  // Registrar un usuario nuevo
+  public async registro(usuario: Usuario) {
+    await this._storage?.set(usuario.rut, usuario);
   }
 
-  public async login(key: string){
-    const valor = await this._storage?.get(key);
-    return valor
+  // Obtener un usuario por RUT
+  public async obtenerUsuarioPorRut(rut: string): Promise<Usuario | null> {
+    return (await this._storage?.get(rut)) || null;
   }
 }
