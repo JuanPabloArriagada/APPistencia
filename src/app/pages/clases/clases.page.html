@@ -1,32 +1,38 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
+      <ion-back-button color="dark" defaultHref="/menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ titulo }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Selección de día -->
   <div class="day-buttons">
-    <ion-button expand="full" (click)="selectDay('Lunes')">L</ion-button>
-    <ion-button expand="full" (click)="selectDay('Martes')">M</ion-button>
-    <ion-button expand="full" (click)="selectDay('Miércoles')">X</ion-button>
-    <ion-button expand="full" (click)="selectDay('Jueves')">J</ion-button>
-    <ion-button expand="full" (click)="selectDay('Viernes')">V</ion-button>
+    <ion-button expand="full" *ngFor="let day of daysOfWeek" (click)="selectDay(day)">
+      {{ day[0] }}
+    </ion-button>
   </div>
 
+  <!-- Lista de clases del día seleccionado -->
   <div *ngIf="selectedDay" class="class-list">
     <h2>Clases para {{ selectedDay }}</h2>
-    <ion-list>
+    <ion-list *ngIf="clasesRegistradas[selectedDay]?.length > 0; else noClasses">
       <ion-item *ngFor="let clase of clasesRegistradas[selectedDay]">
         <ion-label>
-          <h3>{{ clase.classCode }} - {{ clase.room }}</h3>
-          <p>{{ clase.startTime }} - {{ clase.endTime }}</p>
-          <ion-button *ngIf="showGenerateQR" expand="block" (click)="generarQR()">Generar QR</ion-button>
+          <h3>{{ clase.codigoSala }}</h3>
+          <p>{{ clase.horaInicio }} - {{ clase.horaFin }}</p>
         </ion-label>
+        <ion-button expand="block" *ngIf="showGenerateQR" color="secondary" (click)="generarQR()">
+          Generar QR
+        </ion-button>
       </ion-item>
     </ion-list>
-    <ion-button expand="full" (click)="clearSelection()">Volver a seleccionar</ion-button>
+    <ng-template #noClasses>
+      <p>No hay clases registradas para este día.</p>
+    </ng-template>
+
+    <ion-button expand="full" color="medium" (click)="clearSelection()">Volver a seleccionar</ion-button>
   </div>
 </ion-content>

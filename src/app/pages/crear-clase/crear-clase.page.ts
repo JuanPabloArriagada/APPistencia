@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AsignaturaService } from '../../services/asignaturas.service';
+import { LocalDBService } from '../../services/dbstorage.service';
 import { Asignatura, Horario } from '../../interfaces/asignatura';
-import { v4 as uuidv4 } from 'uuid'; // Para generar IDs únicas
+import { Usuario } from '../../interfaces/usuario';
+import { v4 as uuidv4 } from 'uuid';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-crear-clase',
@@ -12,37 +15,63 @@ export class CrearClasePage implements OnInit {
   asignatura: Asignatura = {
     id: '',
     nombre: '',
-    horarios: [
-      { dia: '', horaInicio: '', horaFin: '', codigoSala: '' } 
-    ],
-    profesorId: ''  // Aquí puedes asignar el ID del profesor actual
+    horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '' }],
+    profesorId: ''
   };
 
-  constructor(private asignaturaService: AsignaturaService) { }
+  rut: string = '';
+  usuarioActual!: Usuario;  // Almacena al usuario actual
 
-  ngOnInit() {}
+  constructor(
+    private asignaturaService: AsignaturaService,
+    private db: LocalDBService,
+    private route: ActivatedRoute
+  ) {}
 
-  // Agregar un nuevo horario
+  async ngOnInit() {
+    this.rut = this.route.snapshot.paramMap.get('rut') || '';
+    
+    // Cargar el usuario actual (profesor)
+    const usuario = await this.db.obtenerUsuarioPorRut(this.rut); 
+    if (usuario) {
+      this.usuarioActual = usuario;
+    } else {
+      console.warn(`Usuario con rut ${this.rut} no encontrado`);
+    }
+  }
+
   agregarHorario() {
     this.asignatura.horarios.push({ dia: '', horaInicio: '', horaFin: '', codigoSala: '' });
   }
 
-  // Eliminar un horario
   eliminarHorario(index: number) {
     this.asignatura.horarios.splice(index, 1);
   }
 
-  // Guardar la asignatura con su horario
   async guardarAsignatura() {
-    this.asignatura.id = uuidv4(); // Generar ID único para la asignatura
+    // Generar ID único para la asignatura
+    this.asignatura.id = uuidv4();
+    this.asignatura.profesorId = this.usuarioActual.rut;
+
+    // Guarda la asignatura en el servicio
     await this.asignaturaService.guardarAsignatura(this.asignatura);
-    console.log('Asignatura guardada:', this.asignatura);
-    // Reiniciar el formulario
+
+    // Actualiza las asignaturas creadas en el usuario actual
+    if (!this.usuarioActual.asignaturasCreadas) {
+      this.usuarioActual.asignaturasCreadas = [];
+    }
+    this.usuarioActual.asignaturasCreadas.push(this.asignatura.id);
+
+    // Guarda el usuario actualizado en LocalDBService
+    await this.db.registro(this.usuarioActual);
+
+    // Reinicia el formulario
     this.asignatura = {
       id: '',
       nombre: '',
       horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '' }],
-      profesorId: '' // agregar la logica para obtener el ID del profesor actual
+      profesorId: ''
     };
+    console.log('Asignatura guardada y registrada en el profesor:', this.asignatura);
   }
 }

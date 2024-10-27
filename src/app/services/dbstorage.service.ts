@@ -7,6 +7,8 @@ import { Usuario } from '../interfaces/usuario';
 })
 export class LocalDBService {
   private _storage: Storage | null = null;
+  private dbKey = 'usuariosDB';  // Llave en localStorage para almacenar los usuarios 
+
 
   constructor(private storage: Storage) {
     this.init();
@@ -17,17 +19,19 @@ export class LocalDBService {
     this._storage = storage;
   }
 
-  // Registrar un usuario nuevo
-  public async registro(usuario: Usuario) {
-    await this._storage?.set(usuario.rut, usuario);
-    console.log('Usuario registrado:', usuario); // Agrega este log
+  // Guarda el usuario en localStorage
+  async registro(usuario: Usuario) {
+    const usuarios = JSON.parse(localStorage.getItem(this.dbKey) || '[]');
+    usuarios.push(usuario);
+    localStorage.setItem(this.dbKey, JSON.stringify(usuarios));
   }
 
-
-  // Obtener un usuario por RUT
-  public async obtenerUsuarioPorRut(rut: string): Promise<Usuario | null> {
-    const usuario = await this._storage?.get(rut);
-    console.log('Usuario obtenido:', usuario); // Agrega este log
-    return usuario || null;
+  // Obtiene un usuario por rut
+  async obtenerUsuarioPorRut(rut: string): Promise<Usuario | null> {
+    const usuarios: Usuario[] = JSON.parse(localStorage.getItem(this.dbKey) || '[]');
+    const usuarioEncontrado = usuarios.find(usuario => usuario.rut === rut);
+    return usuarioEncontrado || null;
   }
+
+  
 }

@@ -23,6 +23,7 @@ export class MenuPage implements OnInit {
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
 
     if (this.rut) {
+      // Cargar datos del usuario según el rut
       const datos = await this.db.obtenerUsuarioPorRut(this.rut);
       if (datos) {
         this.usuarioActual = datos;
