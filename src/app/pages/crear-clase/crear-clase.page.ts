@@ -15,8 +15,9 @@ export class CrearClasePage implements OnInit {
   asignatura: Asignatura = {
     id: '',
     nombre: '',
-    horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '' }],
-    profesorId: ''
+    horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: '' }],
+    profesorId: '',
+    inscritos: []
   };
 
   rut: string = '';
@@ -41,7 +42,7 @@ export class CrearClasePage implements OnInit {
   }
 
   agregarHorario() {
-    this.asignatura.horarios.push({ dia: '', horaInicio: '', horaFin: '', codigoSala: '' });
+    this.asignatura.horarios.push({ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: this.asignatura.id });
   }
 
   eliminarHorario(index: number) {
@@ -69,8 +70,9 @@ export class CrearClasePage implements OnInit {
     this.asignatura = {
       id: '',
       nombre: '',
-      horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '' }],
-      profesorId: ''
+      horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: '' }],
+      profesorId: '',
+      inscritos: []
     };
     console.log('Asignatura guardada y registrada en el profesor:', this.asignatura);
   }

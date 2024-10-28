@@ -34,8 +34,8 @@ const routes: Routes = [
     data: { showGenerateQR: true , titulo: 'Generar QR' }
   },
   {
-    path: 'generar-qr',
-    loadChildren: () => import('./pages/generar-qr/generar-qr.module').then( m => m.GenerarQRPageModule)
+    path: 'generar-qr/:rut',
+    loadChildren: () => import('./pages/generar-qr/generar-qr.module').then(m => m.GenerarQRPageModule)
   },
   {
     path: 'horario',

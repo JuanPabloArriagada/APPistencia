@@ -16,20 +16,20 @@
 
   <div *ngIf="selectedDay" class="class-list">
     <h2>Clases para {{ selectedDay }}</h2>
-    <ion-list *ngIf="selectedDay && clasesRegistradas[selectedDay] && clasesRegistradas[selectedDay].length > 0; else noClasses">
-      <ion-item *ngFor="let registro of clasesRegistradas[selectedDay]">
-        <ion-label>
-          <h3>{{ registro.nombreAsignatura }} - {{ registro.clase.codigoSala }}</h3>
-          <p>{{ registro.clase.horaInicio }} - {{ registro.clase.horaFin }}</p>
+    <ion-list *ngIf="clasesRegistradas[selectedDay] && clasesRegistradas[selectedDay].length > 0; else noClasses">
+      <ion-item *ngFor="let item of clasesRegistradas[selectedDay]">
+        <ion-label> 
+          <h3>{{ item.clase.codigoSala }} - {{ item.nombreAsignatura }}</h3>
+          <p>{{ item.clase.horaInicio }} - {{ item.clase.horaFin }}</p>
         </ion-label>
-        <ion-button expand="block" *ngIf="showGenerateQR" color="secondary" (click)="generarQR()">
+        <ion-button expand="block" *ngIf="showGenerateQR" color="secondary"  (click)="selectClase(item.clase)" (click)="generarQR()">
           Generar QR
         </ion-button>
       </ion-item>
-    </ion-list>       
+    </ion-list>      
     <ng-template #noClasses>
       <p>No hay clases registradas para este día.</p>
-    </ng-template>
+    </ng-template>    
     <ion-button expand="full" color="medium" (click)="clearSelection()">Volver a seleccionar</ion-button>
   </div>
 </ion-content>

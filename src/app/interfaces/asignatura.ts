@@ -3,6 +3,7 @@ export interface Horario {
   horaInicio: string;
   horaFin: string;
   codigoSala: string;
+  asignaturaId: string;
 }
 
   
@@ -11,6 +12,7 @@ export interface Asignatura {
   nombre: string;
   profesorId: string;   //para vincular el profesor con la asignatura, esto lo veremos cuando este subido el login
   horarios: Horario[];
+  inscritos: string[];
 }
 
 export interface Clase {

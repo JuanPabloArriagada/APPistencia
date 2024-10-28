@@ -36,7 +36,7 @@ export class AsignaturaService {
     return asignaturas.filter(asignatura => asignatura.profesorId === usuarioId);
   }
 
-  async agregarClase(asignaturaId: string, clase: Clase): Promise<Clase | null> {
+  async agregarClaseaHorario(asignaturaId: string, clase: Clase): Promise<Clase | null> {
     const asignaturas = await this.obtenerAsignaturas();
     const asignatura = asignaturas.find(a => a.id === asignaturaId);
 

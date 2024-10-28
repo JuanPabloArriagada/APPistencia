@@ -14,6 +14,7 @@ type DayOfWeek = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes';
 export class ClasesPage implements OnInit {
   daysOfWeek: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   selectedDay: DayOfWeek | null = null;
+  selectedClase: Horario | null = null; // Para almacenar la clase seleccionada
   clasesRegistradas: Record<DayOfWeek, { clase: Horario, nombreAsignatura: string }[]> = {
     Lunes: [],
     Martes: [],
@@ -40,10 +41,10 @@ export class ClasesPage implements OnInit {
     await this.cargarClasesPorUsuario();
   }
 
+  // Verifica si hay clases registradas para el día seleccionado por el usuario y retorna un valor booleano
   hayClasesParaElDia(): boolean {
     return this.selectedDay !== null && this.clasesRegistradas[this.selectedDay]?.length > 0;
   }
-
 
   async cargarClasesPorUsuario() {
     const asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario(this.usuarioId);
@@ -56,17 +57,36 @@ export class ClasesPage implements OnInit {
       }
     }
   }
-  
 
   selectDay(day: DayOfWeek) {
     this.selectedDay = day;
   }
 
+  selectClase(clase: Horario) {
+    this.selectedClase = clase;
+    console.log('Clase seleccionada:', clase); // Para depurar
+  }
+
   clearSelection() {
     this.selectedDay = null;
+    this.selectedClase = null; // Limpiar clase seleccionada
   }
 
   generarQR() {
-    this.router.navigate(['/qr', this.usuarioId]);
+  
+    if (this.selectedClase && this.selectedDay) {
+      const { horaInicio, horaFin, codigoSala, asignaturaId } = this.selectedClase;
+      this.router.navigate(['/generar-qr', this.usuarioId], {
+        queryParams: {
+          dia: this.selectedDay,  // Usar el día seleccionado aquí
+          horaInicio: horaInicio,
+          horaFin: horaFin,
+          codigoSala: codigoSala,
+          asignaturaId: asignaturaId
+        }
+      });
+    } else {
+      console.error('No se ha seleccionado ninguna clase o día para generar QR.');
+    }
   }
 }
