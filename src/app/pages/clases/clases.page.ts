@@ -12,10 +12,17 @@ type DayOfWeek = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes';
   styleUrls: ['./clases.page.scss'],
 })
 export class ClasesPage implements OnInit {
+  daysOfWeek: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   selectedDay: DayOfWeek | null = null;
-  clasesRegistradas: Record<DayOfWeek, Horario[]> = { Lunes: [], Martes: [], Miércoles: [], Jueves: [], Viernes: [] };
-  titulo: string = 'Clases';
+  clasesRegistradas: Record<DayOfWeek, { clase: Horario, nombreAsignatura: string }[]> = {
+    Lunes: [],
+    Martes: [],
+    Miércoles: [],
+    Jueves: [],
+    Viernes: []
+  };
   showGenerateQR: boolean = false;
+  titulo: string = 'Clases';
   usuarioId: string = '';
 
   constructor(
@@ -33,17 +40,23 @@ export class ClasesPage implements OnInit {
     await this.cargarClasesPorUsuario();
   }
 
+  hayClasesParaElDia(): boolean {
+    return this.selectedDay !== null && this.clasesRegistradas[this.selectedDay]?.length > 0;
+  }
+
+
   async cargarClasesPorUsuario() {
     const asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario(this.usuarioId);
     for (const asignatura of asignaturas) {
       for (const clase of asignatura.horarios) {
         const dia = clase.dia as DayOfWeek;
         if (this.clasesRegistradas[dia]) {
-          this.clasesRegistradas[dia].push(clase);
+          this.clasesRegistradas[dia].push({ clase, nombreAsignatura: asignatura.nombre });
         }
       }
     }
   }
+  
 
   selectDay(day: DayOfWeek) {
     this.selectedDay = day;
@@ -54,6 +67,6 @@ export class ClasesPage implements OnInit {
   }
 
   generarQR() {
-    this.router.navigate(['/generar-qr', { rut: this.usuarioId }]);
+    this.router.navigate(['/qr', this.usuarioId]);
   }
 }

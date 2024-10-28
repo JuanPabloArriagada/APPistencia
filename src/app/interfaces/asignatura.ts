@@ -15,8 +15,11 @@ export interface Asignatura {
 
 export interface Clase {
   id: string;
+  asignaturaId: string;
   dia: string;
   horaInicio: string;
   horaFin: string;
   codigoSala: string;
+  asistentes: string[];
+  inasistentes: string[];
 }
