@@ -11,19 +11,26 @@
 </ion-header>
 
 <ion-content class="ion-padding" style="height: 100%;">
+  <p>User Type: {{ rol }} </p>
   <div class="ion-text-center">
-    <ng-container *ngIf="usuarioActual">
-      <!-- Opciones para 'Profesor' -->
+    <div>
+      <!-- Botones para el tipo de usuario 'Docente' -->
       <ng-container *ngIf="rol === 'Profesor'">
-        <ion-button class="mb-3 w-100" [routerLink]="['/crear-qr', { rut: rut }]">Generar QR</ion-button>
-        <ion-button class="mb-3 w-100" [routerLink]="['/clases', { rut: rut }]">Clases registradas</ion-button>
-        <ion-button class="w-100" [routerLink]="['/crear-clase', { rut: rut }]">Crear clases</ion-button>
+        <div>
+          <ion-button class="mb-3 w-100" routerLink="/crear-qr">Generar QR</ion-button>
+        </div>
+        <div>
+          <ion-button class="mb-3 w-100" routerLink="/clases">Clases registradas</ion-button>
+        </div>
+        <div>
+          <ion-button class="w-100" routerLink="/crear-clase">Crear clases</ion-button>
+        </div>
       </ng-container>
 
-      <!-- Opciones para 'Estudiante' -->
+      <!-- Botones para el tipo de usuario 'Alumno' -->
       <ng-container *ngIf="rol === 'Estudiante'">
         <div>
-          <ion-button class="mb-3 w-100" [routerLink]="['/horario', { rut: rut }]">Horario</ion-button>
+          <ion-button class="mb-3 w-100" routerLink="/horario">Horario</ion-button>
         </div>
         <div>
           <ion-button class="mb-3 w-100" [routerLink]="['/escaner', { rut: rut }]">Escanear QR</ion-button>
@@ -32,6 +39,6 @@
           <ion-button class="w-100" [routerLink]="['/asistencia', { rut: rut }]">Asistencia</ion-button>
         </div>
       </ng-container>
-    </ng-container>
+    </div>
   </div>
 </ion-content>

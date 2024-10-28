@@ -9,7 +9,6 @@ export class LocalDBService {
   private _storage: Storage | null = null;
   private dbKey = 'usuariosDB';  // Llave en localStorage para almacenar los usuarios 
 
-
   constructor(private storage: Storage) {
     this.init();
   }
@@ -33,5 +32,8 @@ export class LocalDBService {
     return usuarioEncontrado || null;
   }
 
-  
+  public async obtener(key: string) {
+    const valor = await this._storage?.get(key);
+    return valor;
+  }
 }

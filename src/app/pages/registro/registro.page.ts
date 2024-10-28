@@ -18,6 +18,8 @@ export class RegistroPage implements OnInit {
     contrasena: '',
   };
 
+  correo: string = "";
+
   constructor(
     private db: LocalDBService,
     private router: Router
