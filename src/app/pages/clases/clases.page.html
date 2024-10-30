@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
+      <ion-back-button color="dark" defaultHref="/menu"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ titulo }}</ion-title>
   </ion-toolbar>
@@ -9,24 +9,27 @@
 
 <ion-content class="ion-padding">
   <div class="day-buttons">
-    <ion-button expand="full" (click)="selectDay('Lunes')">L</ion-button>
-    <ion-button expand="full" (click)="selectDay('Martes')">M</ion-button>
-    <ion-button expand="full" (click)="selectDay('Miércoles')">X</ion-button>
-    <ion-button expand="full" (click)="selectDay('Jueves')">J</ion-button>
-    <ion-button expand="full" (click)="selectDay('Viernes')">V</ion-button>
+    <ion-button expand="full" *ngFor="let day of daysOfWeek" (click)="selectDay(day)">
+      {{ day[0] }}
+    </ion-button>
   </div>
 
   <div *ngIf="selectedDay" class="class-list">
     <h2>Clases para {{ selectedDay }}</h2>
-    <ion-list>
-      <ion-item *ngFor="let clase of clasesRegistradas[selectedDay]">
-        <ion-label>
-          <h3>{{ clase.classCode }} - {{ clase.room }}</h3>
-          <p>{{ clase.startTime }} - {{ clase.endTime }}</p>
-          <ion-button *ngIf="showGenerateQR" expand="block" (click)="generarQR()">Generar QR</ion-button>
+    <ion-list *ngIf="clasesRegistradas[selectedDay] && clasesRegistradas[selectedDay].length > 0; else noClasses">
+      <ion-item *ngFor="let item of clasesRegistradas[selectedDay]">
+        <ion-label> 
+          <h3>{{ item.clase.codigoSala }} - {{ item.nombreAsignatura }}</h3>
+          <p>{{ item.clase.horaInicio }} - {{ item.clase.horaFin }}</p>
         </ion-label>
+        <ion-button expand="block" *ngIf="showGenerateQR" color="secondary"  (click)="selectClase(item.clase)" (click)="generarQR()">
+          Generar QR
+        </ion-button>
       </ion-item>
-    </ion-list>
-    <ion-button expand="full" (click)="clearSelection()">Volver a seleccionar</ion-button>
+    </ion-list>      
+    <ng-template #noClasses>
+      <p>No hay clases registradas para este día.</p>
+    </ng-template>    
+    <ion-button expand="full" color="medium" (click)="clearSelection()">Volver a seleccionar</ion-button>
   </div>
 </ion-content>

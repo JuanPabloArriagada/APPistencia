@@ -2,12 +2,28 @@
   <app-header></app-header>
 
   <ion-list>
-    <form  #loginForm="ngForm" (ngSubmit)="login()">
+    <form #loginForm="ngForm" (ngSubmit)="login()">
       <ion-item>
-        <ion-input [(ngModel)]="usuario.rut" name="rut" label="R.U.T" placeholder="123456789" type="text" label-placement="floating" fill="outline" [clearInput]="true" [counter]="true" maxlength="9" required></ion-input>
+        <ion-input
+          [(ngModel)]="usuario.rut"
+          name="rut"
+          required
+          type="text"
+          label="rut"
+          labelPlacement="floating"
+          placeholder="Usuario"
+        ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input [(ngModel)]="usuario.contrasena" name="contraseña" required type="password" label="Contraseña de Usuario" labelPlacement="floating" placeholder="Contraseña"></ion-input>
+        <ion-input
+          [(ngModel)]="usuario.contrasena" 
+          required
+          type="password"
+          name="contrasena" 
+          label="Contraseña de Usuario"
+          labelPlacement="floating"
+          placeholder="Contraseña"
+        ></ion-input>
       </ion-item>
       <ion-button type="submit" expand="block" fill="solid">
         Iniciar sesión

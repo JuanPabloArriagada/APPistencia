@@ -9,25 +9,30 @@ import { LocalDBService } from 'src/app/services/dbstorage.service';
   styleUrls: ['./menu.page.scss'],
 })
 export class MenuPage implements OnInit {
-
-  rut:string = "";
-  rol: string = "";
-  usr: Usuario[] = [];
+  rut: string = '';
+  rol: string = '';
+  usuarioActual: Usuario | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private db:LocalDBService,
+    private db: LocalDBService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     // Recoger el parámetro de la ruta
-    this.rut = this.route.snapshot.paramMap.get('rut') || ''; 
+    this.rut = this.route.snapshot.paramMap.get('rut') || '';
 
-    /* Busca al usuario */
-    let buscado = this.db.obtener(this.rut)
-    buscado.then(datos =>{
-      this.rol = (datos.rol)
-    })
+    if (this.rut) {
+      // Cargar datos del usuario según el rut
+      const datos = await this.db.obtenerUsuarioPorRut(this.rut);
+      if (datos) {
+        this.usuarioActual = datos;
+        this.rol = datos.rol;
+      } else {
+        console.warn(`Usuario con rut ${this.rut} no encontrado`);
+      }
+    } else {
+      console.warn('RUT no proporcionado en la URL');
     }
   }
-
+}

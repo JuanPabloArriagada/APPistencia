@@ -9,44 +9,38 @@ import { Router } from '@angular/router';
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage implements OnInit {
+  usuario: Usuario = {
+    rut: '',
+    Nombre: '',
+    correo: '',
+    rol: '',
+    foto: '',
+    contrasena: '',
+  };
 
-  usuario: Usuario={
-    rut:'',
-    Nombre:'',
-    correo:'',
-    rol:'',
-    foto:'',
-    contrasena:'',
-  }
+  correo: string = "";
 
-  correo:string = "";
-  
   constructor(
-    private db:LocalDBService,
-    private router:Router,
+    private db: LocalDBService,
+    private router: Router
   ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  registro(){
-    /* Validar que no este registrado */
-    let buscado=this.db.obtener(this.usuario.rut)
-    buscado.then(datos=>{
-      this.correo = this.usuario.correo.split("@")[1];
-      if(this.correo == "duocuc.cl"){
-        this.usuario.rol = "Estudiante"
-      }
-      else if (this.correo =="profesor.duoc.cl"){
-        this.usuario.rol = "Profesor"
-      }
-      if(datos==null){
-        /* Añadir: rut ,nombre,  correo, contraseña a la storage */
-        this.db.registro(this.usuario.rut, this.usuario);
-        
-        /* Llevar a la pagina de login */
-        this.router.navigate(['/home'])
-      }
-    })
+  async registro() {
+    const buscado = await this.db.obtenerUsuarioPorRut(this.usuario.rut);
+  
+    if (!buscado) {
+      // Asignar rol según el dominio del correo
+      const correoDominio = this.usuario.correo.split("@")[1];
+      this.usuario.rol = correoDominio === "duocuc.cl" ? "Estudiante" : 
+                         correoDominio === "profesor.duoc.cl" ? "Profesor" : 
+                         "Desconocido";
+  
+      await this.db.registro(this.usuario);
+      this.router.navigate(['/home']);
+    } else {
+      console.log('Usuario ya registrado');
+    }
   }
 }

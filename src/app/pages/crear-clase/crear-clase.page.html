@@ -1,39 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Crear Clase</ion-title>
+    <ion-title>Crear Asignatura</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="onSubmit()" #classForm="ngForm">
+  <form (ngSubmit)="guardarAsignatura()">
     <ion-item>
-      <ion-label position="floating">Código de Clase</ion-label>
-      <ion-input type="text" required [(ngModel)]="classData.classCode" name="classCode"></ion-input>
+      <ion-label position="floating">Nombre de Asignatura</ion-label>
+      <ion-input type="text" required [(ngModel)]="asignatura.nombre" name="nombre"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Código Sección</ion-label>
-      <ion-input type="text" required [(ngModel)]="classData.sectionCode" name="sectionCode"></ion-input>
-    </ion-item>
+    <div *ngFor="let horario of asignatura.horarios; let i = index">
+      <h3>Horario {{ i + 1 }}</h3>
 
-    <ion-item>
-      <ion-label position="floating">Cantidad Alumnos</ion-label>
-      <ion-input type="number" required [(ngModel)]="classData.studentCount" name="studentCount"></ion-input>
-    </ion-item>
-
-    <div *ngFor="let session of classData.sessions; let i = index" class="session">
-      <h3>Día y Sala {{ i + 1 }}</h3>
-      <ion-item>
-        <ion-label position="floating">Sala</ion-label>
-        <ion-input type="text" required [(ngModel)]="session.room" name="room{{i}}"></ion-input>
-      </ion-item>
-      
       <ion-item>
         <ion-label position="floating">Día</ion-label>
-        <ion-select required [(ngModel)]="session.day" name="day{{i}}">
+        <ion-select [(ngModel)]="horario.dia" name="dia{{i}}" required>
           <ion-select-option value="Lunes">Lunes</ion-select-option>
           <ion-select-option value="Martes">Martes</ion-select-option>
           <ion-select-option value="Miércoles">Miércoles</ion-select-option>
@@ -41,22 +24,26 @@
           <ion-select-option value="Viernes">Viernes</ion-select-option>
         </ion-select>
       </ion-item>
-      
+
       <ion-item>
-        <ion-label position="floating">Inicio</ion-label>
-        <ion-input type="time" required [(ngModel)]="session.startTime" name="startTime{{i}}"></ion-input>
+        <ion-label position="floating">Hora Inicio</ion-label>
+        <ion-input type="time" required [(ngModel)]="horario.horaInicio" name="horaInicio{{i}}"></ion-input>
       </ion-item>
-      
+
       <ion-item>
-        <ion-label position="floating">Fin</ion-label>
-        <ion-input type="time" required [(ngModel)]="session.endTime" name="endTime{{i}}"></ion-input>
+        <ion-label position="floating">Hora Fin</ion-label>
+        <ion-input type="time" required [(ngModel)]="horario.horaFin" name="horaFin{{i}}"></ion-input>
       </ion-item>
-      
-      <ion-button expand="full" (click)="removeSession(i)">Eliminar</ion-button>
+
+      <ion-item>
+        <ion-label position="floating">Código de Sala</ion-label>
+        <ion-input type="text" required [(ngModel)]="horario.codigoSala" name="codigoSala{{i}}"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" color="danger" (click)="eliminarHorario(i)">Eliminar Horario</ion-button>
     </div>
 
-    <ion-button expand="full" (click)="addSession()">Añadir Día y Sala</ion-button>
-
-    <ion-button type="submit" expand="full" [disabled]="!classForm.valid">Guardar</ion-button>
+    <ion-button expand="full" (click)="agregarHorario()">Añadir Horario</ion-button>
+    <ion-button type="submit" expand="full" [disabled]="!asignatura.nombre">Guardar Asignatura</ion-button>
   </form>
 </ion-content>
