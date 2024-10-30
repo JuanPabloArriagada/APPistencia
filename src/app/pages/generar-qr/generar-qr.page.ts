@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AsistenciaService } from '../../services/asistencia.service';
 import { Clase } from '../../interfaces/asignatura';
+import { QrCodeModule } from 'ng-qrcode'
 
 @Component({
   selector: 'app-generar-qr',
@@ -10,10 +11,9 @@ import { Clase } from '../../interfaces/asignatura';
 })
 export class GenerarQRPage implements OnInit {
   qrData: string = ''; // Dato para generar el QR
-  totalAlumnos: number;
+  totalAlumnos: number = 30;
   confirmados: string[] = [];
   inasistentes: string[] = [];
-  alumnosFaltantes: string[] = []; // Nueva propiedad agregada
   asignaturaId: string;
   dia: string; 
   horaInicio: string; 
@@ -24,20 +24,17 @@ export class GenerarQRPage implements OnInit {
     private asistenciaService: AsistenciaService,
     private router: Router,
     private route: ActivatedRoute
-  ) {
+  ) { 
     this.asignaturaId = ''; 
     this.dia = ''; 
     this.horaInicio = ''; 
     this.horaFin = ''; 
     this.codigoSala = ''; 
-    this.totalAlumnos = 30;  
   }
 
   ngOnInit() {
-    // Obtener el usuarioId de los parámetros de ruta
     const usuarioId = this.route.snapshot.paramMap.get('rut') || '';
 
-    // Obtener los queryParams
     this.route.queryParams.subscribe(params => {
       this.dia = params['dia'] || '';
       this.horaInicio = params['horaInicio'] || '';

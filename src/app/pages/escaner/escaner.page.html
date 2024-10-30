@@ -8,29 +8,12 @@
 </ion-header>
 
 <ion-content>
-  <div class="container">
-    <div class="qr-simulator">
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Simulador de Escaneo de QR</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>Coloca el código QR aquí para escanearlo.</p>
-          <div class="qr-placeholder">
-            <ion-icon name="qr-code" size="large"></ion-icon>
-          </div>
-        </ion-card-content>
-      </ion-card>
-    </div>
+  <ion-button expand="full" color="primary" (click)="startScan()">Iniciar Escaneo</ion-button>
+  
+  <ion-item *ngIf="scannedData">
+    <ion-label>Datos Escaneados:</ion-label>
+    <ion-note>{{ scannedData }}</ion-note>
+  </ion-item>
 
-    <ion-item *ngIf="scannedData">
-      <ion-label>Datos Escaneados:</ion-label>
-      <ion-note>{{ scannedData }}</ion-note>
-    </ion-item>
-
-    <ion-button expand="full" (click)="simulateScan()">Simular Escaneo</ion-button>
-    
-    <!-- Botón de Finalizar -->
-    <ion-button expand="full" color="primary" (click)="finalizeScan()">Finalizar</ion-button>
-  </div>
+  <ion-button expand="full" color="primary" (click)="finalizeScan()">Finalizar</ion-button>
 </ion-content>

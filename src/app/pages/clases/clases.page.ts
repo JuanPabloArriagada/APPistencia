@@ -34,6 +34,7 @@ export class ClasesPage implements OnInit {
 
   async ngOnInit() {
     this.usuarioId = this.route.snapshot.paramMap.get('rut') || '';
+    console.log('RUT del usuario:', this.usuarioId);
     this.route.data.subscribe(data => {
       this.showGenerateQR = data['showGenerateQR'] || false;
       this.titulo = data['titulo'] || 'Clases';

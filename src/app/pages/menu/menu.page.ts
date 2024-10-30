@@ -22,6 +22,8 @@ export class MenuPage implements OnInit {
     // Recoger el parámetro de la ruta
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
 
+    console.log('RUT del usuario:', this.rut);
+
     if (this.rut) {
       // Cargar datos del usuario según el rut
       const datos = await this.db.obtenerUsuarioPorRut(this.rut);

@@ -31,6 +31,7 @@ export class CrearClasePage implements OnInit {
 
   async ngOnInit() {
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
+    console.log('RUT del profesor:', this.rut);
     
     // Cargar el usuario actual (profesor)
     const usuario = await this.db.obtenerUsuarioPorRut(this.rut); 
