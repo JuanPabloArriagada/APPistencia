@@ -1,7 +1,8 @@
 {
   "name": "APPistencia",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

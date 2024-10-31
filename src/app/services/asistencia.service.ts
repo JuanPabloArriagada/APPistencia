@@ -1,28 +1,23 @@
-// services/asistencia.service.ts
-
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Clase } from '../interfaces/asignatura';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AsistenciaService {
-  private storageReady = this.storage.create();
+  constructor(private firestore: AngularFirestore) {}
 
-  constructor(private storage: Storage) {}
-
-  // Guardar la asistencia de una clase
-  async guardarAsistencia(clase: Clase): Promise<void> {
-    await this.storageReady;
-    let clases = (await this.storage.get('clases')) || [];
-    clases.push(clase);
-    await this.storage.set('clases', clases);
+  guardarAsistencia(clase: Clase) {
+    return this.firestore.collection('clases').doc(clase.id).set(clase);
   }
 
-  // Obtener todas las asistencias
-  async obtenerAsistencias(): Promise<Clase[]> {
-    await this.storageReady;
-    return (await this.storage.get('clases')) || [];
+  obtenerClase(claseId: string): Observable<Clase | undefined> {
+    return this.firestore.collection('clases').doc<Clase>(claseId).valueChanges();
+  }
+
+  async actualizarAsistencia(claseId: string, asistentes: string[], inasistentes: string[]) {
+    await this.firestore.collection('clases').doc(claseId).update({ asistentes, inasistentes });
   }
 }

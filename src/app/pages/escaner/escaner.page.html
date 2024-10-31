@@ -8,12 +8,12 @@
 </ion-header>
 
 <ion-content>
-  <ion-button expand="full" color="primary" (click)="startScan()">Iniciar Escaneo</ion-button>
-  
-  <ion-item *ngIf="scannedData">
+  <ion-button expand="full" color="red" (click)="scan()">Iniciar Escaneo</ion-button>
+
+  <ion-item *ngIf="barcodes.length > 0">
     <ion-label>Datos Escaneados:</ion-label>
-    <ion-note>{{ scannedData }}</ion-note>
+    <ion-note *ngFor="let barcode of barcodes">{{ barcode.rawValue }}</ion-note>
   </ion-item>
 
-  <ion-button expand="full" color="primary" (click)="finalizeScan()">Finalizar</ion-button>
+  <ion-button expand="full" color="red" (click)="navCtrl.back()">Finalizar Registro</ion-button>
 </ion-content>
