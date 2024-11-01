@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { AsistenciaService } from '../../services/asistencia.service';
 import { ActivatedRoute } from '@angular/router';
+import { AsignaturaService } from '../../services/asignaturas.service';
 
 @Component({
   selector: 'app-escaner',
@@ -13,93 +14,101 @@ export class EscanerPage implements OnInit {
   isSupported = false;
   barcodes: Barcode[] = [];
   claseId: string = '';
+  isScanning: boolean = false;
+  asignaturaId: string = '';
 
-  // Cambia 'private' a 'public'
   constructor(
     public navCtrl: NavController,
     private asistenciaService: AsistenciaService,
     private route: ActivatedRoute,
-    private alertController: AlertController
+    private asignaturasService: AsignaturaService
   ) {}
 
   ngOnInit() {
-    // Verificar si el escaneo de código de barras es compatible
-    BarcodeScanner.isSupported().then((result) => {
-      this.isSupported = result.supported;
-      if (!this.isSupported) {
-        this.showAlert('El escaneo de códigos de barras no es compatible con este dispositivo.');
-      }
-    });
+    this.checkBarcodeScannerSupport(); // Verifica el soporte del escáner de códigos de barras
+  }
+
+  async checkBarcodeScannerSupport() {
+    const result = await BarcodeScanner.isSupported();
+    this.isSupported = result.supported;
+
+    if (this.isSupported) {
+      await BarcodeScanner.installGoogleBarcodeScannerModule(); // Instala el módulo de escaneo si es compatible
+    }
   }
 
   async scan(): Promise<void> {
-    const granted = await this.requestPermissions();
+    const granted = await this.requestPermissions(); // Solicita permisos de cámara
     if (!granted) {
-      this.presentAlert();
-      return;
+      return; 
     }
-
-    const { barcodes } = await BarcodeScanner.scan();
-    this.barcodes.push(...barcodes);
+  
+    this.isScanning = true; 
+    const { barcodes } = await BarcodeScanner.scan(); // Escanea los códigos de barras
+    this.barcodes.push(...barcodes); // Agrega los códigos escaneados al array
+  
     for (const barcode of this.barcodes) {
-      const scannedValue = barcode.rawValue;
-      await this.showAlert(`Código de barras escaneado: ${scannedValue}`);
-
-      // Asegúrate de que el formato sea correcto
-      const parts = scannedValue.split('ClaseId: ');
-      if (parts.length > 1) {
-        this.claseId = parts[1];
-        const alumnoId = this.route.snapshot.paramMap.get('rut') || '';
-        await this.registrarAsistencia(alumnoId);
-      } else {
-        await this.showAlert('El formato del código escaneado es incorrecto.');
-      }
+      await this.processScannedValue(barcode.rawValue); // Procesa el valor escaneado
     }
+  
+    this.isScanning = false; // Finaliza el escaneo
   }
 
   async requestPermissions(): Promise<boolean> {
-    const { camera } = await BarcodeScanner.requestPermissions();
+    const { camera } = await BarcodeScanner.requestPermissions(); // Solicita permisos de cámara
     return camera === 'granted' || camera === 'limited';
   }
 
-  async presentAlert(): Promise<void> {
-    const alert = await this.alertController.create({
-      header: 'Permiso denegado',
-      message: 'Para usar la aplicación, autorizar los permisos de cámara',
-      buttons: ['OK'],
-    });
-    await alert.present();
+  async processScannedValue(scannedValue: string) {
+    const claseMatch = scannedValue.match(/ClaseId:\s*(\d+)/);
+    const asignaturaMatch = scannedValue.match(/Asignatura:\s*([^,]+)/);
+
+    if (claseMatch && claseMatch[1]) {
+      this.claseId = claseMatch[1]; // Obtiene el ID de la clase
+    } else {
+      return; 
+    }
+
+    if (asignaturaMatch && asignaturaMatch[1]) {
+      this.asignaturaId = asignaturaMatch[1]; // Obtiene el ID de la asignatura
+    } else {
+      return; 
+    }
+
+    const alumnoId = this.route.snapshot.paramMap.get('rut') || '';
+    await this.registrarAsistencia(alumnoId, this.asignaturaId); // Registra la asistencia del alumno
   }
 
-  async registrarAsistencia(alumnoId: string) {
-    await this.showAlert(`Registrando asistencia para el alumno: ${alumnoId}`);
+  async registrarAsistencia(alumnoId: string, asignaturaId: string) {
     try {
-      const clase = await this.asistenciaService.obtenerClase(this.claseId).toPromise();
+      const clase = await this.asistenciaService.obtenerClase(this.claseId); // Obtiene la clase
 
       if (!clase) {
-        await this.showAlert('La clase no existe.');
-        return;
+        return; // Clase no encontrada
       }
 
+      const asignatura = await this.asignaturasService.obtenerAsignaturaPorId(asignaturaId); // Obtiene la asignatura
+      if (!asignatura) {
+        return; 
+      }
+
+      // Verifica si el alumno ya está registrado en la asistencia
       if (clase.asistentes.includes(alumnoId)) {
-        await this.showAlert(`El alumno ${alumnoId} ya está registrado en la asistencia.`);
-      } else {
-        const nuevosAsistentes = [...clase.asistentes, alumnoId];
-        await this.asistenciaService.actualizarAsistencia(this.claseId, nuevosAsistentes, clase.inasistentes);
-        await this.showAlert(`Asistencia registrada para el alumno ${alumnoId}`);
+        return; 
       }
-    } catch (error) {
-      const errorMessage = (error as any).message || error;
-      await this.showAlert(`Error al registrar la asistencia: ${errorMessage}`);
-    }
-  }
 
-  async showAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Información',
-      message: message,
-      buttons: ['OK']
-    });
-    await alert.present();
+      // Registra al alumno en la asistencia
+      const nuevosAsistentes = [...clase.asistentes, alumnoId];
+      const inasistentesActualizados = clase.inasistentes.filter(id => id !== alumnoId);
+
+      await this.asistenciaService.actualizarAsistencia(this.claseId, nuevosAsistentes, inasistentesActualizados); // Actualiza la asistencia
+
+      // Inscripción del alumno en la asignatura si no está inscrito
+      if (!asignatura.inscritos.includes(alumnoId)) {
+        await this.asignaturasService.inscribirAlumnoEnAsignatura(asignaturaId, alumnoId); // Inscribe al alumno en la asignatura
+      }
+    } catch (error: any) {
+      console.error(`Error al registrar la asistencia: ${error.message || error}`);
+    }
   }
 }

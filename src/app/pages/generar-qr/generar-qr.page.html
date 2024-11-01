@@ -5,6 +5,30 @@
 </ion-header>
 
 <ion-content>
-  <qr-code [value]="qrData"></qr-code>
-  <ion-button (click)="finalizarRegistro()">Finalizar Registro</ion-button>
+  <div class="container">
+    <h2>Detalles de la Clase</h2>
+    <p><strong>Nombre de la Asignatura:</strong> {{ asignaturaNombre }}</p>
+
+    <qr-code [value]="qrData"></qr-code>
+
+    <p><strong>Día:</strong> {{ dia }}</p>
+    <p><strong>Hora de Inicio:</strong> {{ horaInicio }}</p>
+    <p><strong>Hora de Fin:</strong> {{ horaFin }}</p>
+    <p><strong>Código de Sala:</strong> {{ codigoSala }}</p>
+
+    <h3>Asistentes</h3>
+    <ul>
+      <li *ngFor="let asistente of confirmados">{{ asistente }}</li>
+    </ul>
+
+    <h3>Inasistentes</h3>
+    <ul>
+      <li *ngFor="let inasistente of inasistentes">{{ inasistente }}</li>
+    </ul>
+
+    <h4>Total Inscritos: {{ totalInscritos }}</h4>
+
+    
+    <ion-button (click)="finalizarRegistro()">Finalizar Registro</ion-button>
+  </div>
 </ion-content>

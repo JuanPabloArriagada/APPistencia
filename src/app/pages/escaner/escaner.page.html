@@ -1,19 +1,20 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
+      <ion-back-button color="primary" defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>Escanear QR</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-button expand="full" color="red" (click)="scan()">Iniciar Escaneo</ion-button>
+  <ion-button expand="full" color="primary" (click)="scan()" [disabled]="isScanning">
+    {{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}
+  </ion-button>
 
   <ion-item *ngIf="barcodes.length > 0">
     <ion-label>Datos Escaneados:</ion-label>
     <ion-note *ngFor="let barcode of barcodes">{{ barcode.rawValue }}</ion-note>
   </ion-item>
-
-  <ion-button expand="full" color="red" (click)="navCtrl.back()">Finalizar Registro</ion-button>
+  <ion-button expand="full" color="primary" (click)="navCtrl.back()">Finalizar Registro</ion-button>
 </ion-content>
