@@ -34,6 +34,7 @@ export class ClasesPage implements OnInit {
 
   async ngOnInit() {
     this.usuarioId = this.route.snapshot.paramMap.get('rut') || '';
+    console.log('RUT del usuario:', this.usuarioId);
     this.route.data.subscribe(data => {
       this.showGenerateQR = data['showGenerateQR'] || false;
       this.titulo = data['titulo'] || 'Clases';
@@ -51,6 +52,7 @@ export class ClasesPage implements OnInit {
     for (const asignatura of asignaturas) {
       for (const clase of asignatura.horarios) {
         const dia = clase.dia as DayOfWeek;
+        clase.asignaturaId = asignatura.id;  // Agregar el id de la asignatura a la clase
         if (this.clasesRegistradas[dia]) {
           this.clasesRegistradas[dia].push({ clase, nombreAsignatura: asignatura.nombre });
         }
@@ -73,7 +75,6 @@ export class ClasesPage implements OnInit {
   }
 
   generarQR() {
-  
     if (this.selectedClase && this.selectedDay) {
       const { horaInicio, horaFin, codigoSala, asignaturaId } = this.selectedClase;
       this.router.navigate(['/generar-qr', this.usuarioId], {

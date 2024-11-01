@@ -17,13 +17,13 @@
       <!-- Botones para el tipo de usuario 'Docente' -->
       <ng-container *ngIf="rol === 'Profesor'">
         <div>
-          <ion-button class="mb-3 w-100" routerLink="/crear-qr">Generar QR</ion-button>
+          <ion-button class="mb-3 w-100" [routerLink]="['/crear-qr', { rut: rut }]">Generar QR</ion-button>
         </div>
         <div>
-          <ion-button class="mb-3 w-100" routerLink="/clases">Clases registradas</ion-button>
+          <ion-button class="mb-3 w-100" [routerLink]="['/clases', { rut: rut }]">Clases registradas</ion-button>
         </div>
         <div>
-          <ion-button class="w-100" routerLink="/crear-clase">Crear clases</ion-button>
+          <ion-button class="w-100" [routerLink]="['/crear-clase', { rut: rut }]">Crear clases</ion-button>
         </div>
       </ng-container>
 

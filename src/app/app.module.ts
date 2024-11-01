@@ -1,27 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { QRCodeModule } from 'angularx-qrcode'; // Importar modulo de QRCode para Angular 
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
-/* LIBRERIAS */
-
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { QrCodeModule } from 'ng-qrcode';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from '../environments/environment';
+
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, 
-    QRCodeModule, // Importar modulo de QRCode para Angular
-    IonicModule.forRoot(), 
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot(),
-
+    QrCodeModule, // Importa el módulo QR
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule, // Importa Firestore para la base de datos en tiempo real
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
