@@ -30,7 +30,7 @@
       <!-- Botones para el tipo de usuario 'Alumno' -->
       <ng-container *ngIf="rol === 'Estudiante'">
         <div>
-          <ion-button class="mb-3 w-100" routerLink="/horario">Horario</ion-button>
+          <ion-button class="mb-3 w-100" [routerLink]="['/horario', { rut: rut }]">Horario</ion-button>
         </div>
         <div>
           <ion-button class="mb-3 w-100" [routerLink]="['/escaner', { rut: rut }]">Escanear QR</ion-button>

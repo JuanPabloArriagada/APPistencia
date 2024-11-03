@@ -84,4 +84,10 @@ export class AsistenciaService {
       console.error('Error al registrar la asistencia:', error);
     }
   }
+  // Obtiene las clases de una asignatura específica
+  async obtenerAsistenciaPorAsignatura(asignaturaId: string): Promise<Clase[]> {
+    const clases = await this.firestore.collection<Clase>('clases', ref => ref.where('asignaturaId', '==', asignaturaId)).valueChanges().toPromise();
+    return clases ?? [];
+  }
+
 }

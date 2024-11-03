@@ -1,25 +1,28 @@
-import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
-
-interface Subject {
-  name: string;
-  attendance: number;
-  absences: number;
-}
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AsignaturaService } from '../../services/asignaturas.service';
+import { Asignatura, AsistenciaAsignatura } from '../../interfaces/asignatura';
 
 @Component({
   selector: 'app-asistencia',
   templateUrl: './asistencia.page.html',
   styleUrls: ['./asistencia.page.scss'],
 })
-export class AsistenciaPage {
-  subjects: Subject[] = [
-    { name: 'Matemáticas', attendance: 20, absences: 2 },
-    { name: 'Historia', attendance: 18, absences: 4 },
-    { name: 'Ciencias', attendance: 19, absences: 3 },
-    { name: 'Lengua', attendance: 21, absences: 1 },
-  ];
+export class AsistenciaPage implements OnInit {
+  rut: string = '';
+  asignaturas: AsistenciaAsignatura[] = [];
+  
+  constructor(
+    private route: ActivatedRoute,
+    private asignaturaService: AsignaturaService
+  ) {}
 
-  constructor(private navCtrl: NavController) {}
+  async ngOnInit() {
+    this.rut = this.route.snapshot.paramMap.get('rut')!;
+    this.asignaturas = await this.asignaturaService.obtenerAsignaturasConAsistencias(this.rut);  }
 
+  async cargarAsignaturasConAsistencias() {
+    this.asignaturas = await this.asignaturaService.obtenerAsignaturasConAsistencias(this.rut);
+    console.log('Asignaturas con datos de asistencia:', this.asignaturas);
+  }
 }

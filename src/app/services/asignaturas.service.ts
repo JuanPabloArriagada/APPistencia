@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Asignatura, Clase } from '../interfaces/asignatura';
+import { Asignatura, AsistenciaAsignatura, Clase } from '../interfaces/asignatura';
 import { v4 as uuidv4 } from 'uuid';
 import { arrayUnion } from 'firebase/firestore'; // Importa arrayUnion
 import { map, Observable } from 'rxjs';
@@ -12,16 +12,26 @@ export class AsignaturaService {
   constructor(private firestore: AngularFirestore) {}
 
   async obtenerAsignaturas(): Promise<Asignatura[]> {
-    const asignaturasSnapshot = await this.firestore.collection('asignaturas').get().toPromise();
-    
-    if (!asignaturasSnapshot || asignaturasSnapshot.empty) {
-      return []; // Retorna un array vacío si no hay documentos
+    console.log('Intentando obtener todas las asignaturas...');
+    try {
+      const asignaturasSnapshot = await this.firestore.collection('asignaturas').get().toPromise();
+      if (!asignaturasSnapshot || asignaturasSnapshot.empty) {
+        console.log('No se encontraron documentos en la colección "asignaturas".');
+        return [];
+      }
+      
+      const asignaturas = asignaturasSnapshot.docs.map(doc => {
+        const data = doc.data() as Asignatura;
+        console.log(`Asignatura obtenida: ${JSON.stringify(data)}`);
+        return { ...data, id: doc.id };
+      });
+      
+      console.log('Asignaturas obtenidas:', asignaturas);
+      return asignaturas;
+    } catch (error) {
+      console.error('Error al obtener asignaturas:', error);
+      return [];
     }
-
-    return asignaturasSnapshot.docs.map(doc => {
-      const data = doc.data() as Asignatura;
-      return { ...data, id: doc.id }; // Cambié el orden
-    });
   }
 
   async guardarAsignatura(asignatura: Asignatura): Promise<void> {
@@ -30,10 +40,21 @@ export class AsignaturaService {
   }
 
   async obtenerAsignaturasPorUsuario(usuarioId: string): Promise<Asignatura[]> {
-    const asignaturas = await this.obtenerAsignaturas();
-    return asignaturas.filter(asignatura => asignatura.profesorId === usuarioId);
+    console.log(`Obteniendo asignaturas para el usuario con ID: ${usuarioId}`);
+    try {
+      const asignaturas = await this.obtenerAsignaturas();
+      console.log('Asignaturas obtenidas desde Firebase:', asignaturas);
+      
+      const asignaturasFiltradas = asignaturas.filter(asignatura => asignatura.profesorId === usuarioId);
+      console.log(`Asignaturas filtradas para el usuario ${usuarioId}:`, asignaturasFiltradas);
+      
+      return asignaturasFiltradas;
+    } catch (error) {
+      console.error('Error al obtener asignaturas por usuario:', error);
+      return [];
+    }
   }
-
+  
   async agregarClaseaHorario(asignaturaId: string, clase: Clase): Promise<Clase | null> {
     const asignaturaRef = this.firestore.collection('asignaturas').doc(asignaturaId);
 
@@ -102,4 +123,56 @@ export class AsignaturaService {
       })
     );
   }
+
+  obtenerAsignaturasDelHorarioPorUsuario(usuarioRut: string): Promise<Asignatura[]> {
+    return this.firestore
+      .collection<Asignatura>('asignaturas', ref => ref.where('inscritos', 'array-contains', usuarioRut))
+      .get()
+      .toPromise()
+      .then(querySnapshot => {
+        const asignaturas: Asignatura[] = [];
+        querySnapshot?.forEach(doc => {
+          asignaturas.push(doc.data() as Asignatura);
+        });
+        console.log(`Asignaturas filtradas para el horario del usuario ${usuarioRut}:`, asignaturas);
+        return asignaturas;
+      });
+  }
+  
+  async obtenerAsignaturasConAsistencias(rut: string): Promise<AsistenciaAsignatura[]> {
+    try {
+      const asignaturasRef = this.firestore.collection<Asignatura>('asignaturas', ref => ref.where('inscritos', 'array-contains', rut));
+      const asignaturasSnapshot = await asignaturasRef.get().toPromise();
+  
+      if (!asignaturasSnapshot) {
+        console.error('No se pudo obtener el snapshot de asignaturas.');
+        return [];
+      }
+      const asignaturas = await Promise.all(asignaturasSnapshot.docs.map(async doc => {
+        const asignatura = doc.data() as Asignatura;
+        const clasesRef = this.firestore.collection<Clase>('clases', ref => ref.where('asignaturaId', '==', asignatura.id));
+        const clasesSnapshot = await clasesRef.get().toPromise();
+  
+        let cantAsistencias = 0;
+        let cantInasistencias = 0;
+  
+        clasesSnapshot?.forEach(claseDoc => {
+          const clase = claseDoc.data() as Clase;
+          if (clase.asistentes.includes(rut)) cantAsistencias++;
+          if (clase.inasistentes.includes(rut)) cantInasistencias++;
+        });
+  
+        return { ...asignatura, cantAsistencias, cantInasistencias } as AsistenciaAsignatura;
+      }));
+  
+      return asignaturas;
+    } catch (error) {
+      console.error('Error al obtener asignaturas con asistencias:', error);
+      return [];
+    }
+  }
+  
+  
+
 }
+

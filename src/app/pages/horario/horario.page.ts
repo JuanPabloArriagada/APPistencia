@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AsignaturaService } from '../../services/asignaturas.service';
-import { LocalDBService } from '../../services/dbstorage.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Asignatura } from '../../interfaces/asignatura';
-import { Usuario } from '../../interfaces/usuario';
 
 @Component({
   selector: 'app-horario',
@@ -10,33 +9,35 @@ import { Usuario } from '../../interfaces/usuario';
   styleUrls: ['./horario.page.scss'],
 })
 export class HorarioPage implements OnInit {
-  diasSemana = ['L', 'M', 'X', 'J', 'V'];
+  diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   asignaturas: Asignatura[] = [];
   selectedDay: string | null = null;
-  clasesRegistradas: Record<string, { codigoSala: string; horaInicio: string; horaFin: string }[]> = {};
+  clasesRegistradas: Record<string, { nombreAsignatura: string; codigoSala: string; horaInicio: string; horaFin: string }[]> = {};
 
-  usuarioActual: Usuario | null = null;
+  usuarioRut: string | null = null;
 
   constructor(
     private asignaturaService: AsignaturaService,
-    private db: LocalDBService
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   async ngOnInit() {
-    // Obtener el usuario actual usando LocalDBService
-    this.usuarioActual = await this.db.obtenerUsuarioPorRut('12345678-9'); // Usa el RUT correcto aquí
+    // Paso 1: Verificar que el RUT se obtiene correctamente de la ruta
+    this.usuarioRut = this.route.snapshot.paramMap.get('rut') || '';
+    console.log('RUT del usuario:', this.usuarioRut);
 
-    if (this.usuarioActual) {
+    if (this.usuarioRut) {
       await this.cargarAsignaturas();
-      this.selectDay('L');
+      this.selectDay('L'); // Selecciona el día inicial
     } else {
-      console.warn('Usuario no encontrado');
+      console.warn('RUT de usuario no encontrado en la ruta');
     }
   }
 
   async cargarAsignaturas() {
-    if (this.usuarioActual) {
-      this.asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario(this.usuarioActual.rut);
+    if (this.usuarioRut) {
+      this.asignaturas = await this.asignaturaService.obtenerAsignaturasDelHorarioPorUsuario(this.usuarioRut);
       
       this.asignaturas.forEach(asignatura => {
         asignatura.horarios.forEach(clase => {
@@ -44,14 +45,18 @@ export class HorarioPage implements OnInit {
             this.clasesRegistradas[clase.dia] = [];
           }
           this.clasesRegistradas[clase.dia].push({
+            nombreAsignatura: asignatura.nombre,
             codigoSala: clase.codigoSala,
             horaInicio: clase.horaInicio,
             horaFin: clase.horaFin,
           });
         });
       });
+      console.log('Asignaturas cargadas en la página de horario:', this.asignaturas);
+      console.log('Clases registradas organizadas por día:', this.clasesRegistradas);
     }
   }
+  
 
   selectDay(day: string) {
     this.selectedDay = day;
