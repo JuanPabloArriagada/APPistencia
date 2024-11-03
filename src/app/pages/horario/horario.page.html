@@ -1,31 +1,17 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Horario del Alumno</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div class="buttons-container">
-    <ion-button *ngFor="let dia of diasSemana" (click)="selectDay(dia)">
-      {{ dia }}
-    </ion-button>
+  <div *ngFor="let day of diasSemana">
+    <h2>{{ day }}</h2>
+    <ng-container *ngIf="clasesRegistradas[day] && clasesRegistradas[day].length > 0; else noClases">
+      <div *ngFor="let clase of clasesRegistradas[day]">
+        <p><strong>Asignatura:</strong> {{ clase.nombreAsignatura }}</p>
+        <p><strong>Sala:</strong> {{ clase.codigoSala }}</p>
+        <p><strong>Inicio:</strong> {{ clase.horaInicio }}</p>
+        <p><strong>Fin:</strong> {{ clase.horaFin }}</p>
+        <hr />
+      </div>
+    </ng-container>
+    <ng-template #noClases>
+      <p>No hay clases registradas para este día.</p>
+    </ng-template>
   </div>
-
-  <ion-list *ngIf="selectedDay">
-    <ion-item>
-      <ion-label>Clases Registradas para {{ selectedDay }}</ion-label>
-    </ion-item>
-    <ion-item *ngFor="let clase of clasesRegistradas[selectedDay]">
-      <ion-label>
-        Sala: {{ clase.codigoSala }} 
-        ({{ clase.horaInicio }} - {{ clase.horaFin }})
-      </ion-label>
-    </ion-item>
-    <ion-item *ngIf="clasesRegistradas[selectedDay]?.length === 0">
-      <ion-label>No hay clases registradas para este día.</ion-label>
-    </ion-item>
-  </ion-list>
 </ion-content>

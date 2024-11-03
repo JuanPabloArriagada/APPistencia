@@ -1,22 +1,20 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
-    </ion-buttons>
     <ion-title>Asistencia</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="container">
-    <ion-list>
-      <ion-item *ngFor="let subject of subjects">
-        <ion-label>
-          <h2>{{ subject.name }}</h2>
-          <p>Asistencias: {{ subject.attendance }}</p>
-          <p>Inasistencias: {{ subject.absences }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
+  <ion-list *ngIf="asignaturas.length > 0">
+    <ion-item *ngFor="let asignatura of asignaturas">
+      <ion-label>
+        <h2>{{ asignatura.nombre }}</h2>
+        <p>Asistencias: {{ asignatura.cantAsistencias }}</p>
+        <p>Inasistencias: {{ asignatura.cantInasistencias }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-text *ngIf="asignaturas.length === 0">
+    No estás inscrito en ninguna asignatura.
+  </ion-text>
 </ion-content>

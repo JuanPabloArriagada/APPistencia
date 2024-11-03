@@ -10,7 +10,7 @@ export interface Horario {
 export interface Asignatura {
   id: string;
   nombre: string;
-  profesorId: string;   //para vincular el profesor con la asignatura, esto lo veremos cuando este subido el login
+  profesorId: string;   
   horarios: Horario[];
   inscritos: string[];
 }
@@ -24,4 +24,9 @@ export interface Clase {
   codigoSala: string;
   asistentes: string[];
   inasistentes: string[];
+}
+
+export interface AsistenciaAsignatura extends Asignatura {
+  cantAsistencias: number;
+  cantInasistencias: number;
 }
