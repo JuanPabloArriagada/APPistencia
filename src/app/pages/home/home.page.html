@@ -1,27 +1,27 @@
-<ion-content [fullscreen]="true">
-  <app-header></app-header>
+<app-header></app-header>
 
+<ion-content class="ion-padding">
   <ion-list>
     <form #loginForm="ngForm" (ngSubmit)="login()">
       <ion-item>
-        <ion-input
+        <ion-input class="fs-2"
           [(ngModel)]="usuario.rut"
           name="rut"
           required
           type="text"
           label="rut"
-          labelPlacement="floating"
+          labelPlacement="stacked"
           placeholder="Usuario"
         ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input
+        <ion-input class="large-label"
           [(ngModel)]="usuario.contrasena" 
           required
           type="password"
           name="contrasena" 
           label="Contraseña de Usuario"
-          labelPlacement="floating"
+          labelPlacement="stacked"
           placeholder="Contraseña"
         ></ion-input>
       </ion-item>
@@ -34,3 +34,4 @@
     </ion-button>
   </ion-list>
 </ion-content>
+
