@@ -5,13 +5,13 @@
     <form #loginForm="ngForm" (ngSubmit)="login()">
       <ion-item>
         <ion-input
-          [(ngModel)]="usuario.rut"
-          name="rut"
+          [(ngModel)]="usuario.correo"
+          name="correo"
           required
-          type="text"
-          label="rut"
+          type="email"
+          label="Correo"
           labelPlacement="floating"
-          placeholder="Usuario"
+          placeholder="Correo"
         ></ion-input>
       </ion-item>
       <ion-item>
@@ -20,7 +20,7 @@
           required
           type="password"
           name="contrasena" 
-          label="Contraseña de Usuario"
+          label="Contraseña"
           labelPlacement="floating"
           placeholder="Contraseña"
         ></ion-input>
@@ -29,7 +29,7 @@
         Iniciar sesión
       </ion-button>
     </form>
-    <ion-button href="registro" type="submit" expand="block" fill="solid">
+    <ion-button href="registro" expand="block" fill="solid">
       Registrarse
     </ion-button>
   </ion-list>

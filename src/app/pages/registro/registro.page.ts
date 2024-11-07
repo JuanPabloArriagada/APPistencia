@@ -1,5 +1,6 @@
+// registro.page.ts
 import { Component, OnInit } from '@angular/core';
-import { LocalDBService } from '../../services/dbstorage.service';
+import { AuthService } from '../../services/auth-service.service';
 import { Usuario } from '../../interfaces/usuario';
 import { Router } from '@angular/router';
 
@@ -18,29 +19,28 @@ export class RegistroPage implements OnInit {
     contrasena: '',
   };
 
-  correo: string = "";
-
   constructor(
-    private db: LocalDBService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit() {}
 
   async registro() {
-    const buscado = await this.db.obtenerUsuarioPorRut(this.usuario.rut);
-  
-    if (!buscado) {
-      // Asignar rol según el dominio del correo
+    try {
+      // Verificar el dominio del correo y asignar rol
       const correoDominio = this.usuario.correo.split("@")[1];
       this.usuario.rol = correoDominio === "duocuc.cl" ? "Estudiante" : 
                          correoDominio === "profesor.duoc.cl" ? "Profesor" : 
                          "Desconocido";
-  
-      await this.db.registro(this.usuario);
+
+      // Llamar a AuthService para registrar en Firebase Auth y Firestore
+      await this.authService.registro(this.usuario);
+      
+      // Redirigir a la página de inicio de sesión tras registro exitoso
       this.router.navigate(['/home']);
-    } else {
-      console.log('Usuario ya registrado');
+    } catch (error) {
+      console.error('Error durante el registro:', error);
     }
   }
 }

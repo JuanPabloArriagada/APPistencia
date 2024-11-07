@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { LocalDBService } from '../../services/dbstorage.service';
+import { AuthService } from '../../services/auth-service.service';
 import { Usuario } from 'src/app/interfaces/usuario';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -18,24 +18,21 @@ export class HomePage implements OnInit {
     contrasena: '',
   };
 
-  constructor(
-    private router: Router,
-    private db: LocalDBService
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    // Verificar si el usuario ya está almacenado en el storage
+    const storedUser = await this.authService.getUsuarioActual();
+    if (storedUser) {
+      this.router.navigate(['/menu', { rut: storedUser.rut }]); // Redirigir si ya hay un usuario
+    }
+  }
 
   async login() {
-    const datos = await this.db.obtenerUsuarioPorRut(this.usuario.rut);
-  
-    // Log de datos obtenidos y contraseña ingresada
-    console.log('Datos obtenidos:', datos);
-    console.log('Contraseña ingresada:', this.usuario.contrasena);
-  
-    if (datos && datos.contrasena === this.usuario.contrasena) {
-      this.router.navigate(['/menu', { rut: this.usuario.rut }]);
-    } else {
-      console.log('Credenciales incorrectas');
+    try {
+      await this.authService.login(this.usuario.correo, this.usuario.contrasena);
+    } catch (error) {
+      console.error('Credenciales incorrectas', error);
     }
   }
 }
