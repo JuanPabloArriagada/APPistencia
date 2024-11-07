@@ -1,3 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Horario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
 <ion-content>
   <div *ngFor="let day of diasSemana">
     <h2>{{ day }}</h2>
