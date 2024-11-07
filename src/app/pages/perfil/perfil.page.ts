@@ -9,12 +9,12 @@ import { NavController } from '@ionic/angular';
 })
 export class PerfilPage implements OnInit {
 
- profile = {
+  profile = {
     name: 'Juan Pérez',
     email: 'juan.perez@example.com',
     rut: '12.345.678-9',
     role: 'Estudiante', // Puede ser 'Estudiante' o 'Profesor'
-    imageUrl: 'https://via.placeholder.com/150', // URL de la imagen de perfil
+    imageUrl: 'assets/images/Perfil_icon.jpg', // URL de la imagen de perfil
   };
 
   constructor(private navCtrl: NavController, private router:Router) {}

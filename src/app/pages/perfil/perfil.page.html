@@ -1,19 +1,23 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="dark" defaultHref="/"></ion-back-button>
+      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
     </ion-buttons>
     <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding text-center">
-  <img [src]="profile.imageUrl" alt="Imagen de Perfil" class="profile-image" />
+<ion-content class="ion-padding">
+  <div class="text-center">
+    <img [src]="profile.imageUrl" alt="Imagen de Perfil" class="profile-image" />
+  </div>
   
-  <h2>{{ profile.name }}</h2>
-  <p>Email: {{ profile.email }}</p>
-  <p>RUT: {{ profile.rut }}</p>
-  <p>Rol: {{ profile.role }}</p>
+  <div class="profile-info">
+    <h2>{{ profile.name }}</h2>
+    <p>Email: {{ profile.email }}</p>
+    <p>RUT: {{ profile.rut }}</p>
+    <p>Rol: {{ profile.role }}</p>
+  </div>
 
   <ion-button expand="full" (click)="closeProfile()">Cerrar Perfil</ion-button>
 </ion-content>
