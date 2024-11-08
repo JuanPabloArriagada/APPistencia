@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { AsistenciaService } from '../../services/asistencia.service';
 import { ActivatedRoute } from '@angular/router';
 import { AsignaturaService } from '../../services/asignaturas.service';
+
 
 @Component({
   selector: 'app-escaner',
@@ -21,7 +22,8 @@ export class EscanerPage implements OnInit {
     public navCtrl: NavController,
     private asistenciaService: AsistenciaService,
     private route: ActivatedRoute,
-    private asignaturasService: AsignaturaService
+    private asignaturasService: AsignaturaService,
+    private alertController: AlertController   
   ) {}
 
   ngOnInit() {
@@ -38,20 +40,27 @@ export class EscanerPage implements OnInit {
   }
 
   async scan(): Promise<void> {
-    const granted = await this.requestPermissions(); // Solicita permisos de cámara
+    await this.presentAlert('Solicitando permisos de cámara...');
+    const granted = await this.requestPermissions();
+    
     if (!granted) {
-      return; 
+      await this.presentAlert('Permisos de cámara denegados.');
+      return;
     }
+    
+    this.isScanning = true;
+    await this.presentAlert('Iniciando escaneo...');
   
-    this.isScanning = true; 
-    const { barcodes } = await BarcodeScanner.scan(); // Escanea los códigos de barras
-    this.barcodes.push(...barcodes); // Agrega los códigos escaneados al array
+    const { barcodes } = await BarcodeScanner.scan();
+    this.barcodes.push(...barcodes);
   
     for (const barcode of this.barcodes) {
-      await this.processScannedValue(barcode.rawValue); // Procesa el valor escaneado
+      await this.presentAlert(`Código escaneado: ${barcode.rawValue}`);
+      await this.processScannedValue(barcode.rawValue);
     }
   
-    this.isScanning = false; // Finaliza el escaneo
+    this.isScanning = false;
+    await this.presentAlert('Escaneo finalizado.');
   }
 
   async requestPermissions(): Promise<boolean> {
@@ -60,55 +69,72 @@ export class EscanerPage implements OnInit {
   }
 
   async processScannedValue(scannedValue: string) {
+    await this.presentAlert('Procesando el valor escaneado...');
+
     const claseMatch = scannedValue.match(/ClaseId:\s*(\d+)/);
     const asignaturaMatch = scannedValue.match(/Asignatura:\s*([^,]+)/);
 
     if (claseMatch && claseMatch[1]) {
-      this.claseId = claseMatch[1]; // Obtiene el ID de la clase
+      this.claseId = claseMatch[1];
+      await this.presentAlert(`ID de Clase obtenido: ${this.claseId}`);
     } else {
-      return; 
+      await this.presentAlert('ID de Clase no encontrado en el código.');
+      return;
     }
 
     if (asignaturaMatch && asignaturaMatch[1]) {
-      this.asignaturaId = asignaturaMatch[1]; // Obtiene el ID de la asignatura
+      this.asignaturaId = asignaturaMatch[1];
+      await this.presentAlert(`ID de Asignatura obtenido: ${this.asignaturaId}`);
     } else {
-      return; 
+      await this.presentAlert('ID de Asignatura no encontrado en el código.');
+      return;
     }
 
     const alumnoId = this.route.snapshot.paramMap.get('rut') || '';
-    await this.registrarAsistencia(alumnoId, this.asignaturaId); // Registra la asistencia del alumno
-  }
+    await this.registrarAsistencia(alumnoId, this.asignaturaId);
+  } 
+
 
   async registrarAsistencia(alumnoId: string, asignaturaId: string) {
     try {
-      const clase = await this.asistenciaService.obtenerClase(this.claseId); // Obtiene la clase
-
+      const clase = await this.asistenciaService.obtenerClase(this.claseId);
+  
       if (!clase) {
-        return; // Clase no encontrada
+        await this.presentAlert('Clase no encontrada.');
+        return;
       }
-
-      const asignatura = await this.asignaturasService.obtenerAsignaturaPorId(asignaturaId); // Obtiene la asignatura
+  
+      const asignatura = await this.asignaturasService.obtenerAsignaturaPorId(asignaturaId);
       if (!asignatura) {
-        return; 
+        await this.presentAlert('Asignatura no encontrada.');
+        return;
       }
-
-      // Verifica si el alumno ya está registrado en la asistencia
+  
       if (clase.asistentes.includes(alumnoId)) {
-        return; 
+        await this.presentAlert('El alumno ya está registrado en la asistencia.');
+        return;
       }
-
-      // Registra al alumno en la asistencia
+  
       const nuevosAsistentes = [...clase.asistentes, alumnoId];
       const inasistentesActualizados = clase.inasistentes.filter(id => id !== alumnoId);
-
-      await this.asistenciaService.actualizarAsistencia(this.claseId, nuevosAsistentes, inasistentesActualizados); // Actualiza la asistencia
-
-      // Inscripción del alumno en la asignatura si no está inscrito
+  
+      await this.asistenciaService.actualizarAsistencia(this.claseId, nuevosAsistentes, inasistentesActualizados);
+  
       if (!asignatura.inscritos.includes(alumnoId)) {
-        await this.asignaturasService.inscribirAlumnoEnAsignatura(asignaturaId, alumnoId); // Inscribe al alumno en la asignatura
+        await this.asignaturasService.inscribirAlumnoEnAsignatura(asignaturaId, alumnoId);
       }
+  
+      await this.presentAlert('Asistencia registrada exitosamente.');
     } catch (error: any) {
-      console.error(`Error al registrar la asistencia: ${error.message || error}`);
+      await this.presentAlert(`Error al registrar la asistencia: ${error.message || error}`);
     }
+  }
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Información',
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 }
