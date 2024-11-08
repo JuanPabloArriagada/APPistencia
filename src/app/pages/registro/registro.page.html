@@ -1,36 +1,48 @@
+<!-- registro.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Crea tu cuenta</ion-card-title>
-    </ion-card-header>
+<ion-content>
+  <form [formGroup]="registroForm" (ngSubmit)="registro()">
+    <ion-item>
+      <ion-label position="floating">RUT</ion-label>
+      <ion-input formControlName="rut"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['rut'].invalid && registroForm.controls['rut'].touched">
+      <ion-label color="danger">RUT inválido o incompleto</ion-label>
+    </ion-item>
 
-    <ion-card-content>
-      <form #registroForm="ngForm" (ngSubmit)="registro()">
-        <ion-item>
-          <ion-input [(ngModel)]="usuario.rut" name="rut" label="Rut" placeholder="123456789" type="text" label-placement="floating" fill="outline" [clearInput]="true" [counter]="true" maxlength="9" required></ion-input>
-        </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input formControlName="Nombre"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['Nombre'].invalid && registroForm.controls['Nombre'].touched">
+      <ion-label color="danger">Nombre es obligatorio</ion-label>
+    </ion-item>
 
-        <ion-item>
-          <ion-input [(ngModel)]="usuario.Nombre" name="Nombre" label="Nombre completo" type="text" label-placement="floating" fill="outline" [clearInput]="true" required></ion-input>
-        </ion-item>
+    <ion-item>
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input formControlName="correo" type="email"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['correo'].invalid && registroForm.controls['correo'].touched">
+      <ion-label color="danger">Correo inválido</ion-label>
+    </ion-item>
 
-        <ion-item>
-          <ion-input [(ngModel)]="usuario.correo" name="Correo" label="Correo Institucional" placeholder="ejemplo@duoc.cl" type="email" label-placement="floating" fill="outline" [clearInput]="true" required></ion-input>
-        </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input formControlName="contrasena" type="password"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['contrasena'].invalid && registroForm.controls['contrasena'].touched">
+      <ion-label color="danger">La contraseña es obligatoria y debe tener al menos 6 caracteres</ion-label>
+    </ion-item>
 
-        <ion-item>
-          <ion-input [(ngModel)]="usuario.contrasena" name="Contraseña" label="Contraseña" placeholder="********" type="password" label-placement="floating" fill="outline" [clearInput]="true" required></ion-input>
-        </ion-item>
+    <div *ngIf="errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
 
-        <ion-button expand="block" type="submit">Registrarse</ion-button>
-      </form>
-      <ion-button routerLink="/home" expand="block" type="submit">Volver al login</ion-button>
-    </ion-card-content>
-  </ion-card>
+    <ion-button expand="full" type="submit" [disabled]="registroForm.invalid">Registrar</ion-button>
+  </form>
 </ion-content>

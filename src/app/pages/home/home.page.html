@@ -2,33 +2,48 @@
   <app-header></app-header>
 
   <ion-list>
-    <form #loginForm="ngForm" (ngSubmit)="login()">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
       <ion-item>
         <ion-input
-          [(ngModel)]="usuario.correo"
-          name="correo"
+          formControlName="correo"
           required
           type="email"
           label="Correo"
           labelPlacement="floating"
           placeholder="Correo"
-        ></ion-input>
+          [class.invalid]="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched"
+        ></ion-input> <!-- Asegúrate de cerrar correctamente esta etiqueta -->
+
+        <ion-text color="danger" *ngIf="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched">
+          <p>Correo inválido</p>
+        </ion-text>
       </ion-item>
+
       <ion-item>
         <ion-input
-          [(ngModel)]="usuario.contrasena" 
+          formControlName="contrasena"
           required
           type="password"
-          name="contrasena" 
           label="Contraseña"
           labelPlacement="floating"
           placeholder="Contraseña"
-        ></ion-input>
+          [class.invalid]="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched"
+        ></ion-input> <!-- Asegúrate de cerrar correctamente esta etiqueta -->
+
+        <ion-text color="danger" *ngIf="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched">
+          <p>La contraseña es requerida</p>
+        </ion-text>
       </ion-item>
-      <ion-button type="submit" expand="block" fill="solid">
+
+      <ion-button type="submit" expand="block" fill="solid" [disabled]="!loginForm.valid">
         Iniciar sesión
       </ion-button>
+
+      <div *ngIf="errorMessage" style="color: red;">
+        {{ errorMessage }}
+      </div>
     </form>
+
     <ion-button href="registro" expand="block" fill="solid">
       Registrarse
     </ion-button>

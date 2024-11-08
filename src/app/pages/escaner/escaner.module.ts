@@ -5,15 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { EscanerPageRoutingModule } from './escaner-routing.module';
 import { EscanerPage } from './escaner.page';
-import { BarcodeScanner } from  
- '@capacitor-mlkit/barcode-scanning';
+
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EscanerPageRoutingModule
+    EscanerPageRoutingModule,
   ],
   declarations: [EscanerPage]
 })
