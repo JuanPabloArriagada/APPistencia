@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Usuario } from 'src/app/interfaces/usuario';
-import { LocalDBService } from 'src/app/services/dbstorage.service';
+import { AuthService } from 'src/app/services/auth-service.service'; // Importar AuthService
 
 @Component({
   selector: 'app-menu',
@@ -15,24 +15,24 @@ export class MenuPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private db: LocalDBService
+    private authService: AuthService // Inyectar AuthService
   ) {}
 
   async ngOnInit() {
     // Recoger el parámetro de la ruta
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
-
     console.log('RUT del usuario:', this.rut);
-
+  
     if (this.rut) {
-      // Cargar datos del usuario según el rut
-      const datos = await this.db.obtenerUsuarioPorRut(this.rut);
-      if (datos) {
-        this.usuarioActual = datos;
-        this.rol = datos.rol;
-      } else {
-        console.warn(`Usuario con rut ${this.rut} no encontrado`);
-      }
+      // Obtener el usuario actual desde AuthService
+      this.authService.getUsuarioActual(this.rut).subscribe((datos) => {
+        if (datos) {
+          this.usuarioActual = datos;
+          this.rol = datos.rol;
+        } else {
+          console.warn(`Usuario con rut ${this.rut} no encontrado en AuthService`);
+        }
+      });
     } else {
       console.warn('RUT no proporcionado en la URL');
     }
