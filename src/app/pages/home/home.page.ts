@@ -25,6 +25,7 @@ export class HomePage implements OnInit {
     this.loginForm = new FormGroup({
       correo: new FormControl('', [Validators.required, Validators.email]),
       contrasena: new FormControl('', [Validators.required]),
+      rut: new FormControl('', [Validators.required]),  // Agrega el campo rut
     });
   }
 
@@ -52,11 +53,11 @@ export class HomePage implements OnInit {
       return; // Si el formulario no es válido, no hacer nada
     }
   
-    const { correo, contrasena } = this.loginForm.value; // Obtener valores del formulario
+    const { correo, contrasena, rut } = this.loginForm.value; // Obtener valores del formulario, incluido rut
   
     try {
       console.log('Intentando login con correo:', correo);
-      await this.authService.login(correo, contrasena);
+      await this.authService.login(correo, contrasena, rut); // Pasa rut como parámetro adicional
       console.log('Login exitoso');
     } catch (error) {
       console.error('Credenciales incorrectas', error);

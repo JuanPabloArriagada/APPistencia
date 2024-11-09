@@ -12,8 +12,7 @@
           labelPlacement="floating"
           placeholder="Correo"
           [class.invalid]="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched"
-        ></ion-input> <!-- Asegúrate de cerrar correctamente esta etiqueta -->
-
+        ></ion-input>
         <ion-text color="danger" *ngIf="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched">
           <p>Correo inválido</p>
         </ion-text>
@@ -28,10 +27,25 @@
           labelPlacement="floating"
           placeholder="Contraseña"
           [class.invalid]="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched"
-        ></ion-input> <!-- Asegúrate de cerrar correctamente esta etiqueta -->
-
+        ></ion-input>
         <ion-text color="danger" *ngIf="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched">
           <p>La contraseña es requerida</p>
+        </ion-text>
+      </ion-item>
+
+      <!-- Agregar campo para el RUT -->
+      <ion-item>
+        <ion-input
+          formControlName="rut"
+          required
+          type="text"
+          label="RUT"
+          labelPlacement="floating"
+          placeholder="RUT"
+          [class.invalid]="loginForm.controls['rut'].invalid && loginForm.controls['rut'].touched"
+        ></ion-input>
+        <ion-text color="danger" *ngIf="loginForm.controls['rut'].invalid && loginForm.controls['rut'].touched">
+          <p>El RUT es requerido</p>
         </ion-text>
       </ion-item>
 

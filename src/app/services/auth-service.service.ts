@@ -42,21 +42,22 @@ export class AuthService {
   }
 
   // Iniciar sesión
-  async login(correo: string, contrasena: string) {
-    if (!correo || !contrasena) {
-      throw new Error('Correo o contraseña vacíos');
+  async login(correo: string, contrasena: string, rut: string) {  // Añadir rut como parámetro
+    if (!correo || !contrasena || !rut) {  // Verificar que el rut esté presente
+      throw new Error('Correo, contraseña o rut vacíos');
     }
   
     try {
       const credenciales = await this.afAuth.signInWithEmailAndPassword(correo, contrasena);
       const user = credenciales.user;
-      if (user) {
-        const usuariosRef = this.firestore.collection('usuarios');
-        const querySnapshot = await usuariosRef.ref.where('correo', '==', correo).get();
   
-        if (!querySnapshot.empty) {
-          const data = querySnapshot.docs[0].data() as Usuario;
-          this.router.navigate(['/menu', { rut: data.rut }]);
+      if (user) {
+        // Ahora usamos el `rut` directamente como el ID de documento
+        const usuarioDoc = await this.firestore.collection('usuarios').doc(rut).get().toPromise();
+        
+        if (usuarioDoc && usuarioDoc.exists) {
+          // Si encontramos el usuario, navega a MenuPage con el rut
+          this.router.navigate(['/menu', { rut }]);
         } else {
           throw new Error('Usuario no encontrado');
         }
@@ -66,18 +67,16 @@ export class AuthService {
       throw new Error('Error de autenticación');
     }
   }
+
   
   // Obtener datos del usuario autenticado
   getUsuarioActual(rut: string): Observable<Usuario | null> {
-    const docRef = this.firestore.collection('usuarios').doc(rut);
-
-    // Devuelve un Observable que puedes suscribir
-    return docRef.get().pipe(
-      map(docSnapshot => {
-        if (docSnapshot.exists) {
-          return docSnapshot.data() as Usuario;
+    return this.firestore.collection('usuarios').doc(rut).snapshotChanges().pipe(
+      map(snapshot => {
+        if (snapshot.payload.exists) {
+          return snapshot.payload.data() as Usuario;
         }
-        return null; // Si no existe el documento
+        return null;
       })
     );
   }

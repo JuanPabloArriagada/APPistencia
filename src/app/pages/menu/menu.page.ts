@@ -19,12 +19,10 @@ export class MenuPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // Recoger el parámetro de la ruta
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
     console.log('RUT del usuario:', this.rut);
-  
+
     if (this.rut) {
-      // Obtener el usuario actual desde AuthService
       this.authService.getUsuarioActual(this.rut).subscribe((datos) => {
         if (datos) {
           this.usuarioActual = datos;
@@ -35,6 +33,6 @@ export class MenuPage implements OnInit {
       });
     } else {
       console.warn('RUT no proporcionado en la URL');
-    }
+  }
   }
 }
