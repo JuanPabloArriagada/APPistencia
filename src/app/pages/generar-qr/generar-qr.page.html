@@ -8,23 +8,26 @@
 </ion-header>
 
 <ion-content>
-  <div class="container">
-    <h2>Detalles de la Clase</h2>
+  <div class="container ion-padding">
+    <h2 class="ion-text-center">Detalles de la Clase</h2>
+    
+    <div class="container-qr">
+      <qr-code [value]="qrData"></qr-code> 
+    </div>
+    
+    
     <p><strong>Nombre de la Asignatura:</strong> {{ asignaturaNombre }}</p>
-
-    <qr-code [value]="qrData"></qr-code>
-
     <p><strong>Día:</strong> {{ dia }}</p>
     <p><strong>Hora de Inicio:</strong> {{ horaInicio }}</p>
     <p><strong>Hora de Fin:</strong> {{ horaFin }}</p>
     <p><strong>Código de Sala:</strong> {{ codigoSala }}</p>
 
-    <h3>Asistentes</h3>
+    <h5 >Asistentes</h5>
     <ul>
       <li *ngFor="let asistente of confirmados">{{ asistente }}</li>
     </ul>
 
-    <h3>Inasistentes</h3>
+    <h5>Inasistentes</h5>
     <ul>
       <li *ngFor="let inasistente of inasistentes">{{ inasistente }}</li>
     </ul>

@@ -13,7 +13,6 @@ export class HorarioPage implements OnInit {
   asignaturas: Asignatura[] = [];
   selectedDay: string | null = null;
   clasesRegistradas: Record<string, { nombreAsignatura: string; codigoSala: string; horaInicio: string; horaFin: string }[]> = {};
-
   usuarioRut: string | null = null;
 
   constructor(
@@ -23,13 +22,13 @@ export class HorarioPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // Paso 1: Verificar que el RUT se obtiene correctamente de la ruta
+    // Obtener RUT del usuario de la ruta
     this.usuarioRut = this.route.snapshot.paramMap.get('rut') || '';
     console.log('RUT del usuario:', this.usuarioRut);
 
     if (this.usuarioRut) {
       await this.cargarAsignaturas();
-      this.selectDay('L'); // Selecciona el día inicial
+      this.selectDay(this.diasSemana[0]);
     } else {
       console.warn('RUT de usuario no encontrado en la ruta');
     }
@@ -56,8 +55,8 @@ export class HorarioPage implements OnInit {
       console.log('Clases registradas organizadas por día:', this.clasesRegistradas);
     }
   }
-  
 
+  // Función para seleccionar el día y mostrar las clases correspondientes
   selectDay(day: string) {
     this.selectedDay = day;
   }

@@ -8,9 +8,9 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="day-buttons">
-    <ion-button expand="full" *ngFor="let day of daysOfWeek" (click)="selectDay(day)">
-      {{ day[0] }}
+  <div class="select-day">
+    <ion-button *ngFor="let day of daysOfWeek" (click)="selectDay(day)" [color]="day === selectedDay ? 'primary' : 'medium'">
+      {{ day.slice(0,2) }}
     </ion-button>
   </div>
 
@@ -30,6 +30,5 @@
     <ng-template #noClasses>
       <p>No hay clases registradas para este día.</p>
     </ng-template>    
-    <ion-button expand="full" color="medium" (click)="clearSelection()">Volver a seleccionar</ion-button>
   </div>
 </ion-content>
