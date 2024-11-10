@@ -5,6 +5,7 @@ import { Asignatura, Horario } from '../../interfaces/asignatura';
 import { Usuario } from '../../interfaces/usuario';
 import { v4 as uuidv4 } from 'uuid';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../services/auth-service.service';
 
 @Component({
   selector: 'app-crear-clase',
@@ -25,7 +26,7 @@ export class CrearClasePage implements OnInit {
 
   constructor(
     private asignaturaService: AsignaturaService,
-    private db: LocalDBService,
+    private Aut: AuthService,
     private route: ActivatedRoute
   ) {}
 
@@ -34,12 +35,13 @@ export class CrearClasePage implements OnInit {
     console.log('RUT del profesor:', this.rut);
     
     // Cargar el usuario actual (profesor)
-    const usuario = await this.db.obtenerUsuarioPorRut(this.rut); 
-    if (usuario) {
-      this.usuarioActual = usuario;
-    } else {
-      console.warn(`Usuario con rut ${this.rut} no encontrado`);
-    }
+    this.Aut.getUsuarioActual(this.rut).subscribe(usuario => {
+      if (usuario) {
+        this.usuarioActual = usuario;
+      } else {
+        console.warn(`Usuario con rut ${this.rut} no encontrado`);
+      }
+    });
   }
 
   agregarHorario() {
@@ -70,7 +72,7 @@ export class CrearClasePage implements OnInit {
     this.usuarioActual.asignaturasCreadas.push(this.asignatura.id);
 
     // Guarda el usuario actualizado en LocalDBService
-    await this.db.registro(this.usuarioActual);
+
 
     // Reinicia el formulario
     this.asignatura = {
