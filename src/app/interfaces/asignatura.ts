@@ -24,6 +24,7 @@ export interface Clase {
   codigoSala: string;
   asistentes: string[];
   inasistentes: string[];
+  fecha: string;
 }
 
 export interface AsistenciaAsignatura extends Asignatura {

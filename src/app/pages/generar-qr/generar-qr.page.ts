@@ -23,6 +23,8 @@ export class GenerarQRPage implements OnInit {
   claseIdCreada: string = '';
   totalInscritos: number = 0;
   rut: string = this.route.snapshot.paramMap.get('rut') || '';
+  fechaClase: string = new Date().toISOString(); // Fecha de la clase en formato ISO que es la que se guarda en Firestore
+                                                // el formato ISO es: 'YYYY-MM-DDTHH:mm:ss.sssZ'
 
   constructor(
     private asistenciaService: AsistenciaService,
@@ -58,7 +60,8 @@ export class GenerarQRPage implements OnInit {
       horaFin: this.horaFin,
       codigoSala: this.codigoSala,
       asistentes: [],
-      inasistentes: [...this.asignaturaInscritos] 
+      inasistentes: [...this.asignaturaInscritos] ,
+      fecha: this.fechaClase
     };
 
     this.qrData = `ClaseId: ${nuevaClase.id}, Asignatura: ${this.asignaturaId}, NombreAsignatura: ${this.asignaturaNombre}, Día: ${this.dia}, Inicio: ${this.horaInicio}, Fin: ${this.horaFin}, Sala: ${this.codigoSala}`;

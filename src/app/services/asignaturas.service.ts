@@ -54,6 +54,31 @@ export class AsignaturaService {
       return [];
     }
   }
+
+  async obtenerAsignaturasPorProfesor(rutProfesor: string): Promise<Asignatura[]> {
+    console.log(`Obteniendo asignaturas para el profesor con rut: ${rutProfesor}`);
+    try {
+      const asignaturasRef = this.firestore.collection<Asignatura>('asignaturas', ref => ref.where('profesorId', '==', rutProfesor));
+      const asignaturasSnapshot = await asignaturasRef.get().toPromise();
+
+      if (!asignaturasSnapshot || asignaturasSnapshot.empty) {
+        console.log('No se encontraron asignaturas para este profesor.');
+        return [];
+      }
+      
+      const asignaturas = asignaturasSnapshot.docs.map(doc => {
+        const data = doc.data() as Asignatura;
+        return { ...data, id: doc.id };
+      });
+      
+      console.log(`Asignaturas obtenidas para el profesor ${rutProfesor}:`, asignaturas);
+      return asignaturas;
+    } catch (error) {
+      console.error('Error al obtener asignaturas por profesor:', error);
+      return [];
+    }
+}
+
   
   async agregarClaseaHorario(asignaturaId: string, clase: Clase): Promise<Clase | null> {
     const asignaturaRef = this.firestore.collection('asignaturas').doc(asignaturaId);
@@ -170,6 +195,11 @@ export class AsignaturaService {
       console.error('Error al obtener asignaturas con asistencias:', error);
       return [];
     }
+  }
+  
+  async obtenerClasesPorAsignatura(asignaturaId: string): Promise<Clase[]> {
+    const clasesSnapshot = await this.firestore.collection<Clase>('clases', ref => ref.where('asignaturaId', '==', asignaturaId)).get().toPromise();
+    return clasesSnapshot?.docs.map(doc => doc.data() as Clase) || [];
   }
   
   

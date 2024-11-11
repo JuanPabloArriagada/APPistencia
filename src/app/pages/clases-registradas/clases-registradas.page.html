@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Clases Registradas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="asignaturas.length > 0">
+    <ion-list>
+      <ion-item *ngFor="let asignatura of asignaturas" (click)="seleccionarAsignatura(asignatura)">
+        {{ asignatura.nombre }}
+      </ion-item>
+    </ion-list>
+  </div>
+  
+  <div *ngIf="asignaturaSeleccionada">
+    <h2>Clases de {{ asignaturaSeleccionada.nombre }}</h2>
+    <ion-list *ngIf="clases.length > 0">
+      <ion-item *ngFor="let clase of clases">
+        <ion-label>
+          <h3>Fecha: {{ clase.fecha }}</h3>
+          <p>Asistentes: {{ clase.asistentes.length }}</p>
+          <p>Inasistentes: {{ clase.inasistentes.length }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="asignaturaSeleccionada && clases.length === 0">
+    <p>No hay clases registradas para esta asignatura.</p>
+  </div>
+</ion-content>
