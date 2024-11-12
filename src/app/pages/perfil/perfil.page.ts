@@ -24,7 +24,6 @@ export class PerfilPage implements OnInit {
     // Configurar el formulario de perfil
     this.perfilForm = this.fb.group({
       Nombre: ['', Validators.required],
-      foto: [''],
     });
   }
 
@@ -38,7 +37,6 @@ export class PerfilPage implements OnInit {
         this.usuario = usuario;
         this.perfilForm.patchValue({
           Nombre: usuario.Nombre,
-          foto: usuario.foto,
         });
       }
     });
@@ -50,7 +48,6 @@ export class PerfilPage implements OnInit {
     if (this.editMode && this.usuario) {
       this.perfilForm.patchValue({
         Nombre: this.usuario.Nombre,
-        foto: this.usuario.foto,
       });
     }
   }

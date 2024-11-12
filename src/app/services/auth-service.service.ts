@@ -98,4 +98,9 @@ export class AuthService {
     await this.storage.remove('usuario'); // Eliminar el usuario almacenado al cerrar sesión
     this.router.navigate(['/login']); // Redirigir al login
   }
+
+  async isAuthenticated(): Promise<boolean> {
+    const user = await this.afAuth.currentUser;
+    return user !== null;  // Si hay un usuario, está autenticado
+  }
 }

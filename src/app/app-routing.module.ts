@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';  // AuthGuard para proteger rutas
 
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule)
   },
   {
     path: '',
@@ -13,63 +14,73 @@ const routes: Routes = [
   },
   {
     path: 'menu',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
+    loadChildren: () => import('./pages/menu/menu.module').then(m => m.MenuPageModule),
+    canActivate: [AuthGuard] 
   },
   {
     path: 'perfil',
-    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+    loadChildren: () => import('./pages/perfil/perfil.module').then(m => m.PerfilPageModule),
+    canActivate: [AuthGuard] 
   },
   {
     path: 'crear-clase',
-    loadChildren: () => import('./pages/crear-clase/crear-clase.module').then( m => m.CrearClasePageModule)
+    loadChildren: () => import('./pages/crear-clase/crear-clase.module').then(m => m.CrearClasePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'clases',
     loadChildren: () => import('./pages/clases/clases.module').then(m => m.ClasesPageModule),
-    data: { titulo: 'Clases' }
+    data: { titulo: 'Clases' },
+    canActivate: [AuthGuard]
   },
   {
     path: 'crear-qr',
     loadChildren: () => import('./pages/clases/clases.module').then(m => m.ClasesPageModule),
-    data: { showGenerateQR: true , titulo: 'Generar QR' }
+    data: { showGenerateQR: true , titulo: 'Generar QR' },
+    canActivate: [AuthGuard]
   },
   {
     path: 'generar-qr/:rut',
-    loadChildren: () => import('./pages/generar-qr/generar-qr.module').then(m => m.GenerarQRPageModule)
+    loadChildren: () => import('./pages/generar-qr/generar-qr.module').then(m => m.GenerarQRPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'horario',
-    loadChildren: () => import('./pages/horario/horario.module').then( m => m.HorarioPageModule)
+    loadChildren: () => import('./pages/horario/horario.module').then(m => m.HorarioPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'asistencia',
-    loadChildren: () => import('./pages/asistencia/asistencia.module').then( m => m.AsistenciaPageModule)
+    loadChildren: () => import('./pages/asistencia/asistencia.module').then(m => m.AsistenciaPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'escaner',
-    loadChildren: () => import('./pages/escaner/escaner.module').then( m => m.EscanerPageModule)
+    loadChildren: () => import('./pages/escaner/escaner.module').then(m => m.EscanerPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'recuperar',
-    loadChildren: () => import('./pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
+    loadChildren: () => import('./pages/recuperar/recuperar.module').then(m => m.RecuperarPageModule),
+  
   },
   {
     path: 'verificar',
-    loadChildren: () => import('./pages/verificar/verificar.module').then( m => m.VerificarPageModule)
+    loadChildren: () => import('./pages/verificar/verificar.module').then(m => m.VerificarPageModule)
   },
   {
     path: 'cambiar',
-    loadChildren: () => import('./pages/cambiar/cambiar.module').then( m => m.CambiarPageModule)
+    loadChildren: () => import('./pages/cambiar/cambiar.module').then(m => m.CambiarPageModule)
   },
   {
     path: 'registro',
-    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
+    loadChildren: () => import('./pages/registro/registro.module').then(m => m.RegistroPageModule)
   },
   {
     path: 'clases-registradas',
-    loadChildren: () => import('./pages/clases-registradas/clases-registradas.module').then( m => m.ClasesRegistradasPageModule)
+    loadChildren: () => import('./pages/clases-registradas/clases-registradas.module').then(m => m.ClasesRegistradasPageModule),
+    canActivate: [AuthGuard]
   },
-
 ];
 
 @NgModule({
