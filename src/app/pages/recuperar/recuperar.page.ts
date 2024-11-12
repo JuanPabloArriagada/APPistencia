@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-recuperar',
@@ -7,24 +8,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./recuperar.page.scss'],
 })
 export class RecuperarPage {
-  codigo:Number=0;
-  email: string = '';
-  metodoVerificacion: string = 'correo'; // Por defecto "correo"
+  correo: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    private alertController: AlertController
+  ) {}
 
-  setCode(codigo: Number){
-    this.codigo = codigo;
+  async enviarCorreoRecuperacion() {
+    try {
+      await this.afAuth.sendPasswordResetEmail(this.correo);
+      this.mostrarAlerta('Correo enviado', 'Por favor, revisa tu bandeja de entrada para restablecer tu contraseña.');
+    } catch (error) {
+      this.mostrarAlerta('Error', 'No se pudo enviar el correo. Verifica la dirección de correo e intenta de nuevo.');
+      console.error('Error al enviar el correo de recuperación:', error);
+    }
   }
 
-  recuperar() {
-    // Aquí envías el correo o SMS al usuario
-    console.log('Correo:', this.email);
-    console.log('Método de Verificación:', this.metodoVerificacion);
-
-    // Después de enviar el correo/SMS, navega a la página de verificar
-    this.router.navigate(['/verificar'], { state: { metodoVerificacion: this.metodoVerificacion }} );
+  async mostrarAlerta(titulo: string, mensaje: string) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensaje,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
-
-  
 }
