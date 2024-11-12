@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   <div *ngIf="asignaturas.length > 0">
     <ion-list>
       <ion-item *ngFor="let asignatura of asignaturas" (click)="seleccionarAsignatura(asignatura)">
@@ -20,7 +20,7 @@
       </ion-item>
     </ion-list>
   </div>
-  
+
   <div *ngIf="asignaturaSeleccionada">
     <h2>Clases de {{ asignaturaSeleccionada.nombre }}</h2>
     <ion-list *ngIf="clases.length > 0">
