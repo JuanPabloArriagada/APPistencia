@@ -1,0 +1,25 @@
+/* registro.page.scss */
+
+/* Estilos para los campos inválidos */
+.invalid {
+    --border-color: #f53d3d;
+    --box-shadow: 0 0 10px rgba(245, 61, 61, 0.3);
+  }
+  
+  /* Estilos para los campos válidos */
+  .valid {
+    --border-color: #10dc60;
+    --box-shadow: 0 0 10px rgba(16, 220, 96, 0.3);
+  }
+  
+  /* Estilo para los mensajes de éxito y error */
+  ion-label[color="danger"] {
+    font-size: 12px;
+    color: #f53d3d;
+  }
+  
+  ion-label[color="success"] {
+    font-size: 12px;
+    color: #10dc60;
+  }
+  

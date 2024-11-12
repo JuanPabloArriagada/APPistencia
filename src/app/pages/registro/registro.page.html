@@ -10,42 +10,65 @@
 
 <ion-content>
   <form [formGroup]="registroForm" (ngSubmit)="registro()">
-    <ion-item>
+    
+    <!-- RUT -->
+    <ion-item [class.invalid]="registroForm.controls['rut'].invalid && registroForm.controls['rut'].dirty"
+              [class.valid]="registroForm.controls['rut'].valid && registroForm.controls['rut'].dirty">
       <ion-label position="floating">RUT</ion-label>
-      <ion-input formControlName="rut"></ion-input>
+      <ion-input formControlName="rut" type="text"></ion-input>
     </ion-item>
-    <ion-item *ngIf="registroForm.controls['rut'].invalid && registroForm.controls['rut'].touched">
-      <ion-label color="danger">RUT inválido o incompleto</ion-label>
+    <ion-item *ngIf="registroForm.controls['rut'].invalid">
+      <ion-label color="danger">{{ rutInvalid }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['rut'].valid">
+      <ion-label color="success">RUT válido</ion-label>
     </ion-item>
 
-    <ion-item>
+    <!-- Nombre -->
+    <ion-item [class.invalid]="registroForm.controls['Nombre'].invalid && registroForm.controls['Nombre'].dirty"
+              [class.valid]="registroForm.controls['Nombre'].valid && registroForm.controls['Nombre'].dirty">
       <ion-label position="floating">Nombre</ion-label>
       <ion-input formControlName="Nombre"></ion-input>
     </ion-item>
-    <ion-item *ngIf="registroForm.controls['Nombre'].invalid && registroForm.controls['Nombre'].touched">
-      <ion-label color="danger">Nombre es obligatorio</ion-label>
+    <ion-item *ngIf="registroForm.controls['Nombre'].invalid">
+      <ion-label color="danger">{{ nombreInvalid }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['Nombre'].valid">
+      <ion-label color="success">Nombre válido</ion-label>
     </ion-item>
 
-    <ion-item>
+    <!-- Correo -->
+    <ion-item [class.invalid]="registroForm.controls['correo'].invalid && registroForm.controls['correo'].dirty"
+              [class.valid]="registroForm.controls['correo'].valid && registroForm.controls['correo'].dirty">
       <ion-label position="floating">Correo</ion-label>
       <ion-input formControlName="correo" type="email"></ion-input>
     </ion-item>
-    <ion-item *ngIf="registroForm.controls['correo'].invalid && registroForm.controls['correo'].touched">
-      <ion-label color="danger">Correo inválido</ion-label>
+    <ion-item *ngIf="registroForm.controls['correo'].invalid">
+      <ion-label color="danger">{{ correoInvalid }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['correo'].valid">
+      <ion-label color="success">Correo válido</ion-label>
     </ion-item>
 
-    <ion-item>
+    <!-- Contraseña -->
+    <ion-item [class.invalid]="registroForm.controls['contrasena'].invalid && registroForm.controls['contrasena'].dirty"
+              [class.valid]="registroForm.controls['contrasena'].valid && registroForm.controls['contrasena'].dirty">
       <ion-label position="floating">Contraseña</ion-label>
       <ion-input formControlName="contrasena" type="password"></ion-input>
     </ion-item>
-    <ion-item *ngIf="registroForm.controls['contrasena'].invalid && registroForm.controls['contrasena'].touched">
-      <ion-label color="danger">La contraseña es obligatoria y debe tener al menos 6 caracteres</ion-label>
+    <ion-item *ngIf="registroForm.controls['contrasena'].invalid">
+      <ion-label color="danger">{{ contrasenaInvalid }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="registroForm.controls['contrasena'].valid">
+      <ion-label color="success">Contraseña válida</ion-label>
     </ion-item>
 
+    <!-- Mensaje de error general -->
     <div *ngIf="errorMessage" class="error-message">
       <p>{{ errorMessage }}</p>
     </div>
 
+    <!-- Botón de registro -->
     <ion-button expand="full" type="submit" [disabled]="registroForm.invalid">Registrar</ion-button>
   </form>
 </ion-content>
