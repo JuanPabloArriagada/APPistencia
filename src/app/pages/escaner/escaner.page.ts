@@ -69,7 +69,6 @@ export class EscanerPage implements OnInit {
       } else {
         this.barcodes.push(...barcodes);
         for (const barcode of this.barcodes) {
-          await this.presentAlert(`Código escaneado: ${barcode.rawValue}`);
           await this.processScannedValue(barcode.rawValue);
         }
       }
@@ -87,7 +86,6 @@ export class EscanerPage implements OnInit {
   }
 
   async processScannedValue(scannedValue: string) {
-    await this.presentAlert('Procesando el valor escaneado...');
 
     const claseMatch = scannedValue.match(/ClaseId:\s*(\d+)/);
     const asignaturaMatch = scannedValue.match(/Asignatura:\s*([^,]+)/);
@@ -116,7 +114,6 @@ export class EscanerPage implements OnInit {
         sala: salaMatch ? salaMatch[1] : ''
       };
       this.escaneoData = escaneo;
-      await this.presentAlert(`Datos escaneados: ${JSON.stringify(escaneo)}`);
     } else {
       await this.presentAlert('Datos de asignatura o nombre de asignatura no encontrados en el código.');
       return;

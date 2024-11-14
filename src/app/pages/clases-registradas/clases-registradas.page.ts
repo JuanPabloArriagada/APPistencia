@@ -26,31 +26,39 @@ export class ClasesRegistradasPage implements OnInit {
 
     this.asignaturaId = this.route.snapshot.paramMap.get('asignaturaId') || '';
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
-    console.log('Asignatura ID obtenido:', this.asignaturaId); // Depurar el ID de la asignatura
+    console.log('Asignatura ID obtenido:', this.asignaturaId);
 
+    // Intentar obtener clases desde storage
     const storedClases = await this.storage.get(`clases-${this.asignaturaId}-${this.rut}`);
     if (storedClases) {
       console.log('Clases encontradas en storage:', storedClases);
-      this.clases = storedClases; 
-      this.calcularPorcentajeAsignatura(); 
+      this.clases = storedClases;
+      this.calcularPorcentajeAsignatura();
     } else {
       console.log('No se encontraron clases en storage. Cargando desde servicio...');
-      this.cargarClases(this.asignaturaId); 
+      this.cargarClases();
     }
   }
 
-  // Cargar las clases de la asignatura seleccionada
-  async cargarClases(asignaturaId: string) {
-    console.log('Cargando clases para la asignatura con ID:', asignaturaId); // Depurar el momento de carga de las clases
+  // Cargar las clases desde el servicio
+  async cargarClases() {
+    console.log('Cargando clases desde servicio...');
     try {
-      this.clases = await this.asignaturaService.obtenerClasesPorAsignatura(asignaturaId);
-      console.log(`Clases cargadas para la asignatura ${asignaturaId}:`, this.clases); 
-      this.calcularPorcentajeAsignatura();  
-
+      this.clases = await this.asignaturaService.obtenerClasesPorAsignatura(this.asignaturaId);
+      console.log(`Clases cargadas desde servicio:`, this.clases);
+      this.calcularPorcentajeAsignatura();
+      
+      // Almacenar las clases en el storage
       await this.storage.set(`clases-${this.asignaturaId}-${this.rut}`, this.clases);
     } catch (error) {
-      console.error('Error al cargar clases:', error);
+      console.error('Error al cargar clases desde servicio:', error);
     }
+  }
+
+  // Método para forzar la actualización de las clases
+  async actualizarClases() {
+    console.log('Actualizando clases...');
+    await this.cargarClases(); // Recargar las clases desde el servicio
   }
 
   // Calcular el porcentaje de asistencia de una clase
@@ -64,9 +72,7 @@ export class ClasesRegistradasPage implements OnInit {
   calcularPorcentajeAsignatura(): void {
     let totalPorcentaje = 0;
     let totalClases = 0;
-    console.log('Calculando porcentaje de asistencia para la asignatura ID:', this.asignaturaId); // Depurar la asignatura actual
     this.clases.forEach((clase) => {
-      console.log('Clase actual:', clase); // Verificar cada clase en el cálculo
       if (clase.asignaturaId === this.asignaturaId) {
         totalPorcentaje += this.calcularPorcentajeClase(clase);
         totalClases++;
@@ -82,7 +88,6 @@ export class ClasesRegistradasPage implements OnInit {
   }
 
   toggleDetalles(clase: Clase) {
-    console.log('Toggle detalles de clase:', clase);
     if (!clase.mostrarDetalles) {
       clase.mostrarDetalles = false; 
     }
