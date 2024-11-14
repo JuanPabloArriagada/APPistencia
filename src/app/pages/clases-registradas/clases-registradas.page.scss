@@ -1,6 +1,5 @@
-/* Estilos generales para las clases */
 ion-header {
-  --background: #4CAF50; /* Color de fondo del toolbar */
+  --background: #4CAF50; 
   --color: white;
 }
 
@@ -16,10 +15,10 @@ ion-title {
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 90%; /* Para que las tarjetas no estén tan estrechas */
-    max-width: 600px; /* Máximo ancho para no ser demasiado grandes en pantallas anchas */
+    width: 90%; 
+    max-width: 600px; 
     margin-left: auto; 
-    margin-right: auto; /* Centra las tarjetas */
+    margin-right: auto; 
   }
   
   .clase-card:hover {
@@ -35,7 +34,7 @@ ion-title {
   }
   
   ion-card-title {
-    font-size: 1.4em; /* Aumenta el tamaño de la fuente para mayor legibilidad */
+    font-size: 1.4em; 
     font-weight: 700;
     color: #333;
   }
@@ -103,7 +102,7 @@ ion-title {
   
   .no-clases ion-card-title {
     font-size: 1.5em;
-    color: #ff6f61; /* Un color de alerta o advertencia */
+    color: #ff6f61; 
   }
   
   .no-clases ion-card-content {

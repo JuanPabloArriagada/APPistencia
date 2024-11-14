@@ -1,7 +1,6 @@
-/* Fondo y estilo del contenido */
+
 ion-header {
-  --background: #3880ff; /* Color principal del header */
-  --color: white;
+  --background: #3880ff; 
 }
 
 ion-title {
@@ -11,25 +10,24 @@ ion-title {
 }
 
 .asignaturas-list {
-  display: grid; /* Usamos grid en lugar de flexbox */
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 3 o más columnas según el espacio disponible */
-  gap: 20px; /* Espaciado entre las tarjetas */
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+  gap: 20px; 
   padding: 10px 20px;
-  width: 100%; /* Asegura que la lista ocupe el 100% del ancho */
+  width: 100%; 
 }
 
-/* Estilo de cada tarjeta */
 ion-card.asignatura-card {
-  width: 100%; /* Ocupa todo el ancho disponible en la celda del grid */
-  max-width: 100%; /* Evitamos que tenga un ancho máximo, ya que grid lo controla */
-  min-height: 250px; /* Altura mínima para las tarjetas */
+  width: 100%; 
+  max-width: 100%; 
+  min-height: 250px; 
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   background: #fff;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Distribuye el contenido de la tarjeta */
+  justify-content: space-between; 
 }
 
 ion-card.asignatura-card:hover {
@@ -38,7 +36,7 @@ ion-card.asignatura-card:hover {
 }
 
 ion-card-header {
-  background-color: #3880ff; /* Azul del header */
+  background-color: #3880ff;
   padding: 16px;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
@@ -88,21 +86,19 @@ ion-card-title {
   margin-top: 30px;
 }
 
-/* Responsividad: Ajuste para pantallas medianas y grandes */
 @media (max-width: 1200px) {
   .asignaturas-list {
     padding: 0 20px;
   }
 }
 
-/* Responsividad para pantallas más pequeñas */
 @media (max-width: 768px) {
   .asignaturas-list {
     padding: 0 16px;
   }
 
   ion-card.asignatura-card {
-    min-height: 300px; /* Altura mínima ajustada */
+    min-height: 300px; 
   }
 }
 

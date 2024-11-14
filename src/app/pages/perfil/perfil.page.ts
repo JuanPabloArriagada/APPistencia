@@ -1,19 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth-service.service';
 import { Usuario } from '../../interfaces/usuario';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Network } from '@capacitor/network';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
 })
-export class PerfilPage implements OnInit {
+export class PerfilPage implements OnInit, OnDestroy {
   perfilForm: FormGroup;
   usuario: Usuario | null = null;
   rut: string = '';
-  editMode = false; // Variable para controlar el modo de edición
+  editMode = false; 
+  isOnline$: BehaviorSubject<boolean> = new BehaviorSubject(true); 
+
+  networkListener: any;
 
   constructor(
     private authService: AuthService,
@@ -21,28 +26,42 @@ export class PerfilPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    // Configurar el formulario de perfil
     this.perfilForm = this.fb.group({
       Nombre: ['', Validators.required],
     });
   }
 
-  ngOnInit() {
-    // Obtener el RUT de los parámetros de la ruta
+  async ngOnInit() {
+    const status = await Network.getStatus();
+    this.isOnline$.next(status.connected);
+
+    this.networkListener = Network.addListener('networkStatusChange', (status) => {
+      this.isOnline$.next(status.connected);
+    });
+
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
 
-    // Cargar datos del usuario
-    this.authService.getUsuarioActual(this.rut).subscribe((usuario) => {
-      if (usuario) {
-        this.usuario = usuario;
-        this.perfilForm.patchValue({
-          Nombre: usuario.Nombre,
+    if (this.rut) {
+      if (this.isOnline$.getValue()) {
+        this.authService.getUsuarioActual(this.rut).subscribe((usuario) => {
+          if (usuario) {
+            this.usuario = usuario;
+            this.perfilForm.patchValue({
+              Nombre: usuario.Nombre,
+            });
+          }
         });
+      } else {
+        this.usuario = await this.authService.getUsuarioActualOffline(this.rut);
+        if (this.usuario) {
+          this.perfilForm.patchValue({
+            Nombre: this.usuario.Nombre,
+          });
+        }
       }
-    });
+    }
   }
 
-  // Método para alternar el modo de edición
   toggleEditMode() {
     this.editMode = !this.editMode;
     if (this.editMode && this.usuario) {
@@ -55,7 +74,6 @@ export class PerfilPage implements OnInit {
   // Método para guardar los cambios
   async guardarCambios() {
     if (this.perfilForm.valid && this.usuario) {
-      // Actualizar los datos del usuario con los valores del formulario
       const datosActualizados = {
         ...this.usuario,
         ...this.perfilForm.value,
@@ -69,7 +87,13 @@ export class PerfilPage implements OnInit {
   // Método para cerrar sesión
   cerrarSesion() {
     this.authService.logout().then(() => {
-      this.router.navigate(['/home']); // Redirige a la página de inicio de sesión
+      this.router.navigate(['/home']); 
     });
+  }
+
+  ngOnDestroy() {
+    if (this.networkListener) {
+      this.networkListener.remove();
+    }
   }
 }

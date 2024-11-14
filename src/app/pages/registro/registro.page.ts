@@ -101,7 +101,6 @@ export class RegistroPage implements OnInit {
       return;
     }
   
-    // Asignar valores del formulario al objeto usuario
     this.usuario = { ...this.registroForm.value };
   
     // Verificar si el RUT ya está registrado

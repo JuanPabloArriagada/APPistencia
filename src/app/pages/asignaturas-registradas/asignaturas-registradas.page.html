@@ -8,7 +8,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Lista de asignaturas con tarjetas -->
   <div *ngIf="asignaturas.length > 0">
     <div class="asignaturas-grid">
       <ion-card *ngFor="let asignatura of asignaturas" class="asignatura-card" (click)="verClases(asignatura)">

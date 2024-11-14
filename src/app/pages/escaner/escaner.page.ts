@@ -37,7 +37,7 @@ export class EscanerPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.checkBarcodeScannerSupport(); // Verifica el soporte del escáner de códigos de barras
+    this.checkBarcodeScannerSupport(); 
   }
 
   async checkBarcodeScannerSupport() {
@@ -45,7 +45,7 @@ export class EscanerPage implements OnInit {
     this.isSupported = result.supported;
 
     if (this.isSupported) {
-      await BarcodeScanner.installGoogleBarcodeScannerModule(); // Instala el módulo de escaneo si es compatible
+      await BarcodeScanner.installGoogleBarcodeScannerModule(); 
     }
   }
 
@@ -61,20 +61,28 @@ export class EscanerPage implements OnInit {
     this.isScanning = true;
     await this.presentAlert('Iniciando escaneo...');
   
-    const { barcodes } = await BarcodeScanner.scan();
-    this.barcodes.push(...barcodes);
-  
-    for (const barcode of this.barcodes) {
-      await this.presentAlert(`Código escaneado: ${barcode.rawValue}`);
-      await this.processScannedValue(barcode.rawValue);
+    try {
+      const { barcodes } = await BarcodeScanner.scan();
+      
+      if (barcodes.length === 0) {
+        await this.presentAlert('No se escaneó ningún código.');
+      } else {
+        this.barcodes.push(...barcodes);
+        for (const barcode of this.barcodes) {
+          await this.presentAlert(`Código escaneado: ${barcode.rawValue}`);
+          await this.processScannedValue(barcode.rawValue);
+        }
+      }
+    } catch (error) {
+      console.error('Error en el escáner:', error);
+      await this.presentAlert('El escáner fue cerrado antes de escanear.');
+    } finally {
+      this.isScanning = false;  
     }
-  
-    this.isScanning = false;
-    await this.presentAlert('Escaneo finalizado.');
   }
 
   async requestPermissions(): Promise<boolean> {
-    const { camera } = await BarcodeScanner.requestPermissions(); // Solicita permisos de cámara
+    const { camera } = await BarcodeScanner.requestPermissions(); 
     return camera === 'granted' || camera === 'limited';
   }
 

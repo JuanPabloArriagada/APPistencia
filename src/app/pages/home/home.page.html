@@ -1,8 +1,6 @@
 <ion-content [fullscreen]="true" class="login-content">
-  <!-- Encabezado -->
   <app-header></app-header>
 
-  <!-- Formulario de inicio de sesión -->
   <div class="login-container">
     <h2 class="ion-text-center">Iniciar Sesión</h2>
 
@@ -20,6 +18,7 @@
       <ion-text color="danger" *ngIf="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched">
         <p>Correo inválido</p>
       </ion-text>
+
       <ion-item>
         <ion-label position="floating">RUT</ion-label>
         <ion-input
@@ -45,22 +44,21 @@
       <ion-text color="danger" *ngIf="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched">
         <p>La contraseña es requerida</p>
       </ion-text>
-      
-      <ion-button type="submit" expand="block" fill="solid" color="primary" [disabled]="!loginForm.valid">
+
+      <ion-button type="submit" expand="block" fill="solid" color="primary" [disabled]="!loginForm.valid || !isOnline">
         Iniciar Sesión
       </ion-button>
-      
-      <!-- Mensaje de error -->
+
       <div *ngIf="errorMessage" class="error-message">
         <ion-text color="danger">{{ errorMessage }}</ion-text>
       </div>
     </form>
 
     <!-- Enlaces secundarios -->
-    <ion-button href="recuperar" expand="block" fill="clear" color="primary">
+    <ion-button href="recuperar" expand="block" fill="clear" color="primary" [disabled]="!isOnline">
       ¿Olvidaste tu contraseña?
     </ion-button>
-    <ion-button href="registro" expand="block" fill="outline" color="secondary">
+    <ion-button href="registro" expand="block" fill="outline" color="secondary" [disabled]="!isOnline">
       Registrarse
     </ion-button>
   </div>

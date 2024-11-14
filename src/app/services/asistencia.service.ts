@@ -14,7 +14,6 @@ export class AsistenciaService {
     private asignaturaService: AsignaturaService
   ) {}
 
-  // Guarda o actualiza la asistencia de una clase en Firestore
   guardarAsistencia(clase: Clase) {
     return this.firestore.collection('clases').doc(clase.id).set(clase);
   }

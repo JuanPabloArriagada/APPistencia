@@ -8,7 +8,6 @@
 </ion-header>
 
 <ion-content class="ion-padding animated-content">
-  <!-- Contenedor Principal -->
   <div class="form-container">
     <ion-card class="form-card">
       <ion-card-content>
@@ -33,7 +32,6 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Mensaje de confirmación/alerta -->
     <div *ngIf="mensajeAlerta" class="alert-message" [class.success]="mensajeAlerta.success">
       <ion-icon [name]="mensajeAlerta.success ? 'checkmark-circle-outline' : 'close-circle-outline'" size="large"></ion-icon>
       <p>{{ mensajeAlerta.message }}</p>

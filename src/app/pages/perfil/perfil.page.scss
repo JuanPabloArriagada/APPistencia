@@ -1,5 +1,5 @@
 ion-header {
-  --background: #4CAF50; /* Color de fondo del toolbar */
+  --background: #4CAF50; 
   --color: white;
 }
 
@@ -18,7 +18,7 @@ ion-title {
 }
 
 .cerrar-sesion-btn:hover {
-  background-color: #D84315; /* Rojo más oscuro al pasar el ratón */
+  background-color: #D84315; 
 }
 
 .perfil-card, .edit-card {
@@ -75,21 +75,21 @@ ion-button {
 }
 
 .save-btn {
-  background-color: #4CAF50; /* Color primario para el botón de guardar */
+  background-color: #4CAF50; 
   color: white;
 }
 
 .cancel-btn {
-  background-color: #f5f5f5; /* Gris claro para cancelar */
+  background-color: #f5f5f5; 
   color: #888;
 }
 
 .save-btn:hover {
-  background-color: #45a049; /* Sombra verde al pasar el ratón */
+  background-color: #45a049; 
 }
 
 .cancel-btn:hover {
-  background-color: #e0e0e0; /* Gris más oscuro al pasar el ratón */
+  background-color: #e0e0e0; 
 }
 
 ion-content {

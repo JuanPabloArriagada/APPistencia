@@ -1,5 +1,5 @@
 ion-header {
-  --background: #4CAF50; /* Color de fondo del toolbar */
+  --background: #4CAF50; 
   --color: white;
 }
 
@@ -7,7 +7,6 @@ ion-content {
     --background: #f9f9f9;
   }
   
-  /* Contenedor del encabezado */
   .header-container h2 {
     font-size: 1.6rem;
     font-weight: bold;
@@ -36,7 +35,6 @@ ion-content {
     padding: 10px;
   }
   
-  /* Detalles de la clase */
   .class-details .details-card {
     margin: 10px;
     padding: 10px;
@@ -97,7 +95,6 @@ ion-content {
     font-weight: bold;
   }
   
-  /* Responsividad */
   @media (max-width: 480px) {
     .header-container h2 {
       font-size: 1.4rem;

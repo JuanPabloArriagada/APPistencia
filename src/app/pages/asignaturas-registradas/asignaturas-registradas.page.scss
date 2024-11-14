@@ -16,7 +16,7 @@
   .asignatura-card ion-card-title {
     font-size: 1.2em;
     font-weight: 600;
-    color: #0077ff; /* Azul moderno */
+    color: #0077ff; 
     text-align: center;
   }
   
@@ -29,11 +29,10 @@
   /* Grid responsivo */
   .asignaturas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adapta el tamaño de las tarjetas */
-    gap: 15px; /* Espacio entre las tarjetas */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 15px; 
   }
   
-  /* Estilo del mensaje cuando no hay asignaturas */
   .no-asignaturas {
     display: flex;
     justify-content: center;
@@ -50,7 +49,7 @@
   
   .no-asignaturas ion-card-title {
     font-size: 1.5em;
-    color: #e74c3c; /* Rojo de advertencia */
+    color: #e74c3c; 
   }
   
   .no-asignaturas ion-card-content {
@@ -58,7 +57,7 @@
     color: #555;
   }
   
-  /* Mejoras para dispositivos pequeños */
+ 
   @media (max-width: 480px) {
     .asignatura-card ion-card-title {
       font-size: 1.1em;
@@ -69,11 +68,11 @@
     }
   
     .asignaturas-grid {
-      grid-template-columns: 1fr; /* Solo una columna en pantallas pequeñas */
+      grid-template-columns: 1fr;
     }
   }
   
-  /* Mejoras para dispositivos grandes */
+ 
   @media (min-width: 1024px) {
     .asignatura-card ion-card-title {
       font-size: 1.5em;
@@ -84,7 +83,7 @@
     }
   
     .asignaturas-grid {
-      gap: 20px; /* Más espacio en pantallas grandes */
+      gap: 20px; 
     }
   }
   

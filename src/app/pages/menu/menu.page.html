@@ -20,16 +20,18 @@
   <ion-grid fixed>
     <ion-row>
       <ng-container *ngIf="rol === 'Profesor'">
-        <!-- Opción Generar QR -->
+        <!-- Generar QR -->
         <ion-col size="6" class="menu-option">
-          <ion-card button [routerLink]="['/crear-qr', { rut: rut }]">
+          <ion-card 
+            [routerLink]="getRouterLinkFor('crear-qr')" 
+            [class.disabled]="!(isOnline$ | async)">
             <ion-card-content>
               <ion-icon name="qr-code-outline" size="large"></ion-icon>
               <h3>Generar QR</h3>
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <!-- Opción Clases Registradas -->
+        <!-- Clases Registradas -->
         <ion-col size="6" class="menu-option">
           <ion-card button [routerLink]="['/asignaturas-registradas', { rut: rut }]">
             <ion-card-content>
@@ -38,9 +40,12 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <!-- Opción Crear Clase -->
+
+        <!-- Crear Clase -->
         <ion-col size="6" class="menu-option">
-          <ion-card button [routerLink]="['/crear-clase', { rut: rut }]">
+          <ion-card 
+            [routerLink]="getRouterLinkFor('crear-clase')" 
+            [class.disabled]="!(isOnline$ | async)">
             <ion-card-content>
               <ion-icon name="create-outline" size="large"></ion-icon>
               <h3>Crear Clase</h3>
@@ -48,7 +53,6 @@
           </ion-card>
         </ion-col>
       </ng-container>
-
       <ng-container *ngIf="rol === 'Estudiante'">
         <!-- Opción Horario -->
         <ion-col size="6" class="menu-option">
@@ -61,7 +65,9 @@
         </ion-col>
         <!-- Opción Escanear QR -->
         <ion-col size="6" class="menu-option">
-          <ion-card button [routerLink]="['/escaner', { rut: rut }]">
+          <ion-card 
+            [routerLink]="getRouterLinkFor('escaner')" 
+            [class.disabled]="!(isOnline$ | async)">
             <ion-card-content>
               <ion-icon name="scan-outline" size="large"></ion-icon>
               <h3>Escanear QR</h3>

@@ -42,13 +42,12 @@
       (click)="scan()" 
       [disabled]="isScanning" 
       class="scan-btn">
-    <ion-icon *ngIf="!isScanning" name="qr-code-outline" slot="start"></ion-icon>
-    <div *ngIf="isScanning" class="scan-indicator">
-      <ion-spinner name="crescent"></ion-spinner>
-    </div>
-    <span>{{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}</span>
-</ion-button>
-
+      <ion-icon *ngIf="!isScanning" name="qr-code-outline" slot="start"></ion-icon>
+      <div *ngIf="isScanning" class="scan-indicator">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+      <span>{{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}</span>
+    </ion-button>
   </div>
 
   <!-- Botón para finalizar -->

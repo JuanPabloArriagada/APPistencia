@@ -17,17 +17,16 @@ ion-label {
   100% { background: linear-gradient(45deg, #3a7bd5, #00b7ff); }
 }
 
-/* Contenedor del formulario */
+
 .form-container {
   width: 100%;
-  max-width: 500px; /* Limita el ancho máximo del formulario */
-  background: rgba(255, 255, 255, 0.9); /* Fondo blanco translúcido */
+  max-width: 500px; 
+  background: rgba(255, 255, 255, 0.9); 
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Espaciado de los campos y animaciones */
 ion-item {
   --padding-start: 16px;
   --padding-end: 16px;
@@ -36,7 +35,6 @@ ion-item {
   transition: all 0.3s ease-in-out;
 }
 
-/* Otros estilos como los de los botones y campos de entrada */
 .submit-btn {
   --background: #3a7bd5;
   --color: white;
@@ -55,7 +53,6 @@ ion-item {
   --background: #d3d3d3;
 }
 
-/* Estilo para el mensaje de éxito */
 .success-message {
   background-color: #28a745; /* Color verde */
   color: white;
@@ -82,7 +79,6 @@ ion-item {
   font-size: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-/* Animación de entrada para el mensaje de éxito */
 .success-message.ng-enter {
   opacity: 0;
 }

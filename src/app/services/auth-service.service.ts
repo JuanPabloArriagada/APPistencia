@@ -47,7 +47,6 @@ export class AuthService {
     const credenciales = await this.afAuth.createUserWithEmailAndPassword(correo, contrasena);
     
     if (credenciales.user) {
-      // Guardar la información en Firestore usando rut como ID del documento
       await this.firestore.collection('usuarios').doc(rut).set({
         rut,
         correo,
@@ -73,7 +72,7 @@ export class AuthService {
   
           if (usuario.correo === correo) {
             // Guardar los datos del usuario en el Storage
-            await this.storage.set('usuario', usuario);  // Guardar el usuario en el almacenamiento local
+            await this.storage.set('usuario', usuario); 
             return usuario;
           } else {
             throw new Error('El correo y el RUT no coinciden');
@@ -115,11 +114,26 @@ export class AuthService {
   async logout() {
     await this.afAuth.signOut();
     await this.storage.remove('usuario');  // Eliminar el usuario almacenado
-    this.router.navigate(['/login']); // Redirigir al login
+    this.router.navigate(['/login']); 
   }
 
   async isAuthenticated(): Promise<boolean> {
     const user = await this.afAuth.currentUser;
     return user !== null;  // Si hay un usuario, está autenticado
   }
+
+  async getUsuarioActualOffline(rut: string): Promise<Usuario | null> {
+    const cachedUser = await this.storage.get(`usuario_${rut}`);
+    if (cachedUser) {
+      console.log(`Cargando usuario desde cache: ${rut}`);
+      return cachedUser as Usuario;
+    }
+    return null;
+  }
+  
+  async guardarUsuarioOffline(usuario: Usuario) {
+    await this.storage.set(`usuario_${usuario.rut}`, usuario);
+    console.log(`Usuario ${usuario.rut} guardado en cache`);
+  }
+
 }

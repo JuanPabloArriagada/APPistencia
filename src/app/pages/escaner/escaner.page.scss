@@ -1,5 +1,5 @@
 ion-header {
-  --background: #4CAF50; /* Color de fondo del toolbar */
+  --background: #4CAF50; 
   --color: white;
 }
 
@@ -9,6 +9,7 @@ ion-title {
   letter-spacing: 1px !important;
   text-transform: uppercase !important;
 }
+
 .menu-title {
   font-size: 22px;
   font-weight: bold;
@@ -19,10 +20,10 @@ ion-title {
 .scan-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between; 
   align-items: center;
   height: 100%;
-  gap: 30px;
+  gap: 20px;
   padding: 20px;
   text-align: center;
 }
@@ -32,32 +33,32 @@ ion-title {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 60vh; /* Colocamos el botón más abajo */
-  border-radius: 20px; /* Redondeamos el contorno para que sea uniforme */
+  flex-grow: 1; 
+  border-radius: 20px;
 }
 
 .scan-btn {
-  background-color: transparent !important; /* Color de fondo personalizado para el botón */
-  border-radius: 12px; /* Bordes redondeados */
-  width: 200px; /* Ajuste del tamaño del botón */
+  background-color: transparent !important; 
+  border-radius: 12px;
+  width: 200px;
   height: 200px;
   padding: 10px;
   font-size: 1.2em;
   font-weight: bold;
   text-transform: uppercase;
-  box-shadow: none !important; /* Eliminar sombra */
-  border: none !important; /* Eliminar cualquier borde del botón */
-  color: white; /* Color de texto */
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Transiciones suaves */
-  position: relative; /* Para usar con iconos e indicadores */
+  box-shadow: none !important; 
+  border: none !important; 
+  color: white; 
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .scan-btn:hover {
-  background-color: #3171e5; /* Color de hover */
-  transform: scale(1.1); /* Efecto visual de ampliación */
+  background-color: #3171e5; 
+  transform: scale(1.1); 
 }
 
 .scan-btn:focus, .scan-btn:active {
@@ -65,31 +66,15 @@ ion-title {
   box-shadow: none;
 }
 
-/* Indicador visual mientras escanea */
 .scan-indicator {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.3); /* Fondo oscuro para el spinner */
-  border-radius: 50%; /* Hacer el fondo del indicador circular */
-  position: absolute; /* Asegura que esté centrado */
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
+  background-color: rgba(0, 0, 0, 0.3); 
+  border-radius: 50%; 
+  position: absolute;
 }
 
 /* Estilo para el spinner */
@@ -130,15 +115,25 @@ ion-label p {
 
 /* Botón para finalizar */
 .finish-btn {
-  margin-top: 25px;
+  margin-top: 20px; 
   font-size: 1.2em;
   padding: 15px;
   border-radius: 50px;
   text-transform: uppercase;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   background-color: transparent !important;
-  color: white; /* Color del texto */
-  border: none; /* Sin borde visible */
+  color: white; 
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.finish-btn:hover {
+  background-color: #28c76f;
+}
+
+.finish-btn:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 /* Responsividad */
@@ -172,28 +167,31 @@ ion-label p {
   .scan-status {
     font-size: 0.9em;
   }
+
+  .finish-btn {
+    font-size: 1.1em;
+    padding: 12px;
+  }
 }
 
-/* Botón de finalizar */
 .finish-btn {
-  background-color: #28c76f; /* Color verde para finalizar */
+  background-color: #28c76f; 
   color: white;
   width: 100%;
   font-size: 1.2em;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: none; /* Eliminar cualquier sombra */
-  border: none !important; /* Eliminar borde visible */
+  box-shadow: none;
+  border: none !important;
   transition: background-color 0.3s ease;
   text-transform: uppercase;
 }
 
 .finish-btn:hover {
-  background-color: #22b35e; /* Color de hover para finalizar */
+  background-color: #22b35e; 
 }
 
 .finish-btn:focus {
   outline: none;
   box-shadow: none;
 }
-

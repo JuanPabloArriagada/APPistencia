@@ -9,7 +9,6 @@
 
 <ion-content>
 
-  <!-- Mostrar el porcentaje de asistencia de la asignatura de manera destacada -->
   <div class="asistencia-header">
     <ion-card>
       <ion-card-header>
@@ -19,7 +18,6 @@
     </ion-card>
   </div>
 
-  <!-- Condición para mostrar un mensaje si no hay clases -->
   <div *ngIf="clases.length === 0" class="no-clases">
     <ion-card>
       <ion-card-header>
@@ -31,10 +29,8 @@
     </ion-card>
   </div>
 
-  <!-- Lista de clases con tarjetas y detalles colapsables -->
   <ion-list *ngIf="clases.length > 0">
     <ion-item *ngFor="let clase of clases">
-      <!-- Tarjeta de cada clase -->
       <ion-card (click)="toggleDetalles(clase)" class="clase-card">
         <ion-card-header>
           <ion-card-title>{{ clase.fecha }}</ion-card-title>
@@ -43,14 +39,13 @@
           </ion-card-subtitle>
         </ion-card-header>
 
-        <!-- Detalles desplegables -->
         <ion-card-content *ngIf="clase.mostrarDetalles">
           <div class="class-details">
             <h3 class="details-title">Horario</h3>
             <p>{{ clase.dia }} de {{ clase.horaInicio }} a {{ clase.horaFin }}</p>
             <p><strong>Sala:</strong> {{ clase.codigoSala }}</p>
             
-            <!-- Asistentes -->
+
             <h3 class="details-title">Asistentes</h3>
             <ion-list lines="none">
               <ion-item *ngFor="let asistente of clase.asistentes">
@@ -58,7 +53,6 @@
               </ion-item>
             </ion-list>
             
-            <!-- Inasistentes -->
             <h3 class="details-title">Inasistentes</h3>
             <ion-list lines="none">
               <ion-item *ngFor="let inasistente of clase.inasistentes">

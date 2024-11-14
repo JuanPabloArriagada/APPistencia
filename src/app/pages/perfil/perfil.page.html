@@ -26,7 +26,8 @@
           <ion-label>Rol</ion-label>
           <ion-note>{{ usuario?.rol }}</ion-note>
         </ion-item>
-        <ion-button expand="full" (click)="toggleEditMode()" class="edit-btn">Editar Perfil</ion-button>
+        <!-- Solo mostrar el botón de editar si estamos online -->
+        <ion-button *ngIf="isOnline$.getValue()" expand="full" (click)="toggleEditMode()" class="edit-btn">Editar Perfil</ion-button>
       </ion-card-content>
     </ion-card>
   </div>

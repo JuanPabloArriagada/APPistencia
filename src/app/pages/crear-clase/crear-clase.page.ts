@@ -24,7 +24,7 @@ export class CrearClasePage implements OnInit {
   };
 
   rut: string = '';
-  usuarioActual!: Usuario;  // Almacena al usuario actual
+  usuarioActual!: Usuario;  
   successMessage: string = ''; // Nuevo mensaje de éxito
 
   constructor(
@@ -37,7 +37,6 @@ export class CrearClasePage implements OnInit {
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
     console.log('RUT del profesor:', this.rut);
     
-    // Cargar el usuario actual (profesor)
     this.Aut.getUsuarioActual(this.rut).subscribe(usuario => {
       if (usuario) {
         this.usuarioActual = usuario;
@@ -56,31 +55,26 @@ export class CrearClasePage implements OnInit {
   }
 
   async guardarAsignatura() {
-    // Generar ID único para la asignatura
     this.asignatura.id = uuidv4();
     this.asignatura.profesorId = this.usuarioActual.rut;
 
-    // Asignar asignaturaId a cada horario
     this.asignatura.horarios.forEach(horario => {
-        horario.asignaturaId = this.asignatura.id; // Asigna el ID de la asignatura a cada horario
+        horario.asignaturaId = this.asignatura.id; 
     });
 
-    // Guarda la asignatura en el servicio
     await this.asignaturaService.guardarAsignatura(this.asignatura);
 
-    // Actualiza las asignaturas creadas en el usuario actual
     if (!this.usuarioActual.asignaturasCreadas) {
         this.usuarioActual.asignaturasCreadas = [];
     }
     this.usuarioActual.asignaturasCreadas.push(this.asignatura.id);
 
-    // Guarda el usuario actualizado en LocalDBService
-    // (Aquí se puede guardar el usuario actualizado si es necesario)
+ 
 
     // Mostrar mensaje de éxito
     this.successMessage = '¡Asignatura creada con éxito!';
     setTimeout(() => {
-      this.successMessage = ''; // Ocultar el mensaje después de 3 segundos
+      this.successMessage = ''; // Limpiar el mensaje después de 3 segundos
     }, 3000);
 
     // Reinicia el formulario
