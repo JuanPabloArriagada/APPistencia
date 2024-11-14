@@ -36,12 +36,17 @@ export class AsignaturasRegistradasPage implements OnInit {
     }
   }
 
+  async actualizarAsignaturas() {
+    console.log('Actualizando asignaturas...');
+    await this.cargarAsignaturas(); // Recargar las asignaturas desde el servicio
+  }
+  
   async cargarAsignaturas() {
     try {
-    
       const asignaturas = await this.asignaturaService.obtenerAsignaturasPorProfesor(this.rut);
       console.log('Asignaturas del profesor:', asignaturas);
       this.asignaturas = asignaturas;
+  
       // Almacenar las asignaturas en storage para su uso futuro
       await this.storage.set(`asignaturas-${this.rut}`, asignaturas);
     } catch (error) {

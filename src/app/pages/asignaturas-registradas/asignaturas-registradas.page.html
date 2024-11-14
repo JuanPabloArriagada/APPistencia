@@ -23,6 +23,9 @@
     </div>
   </div>
 
+  <!-- Botón para actualizar las asignaturas -->
+  <ion-button expand="full" color="primary" (click)="actualizarAsignaturas()">Actualizar Asignaturas</ion-button>
+
   <!-- Mensaje cuando no hay asignaturas -->
   <div *ngIf="asignaturas.length === 0" class="no-asignaturas">
     <ion-card>
