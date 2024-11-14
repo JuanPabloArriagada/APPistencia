@@ -14,14 +14,29 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private firestore: AngularFirestore,
     private router: Router,
-    private storage: Storage // Inyectar Storage
+    private storage: Storage 
   ) {
-    this.initStorage(); // Inicializar el almacenamiento en el constructor
+    this.initStorage();
   }
 
   // Inicializar el almacenamiento
   private async initStorage() {
-    await this.storage.create(); // Asegurarse de que la base de datos del almacenamiento esté creada
+    await this.storage.create(); 
+  }
+
+  async verificarRutExistente(rut: string): Promise<boolean> {
+    const usuarioDoc = await this.firestore.collection('usuarios').doc(rut).get().toPromise();
+    return usuarioDoc ? usuarioDoc.exists : false;  // Devuelve true si el RUT ya está en la base de datos
+  }
+
+  async verificarCorreoExistente(correo: string): Promise<boolean> {
+    try {
+      const snapshot = await this.firestore.collection('usuarios', ref => ref.where('correo', '==', correo)).get().toPromise();
+      return snapshot && !snapshot.empty ? true : false;  // Si el correo está vacío, no existe, si no está vacío, ya está registrado.
+    } catch (error) {
+      console.error('Error al verificar el correo:', error);
+      return false;
+    }
   }
 
   // Registro con Email y Password
@@ -41,9 +56,8 @@ export class AuthService {
     }
   }
 
-  // Iniciar sesión
-  async login(correo: string, contrasena: string, rut: string) {  // Añadir rut como parámetro
-    if (!correo || !contrasena || !rut) {  // Verificar que el rut esté presente
+  async login(correo: string, contrasena: string, rut: string): Promise<Usuario | null> {
+    if (!correo || !contrasena || !rut) {
       throw new Error('Correo, contraseña o rut vacíos');
     }
   
@@ -52,22 +66,28 @@ export class AuthService {
       const user = credenciales.user;
   
       if (user) {
-        // Ahora usamos el `rut` directamente como el ID de documento
         const usuarioDoc = await this.firestore.collection('usuarios').doc(rut).get().toPromise();
-        
+  
         if (usuarioDoc && usuarioDoc.exists) {
-          // Si encontramos el usuario, navega a MenuPage con el rut
-          this.router.navigate(['/menu', { rut }]);
+          const usuario = usuarioDoc.data() as Usuario;
+  
+          if (usuario.correo === correo) {
+            // Guardar los datos del usuario en el Storage
+            await this.storage.set('usuario', usuario);  // Guardar el usuario en el almacenamiento local
+            return usuario;
+          } else {
+            throw new Error('El correo y el RUT no coinciden');
+          }
         } else {
           throw new Error('Usuario no encontrado');
         }
       }
     } catch (error) {
-      console.error('Credenciales incorrectas', error);
-      throw new Error('Error de autenticación');
+      console.error('Error al autenticar usuario:', error);
+      throw new Error('Credenciales incorrectas');
     }
+    return null;
   }
-
   
   // Obtener datos del usuario autenticado
   getUsuarioActual(rut: string): Observable<Usuario | null> {
@@ -92,10 +112,9 @@ export class AuthService {
   }
   
 
-  // Cerrar sesión
   async logout() {
     await this.afAuth.signOut();
-    await this.storage.remove('usuario'); // Eliminar el usuario almacenado al cerrar sesión
+    await this.storage.remove('usuario');  // Eliminar el usuario almacenado
     this.router.navigate(['/login']); // Redirigir al login
   }
 

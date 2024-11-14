@@ -13,7 +13,6 @@ ion-toolbar {
 ion-title {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #4a4a4a;
 }
 
 ion-item {
@@ -116,4 +115,44 @@ ion-item:hover {
 ion-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s;
+}
+/* Estilo para el mensaje de éxito emergente */
+.success-message {
+  position: fixed;
+  top: 20px;  /* Aparece cerca de la parte superior */
+  left: 50%;
+  transform: translateX(-50%);  /* Centrado horizontal */
+  background-color: #4CAF50;  /* Verde exitoso */
+  color: white;
+  padding: 15px 25px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000; 
+  opacity: 0;
+  animation: showToast 0.5s forwards, hideToast 0.5s forwards 3s;
+}
+
+/* Animación de entrada y salida */
+@keyframes showToast {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes hideToast {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
 }

@@ -14,12 +14,11 @@
         <!-- Campos del formulario -->
         <ion-item class="animated-item" [class.invalid]="registroForm.controls['rut'].invalid && registroForm.controls['rut'].dirty">
           <ion-label position="floating">RUT</ion-label>
-          <ion-input formControlName="rut" type="text" placeholder="Ej. 12345678" clear-input></ion-input>
+          <ion-input formControlName="rut" type="text" placeholder="Ej. 12345678 sin punto ni guion" clear-input></ion-input>
         </ion-item>
         <ion-text *ngIf="registroForm.controls['rut'].invalid && registroForm.controls['rut'].dirty">
           <ion-label color="danger">{{ rutInvalid }}</ion-label>
-        </ion-text>
-
+        </ion-text>        
         <ion-item class="animated-item" [class.invalid]="registroForm.controls['Nombre'].invalid && registroForm.controls['Nombre'].dirty">
           <ion-label position="floating">Nombre</ion-label>
           <ion-input formControlName="Nombre" type="text" placeholder="Juan Pérez" clear-input></ion-input>
@@ -44,9 +43,14 @@
           <ion-label color="danger">{{ contrasenaInvalid }}</ion-label>
         </ion-text>
 
+        <!-- Mensaje de error -->
         <div *ngIf="errorMessage" class="error-message">
           <p>{{ errorMessage }}</p>
         </div>
+        <!-- Mensaje de éxito -->
+      <div *ngIf="successMessage" class="success-message">
+        <p>{{ successMessage }}</p>
+      </div>
 
         <!-- Botón de registro -->
         <ion-button expand="full" type="submit" [disabled]="registroForm.invalid" class="submit-btn">Registrar</ion-button>

@@ -8,6 +8,17 @@
 </ion-header>
 
 <ion-content>
+
+  <!-- Mostrar el porcentaje de asistencia de la asignatura de manera destacada -->
+  <div class="asistencia-header">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Promedio de asistencia</ion-card-title>
+        <ion-card-subtitle>{{ porcentajeAsistenciaAsignatura.toFixed(2) }}%</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </div>
+
   <!-- Condición para mostrar un mensaje si no hay clases -->
   <div *ngIf="clases.length === 0" class="no-clases">
     <ion-card>
@@ -59,4 +70,5 @@
       </ion-card>
     </ion-item>
   </ion-list>
+
 </ion-content>

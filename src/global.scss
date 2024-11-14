@@ -35,3 +35,37 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* Forzar el modo claro */
+/* Forzar el modo claro siempre */
+:root {
+    --ion-background-color: #ffffff; /* Fondo blanco */
+    --ion-text-color: #000000; /* Texto oscuro */
+    --ion-item-background-color: #f4f4f4; /* Fondo claro para los ítems */
+    --ion-toolbar-background: #ffffff; /* Fondo blanco en las barras de herramientas */
+    --ion-toolbar-color: #000000; /* Color del texto de la barra de herramientas */
+    --ion-header-background: #ffffff; /* Fondo blanco en los headers */
+    --ion-header-text-color: #000000; /* Color de texto del header */
+  }
+  
+  /* Asegura que el modo oscuro no se aplique, especialmente en el navegador */
+  body {
+    background-color: #ffffff !important; /* Fondo blanco */
+    color: #000000 !important; /* Texto oscuro */
+  }
+  
+  /* Desactivar el modo oscuro de forma global */
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+  }
+
+  ion-title {
+    font-size: 20px !important;
+    font-weight: bold !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+  }
+  

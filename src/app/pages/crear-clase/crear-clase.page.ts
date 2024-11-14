@@ -25,6 +25,7 @@ export class CrearClasePage implements OnInit {
 
   rut: string = '';
   usuarioActual!: Usuario;  // Almacena al usuario actual
+  successMessage: string = ''; // Nuevo mensaje de éxito
 
   constructor(
     private asignaturaService: AsignaturaService,
@@ -74,7 +75,13 @@ export class CrearClasePage implements OnInit {
     this.usuarioActual.asignaturasCreadas.push(this.asignatura.id);
 
     // Guarda el usuario actualizado en LocalDBService
+    // (Aquí se puede guardar el usuario actualizado si es necesario)
 
+    // Mostrar mensaje de éxito
+    this.successMessage = '¡Asignatura creada con éxito!';
+    setTimeout(() => {
+      this.successMessage = ''; // Ocultar el mensaje después de 3 segundos
+    }, 3000);
 
     // Reinicia el formulario
     this.asignatura = {

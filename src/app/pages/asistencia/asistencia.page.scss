@@ -1,3 +1,4 @@
+/* Fondo y estilo del contenido */
 ion-header {
   --background: #3880ff; /* Color principal del header */
   --color: white;
@@ -10,22 +11,25 @@ ion-title {
 }
 
 .asignaturas-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
+  display: grid; /* Usamos grid en lugar de flexbox */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 3 o más columnas según el espacio disponible */
+  gap: 20px; /* Espaciado entre las tarjetas */
   padding: 10px 20px;
+  width: 100%; /* Asegura que la lista ocupe el 100% del ancho */
 }
 
 /* Estilo de cada tarjeta */
 ion-card.asignatura-card {
-  width: 100%;
-  max-width: 420px;
+  width: 100%; /* Ocupa todo el ancho disponible en la celda del grid */
+  max-width: 100%; /* Evitamos que tenga un ancho máximo, ya que grid lo controla */
+  min-height: 250px; /* Altura mínima para las tarjetas */
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   background: #fff;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribuye el contenido de la tarjeta */
 }
 
 ion-card.asignatura-card:hover {
@@ -52,6 +56,7 @@ ion-card-title {
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+  flex-grow: 1;
 }
 
 .progress-item {
@@ -83,22 +88,21 @@ ion-card-title {
   margin-top: 30px;
 }
 
-/* Responsividad */
+/* Responsividad: Ajuste para pantallas medianas y grandes */
+@media (max-width: 1200px) {
+  .asignaturas-list {
+    padding: 0 20px;
+  }
+}
+
+/* Responsividad para pantallas más pequeñas */
 @media (max-width: 768px) {
   .asignaturas-list {
     padding: 0 16px;
   }
 
-  .progress-wrapper {
-    padding: 16px;
-  }
-
-  .progress-label {
-    font-size: 0.9em;
-  }
-
-  .progress-text {
-    font-size: 0.8em;
+  ion-card.asignatura-card {
+    min-height: 300px; /* Altura mínima ajustada */
   }
 }
 

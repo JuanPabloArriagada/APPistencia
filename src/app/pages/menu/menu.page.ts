@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Platform } from '@ionic/angular';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { AuthService } from 'src/app/services/auth-service.service'; // Importar AuthService
 
@@ -15,7 +16,8 @@ export class MenuPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService // Inyectar AuthService
+    private authService: AuthService, // Inyectar AuthService
+    private platform: Platform,
   ) {}
 
   async ngOnInit() {
@@ -33,6 +35,10 @@ export class MenuPage implements OnInit {
       });
     } else {
       console.warn('RUT no proporcionado en la URL');
+
+      this.platform.backButton.subscribeWithPriority(10, () => {
+        console.log('Botón de retroceso deshabilitado');
+      });
   }
   }
 }

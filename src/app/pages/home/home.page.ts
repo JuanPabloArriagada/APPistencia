@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth-service.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-home',
@@ -20,8 +21,7 @@ export class HomePage implements OnInit {
   };
   loginForm: FormGroup;
   errorMessage: string = '';
-
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private storage: Storage) {
     this.loginForm = new FormGroup({
       correo: new FormControl('', [Validators.required, Validators.email]),
       contrasena: new FormControl('', [Validators.required]),
@@ -32,21 +32,21 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     try {
       console.log('Verificando usuario almacenado en storage...');
-      this.authService.getUsuarioActual(this.usuario.rut).subscribe((storedUser) => {
-        if (storedUser) {
-          console.log('Usuario encontrado en storage:', storedUser);
-          this.router.navigate(['/menu', { rut: storedUser.rut }]); // Redirigir si ya hay un usuario
-        } else {
-          console.log('No se encontró usuario en storage');
-        }
-      });
+      const storedUser = await this.storage.get('usuario'); // Obtener el usuario del storage
+  
+      if (storedUser) {
+        console.log('Usuario encontrado en storage:', storedUser);
+        this.router.navigate(['/menu', { rut: storedUser.rut }]); // Redirigir si ya hay un usuario
+      } else {
+        console.log('No se encontró usuario en storage');
+      }
     } catch (error) {
       console.error('Error al verificar usuario en storage', error);
     }
   }
 
   async login() {
-    console.log('Formulario de login: ', this.loginForm.value); // Verifica qué datos se están enviando
+    console.log('Formulario de login: ', this.loginForm.value);
   
     if (!this.loginForm.valid) {
       console.log('Formulario no válido');
@@ -57,11 +57,20 @@ export class HomePage implements OnInit {
   
     try {
       console.log('Intentando login con correo:', correo);
-      await this.authService.login(correo, contrasena, rut); // Pasa rut como parámetro adicional
-      console.log('Login exitoso');
+  
+      // Llamar al servicio para intentar el login
+      const usuario = await this.authService.login(correo, contrasena, rut);
+  
+      // Verificar que el correo, el RUT y la contraseña coinciden en la base de datos
+      if (usuario && usuario.rut === rut && usuario.correo === correo) {
+        console.log('Login exitoso');
+        // Redirigir a la página de menú si todo está bien
+        this.router.navigate(['/menu', { rut: usuario.rut }]);
+      } else {
+        this.errorMessage = 'El correo, el RUT o la contraseña no coinciden.';
+      }
     } catch (error) {
       console.error('Credenciales incorrectas', error);
-      // Aquí puedes mostrar el error en la vista
       this.errorMessage = 'Credenciales incorrectas. Intenta nuevamente.'; // Error de autenticación
     }
   }

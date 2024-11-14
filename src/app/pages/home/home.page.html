@@ -20,22 +20,6 @@
       <ion-text color="danger" *ngIf="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched">
         <p>Correo inválido</p>
       </ion-text>
-
-      <!-- Campo de contraseña -->
-      <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input
-          formControlName="contrasena"
-          type="password"
-          placeholder="Introduce tu contraseña"
-          [class.invalid]="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched"
-        ></ion-input>
-      </ion-item>
-      <ion-text color="danger" *ngIf="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched">
-        <p>La contraseña es requerida</p>
-      </ion-text>
-
-      <!-- Campo de RUT -->
       <ion-item>
         <ion-label position="floating">RUT</ion-label>
         <ion-input
@@ -49,11 +33,23 @@
         <p>El RUT es requerido</p>
       </ion-text>
 
-      <!-- Botón de iniciar sesión -->
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input
+          formControlName="contrasena"
+          type="password"
+          placeholder="Introduce tu contraseña"
+          [class.invalid]="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched"
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched">
+        <p>La contraseña es requerida</p>
+      </ion-text>
+      
       <ion-button type="submit" expand="block" fill="solid" color="primary" [disabled]="!loginForm.valid">
         Iniciar Sesión
       </ion-button>
-
+      
       <!-- Mensaje de error -->
       <div *ngIf="errorMessage" class="error-message">
         <ion-text color="danger">{{ errorMessage }}</ion-text>

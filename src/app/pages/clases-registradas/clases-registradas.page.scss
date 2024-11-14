@@ -110,3 +110,37 @@ ion-title {
     font-size: 1.2em;
     color: #555;
   }
+
+  .asistencia-header {
+    margin: 20px 0;
+  }
+  
+  .asistencia-header ion-card {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .clase-card {
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+  
+  .clase-card ion-card-header {
+    background-color: #f0f4f8;
+  }
+  
+  .registro-hora {
+    font-size: 0.9rem;
+    color: #5a5a5a;
+    margin-top: 10px;
+  }
+  
+  .details-title {
+    font-size: 1.2rem;
+    margin-top: 10px;
+  }
+  
+  .no-clases {
+    text-align: center;
+    margin-top: 50px;
+  }
+  

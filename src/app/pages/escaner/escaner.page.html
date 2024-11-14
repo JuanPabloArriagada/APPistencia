@@ -1,52 +1,58 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="light" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light" ></ion-back-button>
     </ion-buttons>
-    <ion-title class="menu-title">Escanear QR</ion-title>
+    <ion-title>Escáner de Asistencia</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="scan-container">
-    <!-- Botón de escanear centrado y grande -->
-    <div class="scan-btn-container">
-      <ion-button 
-        expand="full" 
-        color="primary" 
-        (click)="scan()" 
-        [disabled]="isScanning" 
-        class="scan-btn">
-        <ion-icon *ngIf="!isScanning" name="qr-code-outline" slot="start"></ion-icon>
-        <div *ngIf="isScanning" class="scan-indicator">
-          <ion-spinner name="crescent"></ion-spinner>
-        </div>
-        <span>{{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}</span>
-      </ion-button>
-    </div>
-
-    <!-- Mensaje de estado de escaneo -->
-    <div *ngIf="isScanning" class="scan-status">
-      <p>Por favor, mantén el código QR dentro del área de escaneo...</p>
-    </div>
-
-    <!-- Resultados -->
-    <ion-list *ngIf="barcodes.length > 0">
-      <ion-item *ngFor="let barcode of barcodes">
-        <ion-label>
-          <h2>Datos Escaneados:</h2>
-          <p>{{ barcode.rawValue }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-
-    <!-- Botón para finalizar -->
-    <ion-button 
-      expand="full" 
-      color="secondary" 
-      (click)="navCtrl.back()" 
-      class="finish-btn">
-      Finalizar Registro
-    </ion-button>
+  <!-- Indicador de escaneo -->
+  <div *ngIf="isScanning" class="scanning-indicator">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Escaneando...</p>
   </div>
+
+  <!-- Resultados del escaneo -->
+  <div *ngIf="escaneoData" class="scan-results">
+    <h2>Detalles de la clase y asignatura</h2>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ escaneoData.nombreAsignatura }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Clase ID:</strong> {{ escaneoData.claseId }}</p>
+        <p><strong>Asignatura:</strong> {{ escaneoData.asignatura }}</p>
+        <p><strong>Nombre de la asignatura:</strong> {{ escaneoData.nombreAsignatura }}</p>
+        <p><strong>Día:</strong> {{ escaneoData.dia }}</p>
+        <p><strong>Hora de inicio:</strong> {{ escaneoData.horaInicio }}</p>
+        <p><strong>Hora de fin:</strong> {{ escaneoData.horaFin }}</p>
+        <p><strong>Sala:</strong> {{ escaneoData.sala }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Botón de escaneo -->
+  <div *ngIf="!isScanning" class="scan-btn-container">
+    <ion-button 
+      *ngIf="!escaneoData" 
+      expand="full" 
+      color="primary" 
+      (click)="scan()" 
+      [disabled]="isScanning" 
+      class="scan-btn">
+    <ion-icon *ngIf="!isScanning" name="qr-code-outline" slot="start"></ion-icon>
+    <div *ngIf="isScanning" class="scan-indicator">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+    <span>{{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}</span>
+</ion-button>
+
+  </div>
+
+  <!-- Botón para finalizar -->
+  <ion-button expand="full" color="secondary" (click)="navCtrl.back()" class="finish-btn">
+    Finalizar Registro
+  </ion-button>
 </ion-content>

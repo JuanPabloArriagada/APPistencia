@@ -1,13 +1,14 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="light" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Crear Clases</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Formulario de Crear Clase -->
   <form (ngSubmit)="guardarAsignatura()">
     <ion-item>
       <ion-label position="floating">Nombre Asignatura</ion-label>
@@ -16,7 +17,7 @@
 
     <div *ngFor="let horario of asignatura.horarios; let i = index">
       <h3 class="ion-text-center">Horario {{ i + 1 }}</h3>
-
+      <!-- Campos para cada horario -->
       <ion-item>
         <ion-label position="floating">Día</ion-label>
         <ion-select [(ngModel)]="horario.dia" name="dia{{i}}" required>
@@ -57,4 +58,9 @@
 
     <ion-button type="submit" expand="full" [disabled]="!asignatura.nombre">Guardar Asignatura</ion-button>
   </form>
+
+  <!-- Mensaje de éxito -->
+  <div *ngIf="successMessage" class="success-message">
+    <p>{{ successMessage }}</p>
+  </div>
 </ion-content>

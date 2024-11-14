@@ -54,3 +54,35 @@ ion-item {
 .submit-btn:disabled {
   --background: #d3d3d3;
 }
+
+/* Estilo para el mensaje de éxito */
+.success-message {
+  background-color: #28a745; /* Color verde */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s ease-out;
+}
+
+.success-message p {
+  margin: 0;
+}
+
+.error-message {
+  background-color: #dc3545; /* Color rojo */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* Animación de entrada para el mensaje de éxito */
+.success-message.ng-enter {
+  opacity: 0;
+}
