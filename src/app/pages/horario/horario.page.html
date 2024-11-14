@@ -1,37 +1,35 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light" defaultHref="/menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>Horario</ion-title>
+    <ion-title class="menu-title">Horario</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="container ion-padding">
-    <!-- Botones para seleccionar el día -->
-    <div class="select-day">
-      <ion-button *ngFor="let day of diasSemana" (click)="selectDay(day)" [color]="day === selectedDay ? 'primary' : 'medium'">
-        {{ day.slice(0,2) }}
-      </ion-button>
-    </div>
-
-    <!-- Mostrar clases del día seleccionado -->
-    <div *ngIf="selectedDay">
-      <h2 class="text-primary">{{ selectedDay }}</h2>
-      <ng-container *ngIf="clasesRegistradas[selectedDay] && clasesRegistradas[selectedDay].length > 0; else noClases">
-        <div *ngFor="let clase of clasesRegistradas[selectedDay]" class="card mb-3 shadow-sm">
-          <div class="card-body">
-            <p><strong>Asignatura:</strong> {{ clase.nombreAsignatura }}</p>
-            <p><strong>Sala:</strong> {{ clase.codigoSala }}</p>
-            <p><strong>Inicio:</strong> {{ clase.horaInicio }}</p>
-            <p><strong>Fin:</strong> {{ clase.horaFin }}</p>
-          </div>
+<ion-content class="ion-padding">
+  <!-- Botones para seleccionar el día -->
+  <div class="select-day">
+    <ion-button *ngFor="let day of diasSemana" (click)="selectDay(day)" [color]="day === selectedDay ? 'primary' : 'medium'" class="day-button">
+      {{ day.slice(0, 2) }}
+    </ion-button>
+  </div>
+  
+  <!-- Mostrar clases del día seleccionado -->
+  <div *ngIf="selectedDay" class="day-classes">
+    <h2 class="day-title text-primary">{{ selectedDay }}</h2>
+    <ng-container *ngIf="clasesRegistradas[selectedDay] && clasesRegistradas[selectedDay].length > 0; else noClases">
+      <div *ngFor="let clase of clasesRegistradas[selectedDay]" class="class-card">
+        <div class="card-body">
+          <p><strong>Asignatura:</strong> {{ clase.nombreAsignatura }}</p>
+          <p><strong>Sala:</strong> {{ clase.codigoSala }}</p>
+          <p><strong>Inicio:</strong> {{ clase.horaInicio }}</p>
+          <p><strong>Fin:</strong> {{ clase.horaFin }}</p>
         </div>
-      </ng-container>
-      <ng-template #noClases>
-        <p class="text-muted">No hay clases registradas para este día.</p>
-      </ng-template>
-    </div>
+      </div>
+    </ng-container>
+    <ng-template #noClases>
+      <p class="text-muted">No hay clases registradas para este día.</p>
+    </ng-template>
   </div>
 </ion-content>

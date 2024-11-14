@@ -76,8 +76,8 @@ export class AsignaturaService {
     } catch (error) {
       console.error('Error al obtener asignaturas por profesor:', error);
       return [];
-    }
-}
+    } 
+  }
 
   
   async agregarClaseaHorario(asignaturaId: string, clase: Clase): Promise<Clase | null> {
@@ -125,11 +125,9 @@ export class AsignaturaService {
         return;
       }
   
-      // Comprobar si el alumno ya está inscrito (opcional, si quieres evitar duplicados)
       if (asignatura.inscritos.includes(alumnoId)) {
         console.log(`El alumno ${alumnoId} ya está inscrito en la asignatura ${asignaturaId}`);
       } else {
-        // Añadir el alumno a los inscritos y actualizar en Firestore
         asignatura.inscritos = [...(asignatura.inscritos || []), alumnoId];
         await this.actualizarAsignatura(asignaturaId, asignatura);
       }
@@ -198,11 +196,12 @@ export class AsignaturaService {
   }
   
   async obtenerClasesPorAsignatura(asignaturaId: string): Promise<Clase[]> {
+    console.log('Obteniendo clases para la asignatura con ID:', asignaturaId); 
     const clasesSnapshot = await this.firestore.collection<Clase>('clases', ref => ref.where('asignaturaId', '==', asignaturaId)).get().toPromise();
-    return clasesSnapshot?.docs.map(doc => doc.data() as Clase) || [];
+    const clases = clasesSnapshot?.docs.map(doc => doc.data() as Clase) || [];
+    console.log(`Clases obtenidas para la asignatura ${asignaturaId}:`, clases); 
+    return clases;
   }
-  
-  
 
 }
 

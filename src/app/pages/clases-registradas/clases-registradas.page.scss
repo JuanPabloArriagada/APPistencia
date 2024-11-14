@@ -1,0 +1,145 @@
+ion-header {
+  --background: #4CAF50; 
+  --color: white;
+}
+
+ion-title {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+  
+  .clase-card {
+    margin: 10px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 90%; 
+    max-width: 600px; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  
+  .clase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  ion-card-header {
+    background-color: #f4f5f8;
+    padding: 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  ion-card-title {
+    font-size: 1.4em; 
+    font-weight: 700;
+    color: #333;
+  }
+  
+  ion-card-subtitle {
+    font-size: 1.1em;
+    color: #777;
+    margin-top: 5px;
+  }
+  
+  .class-details {
+    padding: 20px;
+    background-color: #fafafa;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+  
+  .details-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #007bff;
+    margin-top: 15px;
+  }
+  
+  ion-list ion-item {
+    padding: 12px 0;
+    font-size: 1em;
+  }
+  
+  ion-button {
+    --padding-start: 10px;
+    --padding-end: 10px;
+    --background: #007bff;
+    --color: white;
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    font-size: 1.1em;
+  }
+  
+  ion-button:hover {
+    --background: #0056b3;
+  }
+  
+  ion-item[button] {
+    background-color: transparent;
+    margin: 0;
+  }
+  
+  .no-clases {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+  }
+  
+  .no-clases ion-card {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+  }
+  
+  .no-clases ion-card-title {
+    font-size: 1.5em;
+    color: #ff6f61; 
+  }
+  
+  .no-clases ion-card-content {
+    font-size: 1.2em;
+    color: #555;
+  }
+
+  .asistencia-header {
+    margin: 20px 0;
+  }
+  
+  .asistencia-header ion-card {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .clase-card {
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+  
+  .clase-card ion-card-header {
+    background-color: #f0f4f8;
+  }
+  
+  .registro-hora {
+    font-size: 0.9rem;
+    color: #5a5a5a;
+    margin-top: 10px;
+  }
+  
+  .details-title {
+    font-size: 1.2rem;
+    margin-top: 10px;
+  }
+  
+  .no-clases {
+    text-align: center;
+    margin-top: 50px;
+  }
+  

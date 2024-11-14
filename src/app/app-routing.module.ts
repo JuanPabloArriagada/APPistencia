@@ -77,8 +77,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/registro/registro.module').then(m => m.RegistroPageModule)
   },
   {
-    path: 'clases-registradas',
-    loadChildren: () => import('./pages/clases-registradas/clases-registradas.module').then(m => m.ClasesRegistradasPageModule),
+    path: 'asignaturas-registradas',
+    loadChildren: () => import('./pages/asignaturas-registradas/asignaturas-registradas.module').then( m => m.AsignaturasRegistradasPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'clases-registradas/:asignaturaId/:rut',
+    loadChildren: () => import('./pages/clases-registradas/clases-registradas.module').then( m => m.ClasesRegistradasPageModule),
     canActivate: [AuthGuard]
   },
 ];

@@ -1,24 +1,40 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/home"></ion-back-button>
+      <ion-back-button color="light" defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Recuperar Contraseña</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-content>
-      <form (submit)="enviarCorreoRecuperacion()">
-        <ion-item>
-          <ion-label position="floating">Correo electrónico</ion-label>
-          <ion-input type="email" [(ngModel)]="correo" name="correo" required></ion-input>
-        </ion-item>
-        <ion-button expand="full" type="submit" [disabled]="!correo">
-          Enviar Correo de Recuperación
-        </ion-button>
-      </form>
-    </ion-card-content>
-  </ion-card>
+<ion-content class="ion-padding animated-content">
+  <div class="form-container">
+    <ion-card class="form-card">
+      <ion-card-content>
+        <div class="title-container">
+          <ion-icon name="mail-outline" size="large" color="primary"></ion-icon>
+          <h2>Restablecer tu contraseña</h2>
+          <p>Ingresa tu correo electrónico para recibir instrucciones sobre cómo restablecer tu contraseña.</p>
+        </div>
+
+        <form (submit)="enviarCorreoRecuperacion()">
+          <!-- Campo de Correo -->
+          <ion-item [class.invalid]="correo && !validarCorreo(correo)">
+            <ion-label position="floating">Correo electrónico</ion-label>
+            <ion-input type="email" [(ngModel)]="correo" name="correo" required></ion-input>
+          </ion-item>
+
+          <!-- Botón de Enviar -->
+          <ion-button expand="full" type="submit" [disabled]="!correo || !validarCorreo(correo)" class="submit-button">
+            Enviar Correo de Recuperación
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <div *ngIf="mensajeAlerta" class="alert-message" [class.success]="mensajeAlerta.success">
+      <ion-icon [name]="mensajeAlerta.success ? 'checkmark-circle-outline' : 'close-circle-outline'" size="large"></ion-icon>
+      <p>{{ mensajeAlerta.message }}</p>
+    </div>
+  </div>
 </ion-content>

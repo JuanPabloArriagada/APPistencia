@@ -1,23 +1,45 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Asistencia</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list *ngIf="asignaturas.length > 0">
+<ion-content class="ion-padding">
+  <!-- Lista de Asignaturas -->
+  <ion-list class="asignaturas-list" *ngIf="asignaturas.length > 0">
     <ion-item *ngFor="let asignatura of asignaturas">
-      <ion-label>
-        <h2>{{ asignatura.nombre }}</h2>
-        <p>Asistencias: {{ asignatura.cantAsistencias }}</p>
-        <p>Inasistencias: {{ asignatura.cantInasistencias }}</p>
-      </ion-label>
+      <ion-card class="asignatura-card">
+        <ion-card-header>
+          <ion-card-title>{{ asignatura.nombre }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="progress-wrapper">
+            <div class="progress-item">
+              <p class="progress-label">Asistencias</p>
+              <ion-progress-bar 
+                class="progress-bar" 
+                value="{{ asignatura.cantAsistencias / (asignatura.cantAsistencias + asignatura.cantInasistencias) }}">
+              </ion-progress-bar>
+              <p class="progress-text">{{ asignatura.cantAsistencias }} Asistencias</p>
+            </div>
+            <div class="progress-item">
+              <p class="progress-label">Inasistencias</p>
+              <ion-progress-bar 
+                class="progress-bar" 
+                value="{{ asignatura.cantInasistencias / (asignatura.cantAsistencias + asignatura.cantInasistencias) }}">
+              </ion-progress-bar>
+              <p class="progress-text">{{ asignatura.cantInasistencias }} Inasistencias</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
     </ion-item>
   </ion-list>
-  <ion-text *ngIf="asignaturas.length === 0">
+
+  <ion-text *ngIf="asignaturas.length === 0" class="no-asignaturas">
     No estás inscrito en ninguna asignatura.
   </ion-text>
 </ion-content>

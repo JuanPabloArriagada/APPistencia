@@ -5,6 +5,15 @@ import { AsistenciaService } from '../../services/asistencia.service';
 import { ActivatedRoute } from '@angular/router';
 import { AsignaturaService } from '../../services/asignaturas.service';
 
+interface Escaneo {
+  claseId: number;
+  asignatura: string;
+  nombreAsignatura: string;
+  dia: string;
+  horaInicio: string;
+  horaFin: string;
+  sala: string;
+}
 
 @Component({
   selector: 'app-escaner',
@@ -17,6 +26,7 @@ export class EscanerPage implements OnInit {
   claseId: string = '';
   isScanning: boolean = false;
   asignaturaId: string = '';
+  escaneoData: Escaneo | null = null;
 
   constructor(
     public navCtrl: NavController,
@@ -27,7 +37,7 @@ export class EscanerPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.checkBarcodeScannerSupport(); // Verifica el soporte del escáner de códigos de barras
+    this.checkBarcodeScannerSupport(); 
   }
 
   async checkBarcodeScannerSupport() {
@@ -35,7 +45,7 @@ export class EscanerPage implements OnInit {
     this.isSupported = result.supported;
 
     if (this.isSupported) {
-      await BarcodeScanner.installGoogleBarcodeScannerModule(); // Instala el módulo de escaneo si es compatible
+      await BarcodeScanner.installGoogleBarcodeScannerModule(); 
     }
   }
 
@@ -51,20 +61,28 @@ export class EscanerPage implements OnInit {
     this.isScanning = true;
     await this.presentAlert('Iniciando escaneo...');
   
-    const { barcodes } = await BarcodeScanner.scan();
-    this.barcodes.push(...barcodes);
-  
-    for (const barcode of this.barcodes) {
-      await this.presentAlert(`Código escaneado: ${barcode.rawValue}`);
-      await this.processScannedValue(barcode.rawValue);
+    try {
+      const { barcodes } = await BarcodeScanner.scan();
+      
+      if (barcodes.length === 0) {
+        await this.presentAlert('No se escaneó ningún código.');
+      } else {
+        this.barcodes.push(...barcodes);
+        for (const barcode of this.barcodes) {
+          await this.presentAlert(`Código escaneado: ${barcode.rawValue}`);
+          await this.processScannedValue(barcode.rawValue);
+        }
+      }
+    } catch (error) {
+      console.error('Error en el escáner:', error);
+      await this.presentAlert('El escáner fue cerrado antes de escanear.');
+    } finally {
+      this.isScanning = false;  
     }
-  
-    this.isScanning = false;
-    await this.presentAlert('Escaneo finalizado.');
   }
 
   async requestPermissions(): Promise<boolean> {
-    const { camera } = await BarcodeScanner.requestPermissions(); // Solicita permisos de cámara
+    const { camera } = await BarcodeScanner.requestPermissions(); 
     return camera === 'granted' || camera === 'limited';
   }
 
@@ -73,27 +91,40 @@ export class EscanerPage implements OnInit {
 
     const claseMatch = scannedValue.match(/ClaseId:\s*(\d+)/);
     const asignaturaMatch = scannedValue.match(/Asignatura:\s*([^,]+)/);
+    const nombreAsignaturaMatch = scannedValue.match(/NombreAsignatura:\s*([^,]+)/);
+    const diaMatch = scannedValue.match(/Día:\s*([^,]+)/);
+    const horaInicioMatch = scannedValue.match(/Inicio:\s*([^,]+)/);
+    const horaFinMatch = scannedValue.match(/Fin:\s*([^,]+)/);
+    const salaMatch = scannedValue.match(/Sala:\s*([^,]+)/);
 
     if (claseMatch && claseMatch[1]) {
       this.claseId = claseMatch[1];
-      await this.presentAlert(`ID de Clase obtenido: ${this.claseId}`);
     } else {
       await this.presentAlert('ID de Clase no encontrado en el código.');
       return;
     }
 
-    if (asignaturaMatch && asignaturaMatch[1]) {
+    if (asignaturaMatch && asignaturaMatch[1] && nombreAsignaturaMatch && nombreAsignaturaMatch[1]) {
       this.asignaturaId = asignaturaMatch[1];
-      await this.presentAlert(`ID de Asignatura obtenido: ${this.asignaturaId}`);
+      const escaneo: Escaneo = {
+        claseId: Number(claseMatch[1]),
+        asignatura: asignaturaMatch[1],
+        nombreAsignatura: nombreAsignaturaMatch[1],
+        dia: diaMatch ? diaMatch[1] : '',
+        horaInicio: horaInicioMatch ? horaInicioMatch[1] : '',
+        horaFin: horaFinMatch ? horaFinMatch[1] : '',
+        sala: salaMatch ? salaMatch[1] : ''
+      };
+      this.escaneoData = escaneo;
+      await this.presentAlert(`Datos escaneados: ${JSON.stringify(escaneo)}`);
     } else {
-      await this.presentAlert('ID de Asignatura no encontrado en el código.');
+      await this.presentAlert('Datos de asignatura o nombre de asignatura no encontrados en el código.');
       return;
     }
 
     const alumnoId = this.route.snapshot.paramMap.get('rut') || '';
     await this.registrarAsistencia(alumnoId, this.asignaturaId);
   } 
-
 
   async registrarAsistencia(alumnoId: string, asignaturaId: string) {
     try {
@@ -129,6 +160,7 @@ export class EscanerPage implements OnInit {
       await this.presentAlert(`Error al registrar la asistencia: ${error.message || error}`);
     }
   }
+
   async presentAlert(message: string) {
     const alert = await this.alertController.create({
       header: 'Información',

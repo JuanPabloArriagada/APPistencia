@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AsignaturaService } from '../../services/asignaturas.service';
-import { Asignatura, Clase } from '../../interfaces/asignatura';
+import { Clase } from '../../interfaces/asignatura';
 import { ActivatedRoute } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-clases-registradas',
@@ -9,57 +10,64 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./clases-registradas.page.scss'],
 })
 export class ClasesRegistradasPage implements OnInit {
-  asignaturas: Asignatura[] = [];
   clases: Clase[] = [];
-  asignaturaSeleccionada: Asignatura | null = null;
+  asignaturaId: string = ''; 
   rut: string = '';
-  porcentajeAsistenciaAsignatura: number = 0; // Nuevo campo para el porcentaje de asistencia de la asignatura.
+  porcentajeAsistenciaAsignatura: number = 0;
 
-  constructor(private asignaturaService: AsignaturaService, private route: ActivatedRoute) {}
+  constructor(
+    private asignaturaService: AsignaturaService,
+    private route: ActivatedRoute,
+    private storage: Storage
+  ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.storage.create();
+
+    this.asignaturaId = this.route.snapshot.paramMap.get('asignaturaId') || '';
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
-    this.cargarAsignaturas();
-  }
+    console.log('Asignatura ID obtenido:', this.asignaturaId); // Depurar el ID de la asignatura
 
-  async cargarAsignaturas() {
-    try {
-      this.asignaturas = await this.asignaturaService.obtenerAsignaturasPorProfesor(this.rut);
-      console.log('Asignaturas cargadas:', this.asignaturas);
-    } catch (error) {
-      console.error('Error al cargar asignaturas:', error);
+    const storedClases = await this.storage.get(`clases-${this.asignaturaId}-${this.rut}`);
+    if (storedClases) {
+      console.log('Clases encontradas en storage:', storedClases);
+      this.clases = storedClases; 
+      this.calcularPorcentajeAsignatura(); 
+    } else {
+      console.log('No se encontraron clases en storage. Cargando desde servicio...');
+      this.cargarClases(this.asignaturaId); 
     }
   }
 
-  async seleccionarAsignatura(asignatura: Asignatura) {
-    this.asignaturaSeleccionada = asignatura;
-    this.cargarClases(asignatura.id);
-    this.calcularPorcentajeAsignatura(asignatura.id);  // Llamamos al método para calcular el porcentaje de la asignatura
-  }
-
+  // Cargar las clases de la asignatura seleccionada
   async cargarClases(asignaturaId: string) {
+    console.log('Cargando clases para la asignatura con ID:', asignaturaId); // Depurar el momento de carga de las clases
     try {
       this.clases = await this.asignaturaService.obtenerClasesPorAsignatura(asignaturaId);
-      console.log(`Clases cargadas para la asignatura ${asignaturaId}:`, this.clases);
+      console.log(`Clases cargadas para la asignatura ${asignaturaId}:`, this.clases); 
+      this.calcularPorcentajeAsignatura();  
+
+      await this.storage.set(`clases-${this.asignaturaId}-${this.rut}`, this.clases);
     } catch (error) {
       console.error('Error al cargar clases:', error);
     }
   }
 
-  // Método para calcular el porcentaje de asistencia de una clase.
+  // Calcular el porcentaje de asistencia de una clase
   calcularPorcentajeClase(clase: Clase): number {
     const totalEstudiantes = clase.asistentes.length + clase.inasistentes.length;
     if (totalEstudiantes === 0) return 0; // Evitar división por cero
     return (clase.asistentes.length / totalEstudiantes) * 100;
   }
 
-  // Método para calcular el porcentaje de asistencia promedio de la asignatura.
-  calcularPorcentajeAsignatura(asignaturaId: string): void {
+  // Calcular el porcentaje de asistencia promedio de la asignatura
+  calcularPorcentajeAsignatura(): void {
     let totalPorcentaje = 0;
     let totalClases = 0;
-
+    console.log('Calculando porcentaje de asistencia para la asignatura ID:', this.asignaturaId); // Depurar la asignatura actual
     this.clases.forEach((clase) => {
-      if (clase.asignaturaId === asignaturaId) {
+      console.log('Clase actual:', clase); // Verificar cada clase en el cálculo
+      if (clase.asignaturaId === this.asignaturaId) {
         totalPorcentaje += this.calcularPorcentajeClase(clase);
         totalClases++;
       }
@@ -70,5 +78,14 @@ export class ClasesRegistradasPage implements OnInit {
     } else {
       this.porcentajeAsistenciaAsignatura = 0;
     }
+    console.log('Porcentaje de asistencia promedio de la asignatura:', this.porcentajeAsistenciaAsignatura);
+  }
+
+  toggleDetalles(clase: Clase) {
+    console.log('Toggle detalles de clase:', clase);
+    if (!clase.mostrarDetalles) {
+      clase.mostrarDetalles = false; 
+    }
+    clase.mostrarDetalles = !clase.mostrarDetalles; // Alternar visibilidad
   }
 }

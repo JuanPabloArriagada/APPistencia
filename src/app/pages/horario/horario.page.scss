@@ -1,0 +1,75 @@
+ion-toolbar {
+    --background: #4caf50; 
+    --color: white;
+  }
+  
+  .menu-title {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .select-day {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-around; 
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .day-button {
+    flex: 1 0 30%; 
+    text-align: center;
+    min-width: 60px; 
+  }
+  
+  @media (max-width: 600px) {
+    .day-button {
+      flex: 1 0 40%; 
+    }
+  }
+  
+  .day-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .day-classes {
+    margin-top: 10px;
+  }
+  
+  .day-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .class-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 15px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  .class-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-body {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .card-body p {
+    margin: 5px 0;
+  }
+  
+  .text-muted {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+  }
+  

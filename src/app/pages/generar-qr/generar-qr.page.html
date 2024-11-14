@@ -1,42 +1,82 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Generar QR</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="container ion-padding">
+<ion-content class="ion-padding">
+  <!-- Encabezado -->
+  <div class="header-container">
     <h2 class="ion-text-center">Detalles de la Clase</h2>
-    
-    <div class="container-qr">
-      <qr-code [value]="qrData"></qr-code> 
-    </div>
-    
-    
-    <p><strong>Nombre de la Asignatura:</strong> {{ asignaturaNombre }}</p>
-    <p><strong>Día:</strong> {{ dia }}</p>
-    <p><strong>Fecha:</strong> {{ fechaClase }}</p>
-    <p><strong>Hora de Inicio:</strong> {{ horaInicio }}</p>
-    <p><strong>Hora de Fin:</strong> {{ horaFin }}</p>
-    <p><strong>Código de Sala:</strong> {{ codigoSala }}</p>
-    
+  </div>
 
-    <h5 >Asistentes</h5>
-    <ul>
-      <li *ngFor="let asistente of confirmados">{{ asistente }}</li>
-    </ul>
+  <!-- Contenedor del QR -->
+  <div class="container-qr">
+    <ion-card class="qr-card">
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">Código QR</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <qr-code [value]="qrData" class="qr-code"></qr-code>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-    <h5>Inasistentes</h5>
-    <ul>
-      <li *ngFor="let inasistente of inasistentes">{{ inasistente }}</li>
-    </ul>
+  <!-- Detalles de la clase -->
+  <div class="class-details">
+    <ion-card class="details-card">
+      <ion-card-content>
+        <p><strong>Asignatura:</strong> {{ asignaturaNombre }}</p>
+        <p><strong>Día:</strong> {{ dia }}</p>
+        <p><strong>Fecha:</strong> {{ fechaClase }}</p>
+        <p><strong>Hora Inicio:</strong> {{ horaInicio }}</p>
+        <p><strong>Hora Fin:</strong> {{ horaFin }}</p>
+        <p><strong>Sala:</strong> {{ codigoSala }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-    <h4>Total Inscritos: {{ totalInscritos }}</h4>
+  <!-- Asistentes e inasistentes -->
+  <div class="attendance-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Asistentes ({{ confirmados.length }})</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul class="attendance-list">
+          <li *ngFor="let asistente of confirmados">{{ asistente }}</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
 
-    
-    <ion-button (click)="finalizarRegistro()">Finalizar Registro</ion-button>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Inasistentes ({{ inasistentes.length }})</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul class="attendance-list">
+          <li *ngFor="let inasistente of inasistentes">{{ inasistente }}</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Total inscritos -->
+  <div class="total-inscritos">
+    <ion-card>
+      <ion-card-content>
+        <h4>Total Inscritos: {{ totalInscritos }}</h4>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Botón Finalizar -->
+  <div class="action-button">
+    <ion-button expand="block" color="success" (click)="finalizarRegistro()">
+      Finalizar Registro
+    </ion-button>
   </div>
 </ion-content>

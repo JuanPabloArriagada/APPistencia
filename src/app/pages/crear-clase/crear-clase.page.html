@@ -1,23 +1,25 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>Crear clases</ion-title>
+    <ion-title>Crear Clases</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <form (ngSubmit)="guardarAsignatura()">
     <ion-item>
-      <ion-input label="Nombre Asignatura" type="text" required [(ngModel)]="asignatura.nombre" name="nombre"></ion-input>
+      <ion-label position="floating">Nombre Asignatura</ion-label>
+      <ion-input type="text" required [(ngModel)]="asignatura.nombre" name="nombre"></ion-input>
     </ion-item>
 
     <div *ngFor="let horario of asignatura.horarios; let i = index">
       <h3 class="ion-text-center">Horario {{ i + 1 }}</h3>
-
+      <!-- Campos para cada horario -->
       <ion-item>
-        <ion-select label="Dia" [(ngModel)]="horario.dia" name="dia{{i}}" required>
+        <ion-label position="floating">Día</ion-label>
+        <ion-select [(ngModel)]="horario.dia" name="dia{{i}}" required>
           <ion-select-option value="Lunes">Lunes</ion-select-option>
           <ion-select-option value="Martes">Martes</ion-select-option>
           <ion-select-option value="Miércoles">Miércoles</ion-select-option>
@@ -27,25 +29,37 @@
       </ion-item>
 
       <ion-item>
-        <ion-input label="Hora Inicio" type="time" required [(ngModel)]="horario.horaInicio" name="horaInicio{{i}}"></ion-input>
+        <ion-label position="floating">Hora Inicio</ion-label>
+        <ion-input type="time" required [(ngModel)]="horario.horaInicio" name="horaInicio{{i}}"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-input label="Hora Fin" type="time" required [(ngModel)]="horario.horaFin" name="horaFin{{i}}"></ion-input>
+        <ion-label position="floating">Hora Fin</ion-label>
+        <ion-input type="time" required [(ngModel)]="horario.horaFin" name="horaFin{{i}}"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-input label="Código de Sala" type="text" required [(ngModel)]="horario.codigoSala" name="codigoSala{{i}}"></ion-input>
+        <ion-label position="floating">Código de Sala</ion-label>
+        <ion-input type="text" required [(ngModel)]="horario.codigoSala" name="codigoSala{{i}}"></ion-input>
       </ion-item>
 
       <div class="ion-padding">
-        <ion-button expand="full" (click)="agregarHorario()">Añadir Horario</ion-button>
-        <ion-button expand="full" color="danger" (click)="eliminarHorario(i)">Eliminar Horario</ion-button>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="full" (click)="agregarHorario()">Añadir Horario</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button expand="full" color="danger" (click)="eliminarHorario(i)">Eliminar Horario</ion-button>
+          </ion-col>
+        </ion-row>
       </div>
-      
-      
     </div>
 
     <ion-button type="submit" expand="full" [disabled]="!asignatura.nombre">Guardar Asignatura</ion-button>
   </form>
+
+  <!-- Mensaje de éxito -->
+  <div *ngIf="successMessage" class="success-message">
+    <p>{{ successMessage }}</p>
+  </div>
 </ion-content>

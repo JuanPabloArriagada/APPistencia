@@ -1,0 +1,125 @@
+.select-day {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .select-day ion-button {
+    min-width: 50px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  .no-day-selected {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .no-day-selected ion-card {
+    max-width: 400px;
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .no-day-selected ion-card-title {
+    color: #0077ff;
+    font-size: 1.4rem;
+  }
+  
+  .no-day-selected ion-card-content {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Contenedor de clases */
+  .class-container {
+    text-align: center;
+  }
+  
+  .selected-day {
+    color: #0077ff;
+    font-weight: bold;
+  }
+  
+  .class-card {
+    margin: 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .class-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .class-card ion-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0077ff;
+  }
+  
+  .class-card ion-card-content {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .no-classes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .no-classes ion-card {
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .no-classes ion-card-title {
+    color: #e74c3c;
+    font-size: 1.5rem;
+  }
+  
+  .no-classes ion-card-content {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  @media (max-width: 480px) {
+    .select-day ion-button {
+      font-size: 1rem;
+      min-width: 40px;
+    }
+  
+    .class-card ion-card-title {
+      font-size: 1rem;
+    }
+  
+    .class-card ion-card-content {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .class-container {
+      padding: 20px 40px;
+    }
+  
+    .class-card {
+      margin: 15px auto;
+      max-width: 600px;
+    }
+  
+    .class-card ion-card-title {
+      font-size: 1.4rem;
+    }
+  
+    .class-card ion-card-content {
+      font-size: 1.2rem;
+    }
+  }
+  

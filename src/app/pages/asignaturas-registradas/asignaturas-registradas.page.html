@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Asignaturas Registradas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="asignaturas.length > 0">
+    <div class="asignaturas-grid">
+      <ion-card *ngFor="let asignatura of asignaturas" class="asignatura-card" (click)="verClases(asignatura)">
+        <ion-card-header>
+          <ion-card-title>
+            {{ asignatura.nombre }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Haz clic para ver las clases</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay asignaturas -->
+  <div *ngIf="asignaturas.length === 0" class="no-asignaturas">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>No hay asignaturas registradas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Actualmente no tienes asignaturas registradas. Por favor, revisa más tarde.
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

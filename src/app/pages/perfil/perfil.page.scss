@@ -1,15 +1,112 @@
-.text-center {
+ion-header {
+  --background: #4CAF50; 
+  --color: white;
+}
+
+ion-title {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.cerrar-sesion-btn {
+  background-color: #FF5722; 
+  color: white;
+  border-radius: 25px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cerrar-sesion-btn:hover {
+  background-color: #D84315; 
+}
+
+.perfil-card, .edit-card {
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
-.profile-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+ion-card {
+  width: 90%;
+  max-width: 500px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
 }
 
-.profile-info {
-  text-align: left;
-  padding: 0 16px;
+ion-card:hover {
+  transform: scale(1.02);
+}
+
+ion-card-header {
+  background-color: #f0f0f0;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding: 15px;
+  text-align: center;
+}
+
+ion-card-title {
+  font-size: 22px;
+  color: #333;
+}
+
+ion-card-content {
+  padding: 20px;
+}
+
+ion-item {
+  margin-bottom: 15px;
+}
+
+ion-label {
+  font-weight: bold;
+}
+
+ion-button {
+  font-weight: bold;
+}
+
+.edit-btn, .save-btn, .cancel-btn {
+  border-radius: 20px;
+  margin-top: 15px;
+}
+
+.save-btn {
+  background-color: #4CAF50; 
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5; 
+  color: #888;
+}
+
+.save-btn:hover {
+  background-color: #45a049; 
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0; 
+}
+
+ion-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+ion-card-content .edit-btn, 
+ion-card-content .cancel-btn {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+@media (max-width: 600px) {
+  ion-card {
+    width: 100%;
+  }
 }

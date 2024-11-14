@@ -1,0 +1,23 @@
+.header-toolbar {
+    height: 80px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3a7bd5; 
+    box-shadow: none; 
+  }
+  
+  .logo-container {
+    text-align: center;
+  }
+  
+  .logo-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 600; 
+    color: #eaff00; 
+    letter-spacing: 1px;
+    text-transform: uppercase; 
+    text-shadow: none; 
+  }
+  

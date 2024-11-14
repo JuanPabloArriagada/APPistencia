@@ -1,25 +1,84 @@
-/* registro.page.scss */
+.registro-content {
+  background: linear-gradient(45deg, #3a7bd5, #00d2ff);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  animation: backgroundAnimation 5s infinite alternate;
+}
 
-/* Estilos para los campos inválidos */
-.invalid {
-    --border-color: #f53d3d;
-    --box-shadow: 0 0 10px rgba(245, 61, 61, 0.3);
-  }
-  
-  /* Estilos para los campos válidos */
-  .valid {
-    --border-color: #10dc60;
-    --box-shadow: 0 0 10px rgba(16, 220, 96, 0.3);
-  }
-  
-  /* Estilo para los mensajes de éxito y error */
-  ion-label[color="danger"] {
-    font-size: 12px;
-    color: #f53d3d;
-  }
-  
-  ion-label[color="success"] {
-    font-size: 12px;
-    color: #10dc60;
-  }
-  
+ion-label {
+  margin-bottom: 1rem !important;
+}
+
+@keyframes backgroundAnimation {
+  0% { background: linear-gradient(45deg, #3a7bd5, #00d2ff); }
+  100% { background: linear-gradient(45deg, #3a7bd5, #00b7ff); }
+}
+
+
+.form-container {
+  width: 100%;
+  max-width: 500px; 
+  background: rgba(255, 255, 255, 0.9); 
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --border-radius: 10px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease-in-out;
+}
+
+.submit-btn {
+  --background: #3a7bd5;
+  --color: white;
+  --border-radius: 50px;
+  font-size: 1.2rem;
+  padding: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+.submit-btn:hover {
+  --background: #2c6fae;
+  transform: scale(1.05);
+}
+
+.submit-btn:disabled {
+  --background: #d3d3d3;
+}
+
+.success-message {
+  background-color: #28a745; /* Color verde */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s ease-out;
+}
+
+.success-message p {
+  margin: 0;
+}
+
+.error-message {
+  background-color: #dc3545; /* Color rojo */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.success-message.ng-enter {
+  opacity: 0;
+}

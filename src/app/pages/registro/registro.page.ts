@@ -12,7 +12,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class RegistroPage implements OnInit {
   registroForm: FormGroup;
   errorMessage: string;
-
+  successMessage: string = '';
   usuario: Usuario = {
     rut: '',
     Nombre: '',
@@ -31,6 +31,7 @@ export class RegistroPage implements OnInit {
       rut: ['', [
         Validators.required, 
         Validators.pattern(/^\d{8,9}$/), // Validar solo números y longitud entre 8 y 9
+        Validators.maxLength(9) // Validar longitud máxima de 9 caracteres
       ]],      
       Nombre: ['', [Validators.required, Validators.maxLength(40)]], // Nombre completo
       correo: ['', [
@@ -55,8 +56,22 @@ export class RegistroPage implements OnInit {
 
   get rutInvalid() {
     const rut = this.registroForm.get('rut');
-    return rut?.hasError('required') ? 'El RUT es obligatorio.' :
-           rut?.hasError('maxLength') ? 'El RUT no puede tener más de 12 caracteres.' : '';
+    if (rut?.hasError('required')) {
+      return 'El RUT es obligatorio.';
+    }
+    if (rut?.hasError('maxLength')) {
+      return 'El RUT no puede tener más de 9 caracteres.';
+    }
+    if (rut?.hasError('pattern') && rut?.value?.length > 0 && !rut?.value.match(/^\d+$/)) {
+      return 'El RUT solo puede contener números.';
+    }
+    if (rut?.value && rut.value.length < 8) {
+      return 'El RUT debe tener al menos 8 dígitos.';
+    }
+    if (rut?.value && rut.value.length > 9) {
+      return 'El RUT no puede tener más de 9 dígitos.';
+    }
+    return '';
   }
 
   get nombreInvalid() {
@@ -85,27 +100,42 @@ export class RegistroPage implements OnInit {
     if (!this.registroForm.valid) {
       return;
     }
-
-    // Asignar valores del formulario al objeto usuario
+  
     this.usuario = { ...this.registroForm.value };
-
+  
+    // Verificar si el RUT ya está registrado
+    const rutExistente = await this.authService.verificarRutExistente(this.usuario.rut);
+    if (rutExistente) {
+      this.errorMessage = 'El RUT ya está registrado.';
+      return; // Detener el registro si el RUT está ocupado
+    }
+  
+    // Verificar si el correo ya está registrado
+    const correoExistente = await this.authService.verificarCorreoExistente(this.usuario.correo);
+    if (correoExistente) {
+      this.errorMessage = 'El correo electrónico ya está registrado.';
+      return; // Detener el registro si el correo está ocupado
+    }
+  
     // Verificar el dominio del correo y asignar rol
     const correoDominio = this.usuario.correo.split('@')[1];
     this.usuario.rol = correoDominio === 'duocuc.cl' ? 'Estudiante' : 
                        correoDominio === 'profesor.duoc.cl' ? 'Profesor' : 
                        'Desconocido';
-
+  
     // Validar el rol asignado antes de continuar
     if (this.usuario.rol === 'Desconocido') {
       this.errorMessage = 'El correo debe ser @duocuc.cl o @profesor.duoc.cl';
       return;
     }
-
+  
     try {
       // Llamar al servicio de autenticación para registrar en Firebase
       await this.authService.registro(this.usuario);
-      // Redirigir a la página de inicio de sesión tras registro exitoso
-      this.router.navigate(['/home']);
+      this.successMessage = 'Registro exitoso! Ahora puedes iniciar sesión.';
+      setTimeout(() => {
+        this.router.navigate(['/home']);
+      }, 1000);  
     } catch (error) {
       console.error('Error durante el registro:', error);
       this.errorMessage = 'Hubo un error durante el registro. Intenta nuevamente.';

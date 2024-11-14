@@ -13,6 +13,8 @@ export interface Asignatura {
   profesorId: string;   
   horarios: Horario[];
   inscritos: string[];
+  clases: Clase[];
+  porcentajeAsistencia: number;
 }
 
 export interface Clase {
@@ -25,8 +27,8 @@ export interface Clase {
   asistentes: string[];
   inasistentes: string[];
   fecha: string;
+  mostrarDetalles?: boolean;
 }
-
 export interface AsistenciaAsignatura extends Asignatura {
   cantAsistencias: number;
   cantInasistencias: number;
