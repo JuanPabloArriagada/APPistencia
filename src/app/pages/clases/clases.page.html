@@ -1,34 +1,67 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>Clases</ion-title>
+    <ion-title>Generar Qr</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Selector de días con botones -->
   <div class="select-day">
-    <ion-button *ngFor="let day of daysOfWeek" (click)="selectDay(day)" [color]="day === selectedDay ? 'primary' : 'medium'">
-      {{ day.slice(0,2) }}
+    <ion-button *ngFor="let day of daysOfWeek" (click)="selectDay(day)" 
+                fill="solid" shape="round" 
+                [color]="day === selectedDay ? 'success' : 'medium'">
+      {{ day.slice(0, 2) }}
     </ion-button>
   </div>
 
-  <div *ngIf="selectedDay" class="class-list">
-    <h2>Clases para {{ selectedDay }}</h2>
-    <ion-list *ngIf="clasesRegistradas[selectedDay] && clasesRegistradas[selectedDay].length > 0; else noClasses">
-      <ion-item *ngFor="let item of clasesRegistradas[selectedDay]">
-        <ion-label> 
-          <h3>{{ item.clase.codigoSala }} - {{ item.nombreAsignatura }}</h3>
-          <p>{{ item.clase.horaInicio }} - {{ item.clase.horaFin }}</p>
-        </ion-label>
-        <ion-button expand="block" *ngIf="showGenerateQR" color="secondary"  (click)="selectClase(item.clase)" (click)="generarQR()">
+  <!-- Mensaje si no se ha seleccionado un día -->
+  <div *ngIf="!selectedDay" class="no-day-selected">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Seleccione un día</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Use los botones de arriba para seleccionar un día y ver las clases correspondientes para generar el QR.
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Clases del día seleccionado -->
+  <div *ngIf="selectedDay" class="class-container">
+    <h2>Clases para <span class="selected-day">{{ selectedDay }}</span></h2>
+    <ion-list *ngIf="hayClasesParaElDia(); else noClasses">
+      <ion-card *ngFor="let item of clasesRegistradas[selectedDay]" class="class-card">
+        <ion-card-header>
+          <ion-card-title>
+            {{ item.clase.codigoSala }} - {{ item.nombreAsignatura }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            <strong>Horario:</strong> {{ item.clase.horaInicio }} - {{ item.clase.horaFin }}
+          </p>
+        </ion-card-content>
+        <ion-button expand="block" color="secondary" (click)="selectClase(item.clase); generarQR();">
           Generar QR
         </ion-button>
-      </ion-item>
-    </ion-list>      
-    <ng-template #noClasses>
-      <p>No hay clases registradas para este día.</p>
-    </ng-template>    
+      </ion-card>
+    </ion-list>
   </div>
+
+  <!-- Mensaje cuando no hay clases -->
+  <ng-template #noClasses>
+    <div class="no-classes">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>No hay clases registradas</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Actualmente no hay clases registradas para este día.
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-template>
 </ion-content>

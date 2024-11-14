@@ -18,7 +18,9 @@ export class CrearClasePage implements OnInit {
     nombre: '',
     horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: '' }],
     profesorId: '',
-    inscritos: []
+    inscritos: [],
+    clases: [],
+    porcentajeAsistencia: 0
   };
 
   rut: string = '';
@@ -80,7 +82,9 @@ export class CrearClasePage implements OnInit {
         nombre: '',
         horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: '' }],
         profesorId: '',
-        inscritos: []
+        inscritos: [],
+        clases: [],
+        porcentajeAsistencia: 0
     };
     console.log('Asignatura guardada y registrada en el profesor:', this.asignatura);
   }

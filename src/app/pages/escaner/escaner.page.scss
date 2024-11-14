@@ -1,20 +1,209 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-  
-  .qr-simulator {
-    margin: 20px;
-  }
-  
-  .qr-placeholder {
-    width: 100px;
-    height: 100px;
-    border: 2px dashed #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+ion-toolbar {
+  --background: #4caf50; /* Color primario */   
+  --color: white;
+}
+
+.menu-title {
+  font-size: 22px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.scan-container {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+height: 100%;
+gap: 30px;
+padding: 20px;
+text-align: center;
+}
+
+.scan-btn-container {
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 60vh; /* Colocamos el botón más abajo */
+border-radius: 20px; /* Redondeamos el contorno para que sea uniforme */
+}
+
+.scan-btn {
+background-color: transparent !important; /* Color de fondo personalizado para el botón */
+border-radius: 12px; /* Bordes redondeados */
+width: 200px; /* Ajuste del tamaño del botón */
+height: 200px;
+padding: 10px;
+font-size: 1.2em;
+font-weight: bold;
+text-transform: uppercase;
+box-shadow: none !important; /* Eliminar sombra */
+border: none !important; /* Eliminar cualquier borde del botón */
+color: white; /* Color de texto */
+transition: background-color 0.3s ease, transform 0.3s ease; /* Transiciones suaves */
+position: relative; /* Para usar con iconos e indicadores */
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.scan-btn:hover {
+background-color: #3171e5; /* Color de hover */
+transform: scale(1.1); /* Efecto visual de ampliación */
+}
+
+.scan-btn:focus, .scan-btn:active {
+outline: none;
+box-shadow: none;
+}
+
+/* Indicador visual mientras escanea */
+.scan-indicator {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100%;
+width: 100%;
+background-color: rgba(0, 0, 0, 0.3); /* Fondo oscuro para el spinner */
+border-radius: 50%; /* Hacer el fondo del indicador circular */
+position: absolute; /* Asegura que esté centrado */
+}
+
+@keyframes pulse {
+0% {
+  transform: scale(1);
+  opacity: 0.6;
+}
+50% {
+  transform: scale(1.2);
+  opacity: 1;
+}
+100% {
+  transform: scale(1);
+  opacity: 0.6;
+}
+}
+
+/* Estilo para el spinner */
+ion-spinner {
+--color: #ffffff;
+}
+
+/* Mensaje de estado del escaneo */
+.scan-status {
+font-size: 1.2em;
+color: #444;
+margin-top: 20px;
+animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+from {
+  opacity: 0;
+}
+to {
+  opacity: 1;
+}
+}
+
+/* Resultados del escaneo */
+ion-list {
+width: 100%;
+max-width: 500px;
+margin-top: 30px;
+}
+
+ion-item {
+padding: 15px;
+border-radius: 15px;
+background-color: #f9f9f9;
+margin-bottom: 15px;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+ion-item:hover {
+transform: translateY(-5px);
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+ion-label h2 {
+font-size: 1.2em;
+font-weight: bold;
+color: #333;
+}
+
+ion-label p {
+font-size: 1em;
+color: #666;
+}
+
+/* Botón para finalizar */
+.finish-btn {
+margin-top: 25px;
+font-size: 1.2em;
+padding: 15px;
+border-radius: 50px;
+text-transform: uppercase;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+background-color: transparent !important;
+color: white; /* Color del texto */
+border: none; /* Sin borde visible */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+.scan-container {
+  padding: 15px;
+}
+
+.scan-btn {
+  width: 180px;
+  height: 180px;
+  font-size: 1.3em;
+}
+
+.scan-status {
+  font-size: 1em;
+}
+
+ion-item {
+  padding: 12px;
+}
+}
+
+@media (max-width: 480px) {
+.scan-btn {
+  width: 150px;
+  height: 150px;
+  font-size: 1.2em;
+}
+
+.scan-status {
+  font-size: 0.9em;
+}
+}
+
+/* Botón de finalizar */
+.finish-btn {
+background-color: #28c76f; /* Color verde para finalizar */
+color: white;
+width: 100%;
+font-size: 1.2em;
+padding: 15px;
+border-radius: 10px;
+box-shadow: none; /* Eliminar cualquier sombra */
+border: none !important; /* Eliminar borde visible */
+transition: background-color 0.3s ease;
+text-transform: uppercase;
+}
+
+.finish-btn:hover {
+background-color: #22b35e; /* Color de hover para finalizar */
+}
+
+.finish-btn:focus {
+outline: none;
+box-shadow: none;
+}

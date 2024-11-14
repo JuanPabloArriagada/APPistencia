@@ -15,49 +15,49 @@ const routes: Routes = [
   {
     path: 'menu',
     loadChildren: () => import('./pages/menu/menu.module').then(m => m.MenuPageModule),
-    canActivate: [AuthGuard] 
+    //canActivate: [AuthGuard] 
   },
   {
     path: 'perfil',
     loadChildren: () => import('./pages/perfil/perfil.module').then(m => m.PerfilPageModule),
-    canActivate: [AuthGuard] 
+    //canActivate: [AuthGuard] 
   },
   {
     path: 'crear-clase',
     loadChildren: () => import('./pages/crear-clase/crear-clase.module').then(m => m.CrearClasePageModule),
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'clases',
     loadChildren: () => import('./pages/clases/clases.module').then(m => m.ClasesPageModule),
     data: { titulo: 'Clases' },
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'crear-qr',
     loadChildren: () => import('./pages/clases/clases.module').then(m => m.ClasesPageModule),
     data: { showGenerateQR: true , titulo: 'Generar QR' },
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'generar-qr/:rut',
     loadChildren: () => import('./pages/generar-qr/generar-qr.module').then(m => m.GenerarQRPageModule),
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'horario',
     loadChildren: () => import('./pages/horario/horario.module').then(m => m.HorarioPageModule),
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'asistencia',
     loadChildren: () => import('./pages/asistencia/asistencia.module').then(m => m.AsistenciaPageModule),
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'escaner',
     loadChildren: () => import('./pages/escaner/escaner.module').then(m => m.EscanerPageModule),
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: 'recuperar',
@@ -77,9 +77,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/registro/registro.module').then(m => m.RegistroPageModule)
   },
   {
-    path: 'clases-registradas',
-    loadChildren: () => import('./pages/clases-registradas/clases-registradas.module').then(m => m.ClasesRegistradasPageModule),
-    canActivate: [AuthGuard]
+    path: 'asignaturas-registradas',
+    loadChildren: () => import('./pages/asignaturas-registradas/asignaturas-registradas.module').then( m => m.AsignaturasRegistradasPageModule)
+  },
+  {
+    path: 'clases-registradas/:asignaturaId/:rut',
+    loadChildren: () => import('./pages/clases-registradas/clases-registradas.module').then( m => m.ClasesRegistradasPageModule)
   },
 ];
 

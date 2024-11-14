@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-recuperar',
@@ -9,28 +8,28 @@ import { AlertController } from '@ionic/angular';
 })
 export class RecuperarPage {
   correo: string = '';
+  mensajeAlerta: { success: boolean, message: string } | null = null;
 
-  constructor(
-    private afAuth: AngularFireAuth,
-    private alertController: AlertController
-  ) {}
+  constructor(private afAuth: AngularFireAuth) {}
 
-  async enviarCorreoRecuperacion() {
-    try {
-      await this.afAuth.sendPasswordResetEmail(this.correo);
-      this.mostrarAlerta('Correo enviado', 'Por favor, revisa tu bandeja de entrada para restablecer tu contraseña.');
-    } catch (error) {
-      this.mostrarAlerta('Error', 'No se pudo enviar el correo. Verifica la dirección de correo e intenta de nuevo.');
-      console.error('Error al enviar el correo de recuperación:', error);
-    }
+  // Validación de correo
+  validarCorreo(correo: string): boolean {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return regex.test(correo);
   }
 
-  async mostrarAlerta(titulo: string, mensaje: string) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: mensaje,
-      buttons: ['OK'],
-    });
-    await alert.present();
+  async enviarCorreoRecuperacion() {
+    if (!this.validarCorreo(this.correo)) {
+      this.mensajeAlerta = { success: false, message: 'Por favor ingresa un correo válido.' };
+      return;
+    }
+
+    try {
+      await this.afAuth.sendPasswordResetEmail(this.correo);
+      this.mensajeAlerta = { success: true, message: 'Correo enviado. Revisa tu bandeja de entrada para restablecer tu contraseña.' };
+    } catch (error) {
+      this.mensajeAlerta = { success: false, message: 'No se pudo enviar el correo. Verifica la dirección de correo e intenta de nuevo.' };
+      console.error('Error al enviar el correo de recuperación:', error);
+    }
   }
 }

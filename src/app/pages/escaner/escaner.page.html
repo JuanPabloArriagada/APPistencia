@@ -1,20 +1,52 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="primary" defaultHref="/menu"></ion-back-button>
+      <ion-back-button color="light" defaultHref="/menu"></ion-back-button>
     </ion-buttons>
-    <ion-title>Escanear QR</ion-title>
+    <ion-title class="menu-title">Escanear QR</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-button expand="full" color="primary" (click)="scan()" [disabled]="isScanning">
-    {{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}
-  </ion-button>
+<ion-content class="ion-padding">
+  <div class="scan-container">
+    <!-- Botón de escanear centrado y grande -->
+    <div class="scan-btn-container">
+      <ion-button 
+        expand="full" 
+        color="primary" 
+        (click)="scan()" 
+        [disabled]="isScanning" 
+        class="scan-btn">
+        <ion-icon *ngIf="!isScanning" name="qr-code-outline" slot="start"></ion-icon>
+        <div *ngIf="isScanning" class="scan-indicator">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        <span>{{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}</span>
+      </ion-button>
+    </div>
 
-  <ion-item *ngIf="barcodes.length > 0">
-    <ion-label>Datos Escaneados:</ion-label>
-    <ion-note *ngFor="let barcode of barcodes">{{ barcode.rawValue }}</ion-note>
-  </ion-item>
-  <ion-button expand="full" color="primary" (click)="navCtrl.back()">Finalizar Registro</ion-button>
+    <!-- Mensaje de estado de escaneo -->
+    <div *ngIf="isScanning" class="scan-status">
+      <p>Por favor, mantén el código QR dentro del área de escaneo...</p>
+    </div>
+
+    <!-- Resultados -->
+    <ion-list *ngIf="barcodes.length > 0">
+      <ion-item *ngFor="let barcode of barcodes">
+        <ion-label>
+          <h2>Datos Escaneados:</h2>
+          <p>{{ barcode.rawValue }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!-- Botón para finalizar -->
+    <ion-button 
+      expand="full" 
+      color="secondary" 
+      (click)="navCtrl.back()" 
+      class="finish-btn">
+      Finalizar Registro
+    </ion-button>
+  </div>
 </ion-content>

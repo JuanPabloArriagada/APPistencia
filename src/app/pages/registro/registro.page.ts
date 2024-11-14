@@ -31,6 +31,7 @@ export class RegistroPage implements OnInit {
       rut: ['', [
         Validators.required, 
         Validators.pattern(/^\d{8,9}$/), // Validar solo números y longitud entre 8 y 9
+        Validators.maxLength(9) // Validar longitud máxima de 9 caracteres
       ]],      
       Nombre: ['', [Validators.required, Validators.maxLength(40)]], // Nombre completo
       correo: ['', [
@@ -56,7 +57,7 @@ export class RegistroPage implements OnInit {
   get rutInvalid() {
     const rut = this.registroForm.get('rut');
     return rut?.hasError('required') ? 'El RUT es obligatorio.' :
-           rut?.hasError('maxLength') ? 'El RUT no puede tener más de 12 caracteres.' : '';
+           rut?.hasError('maxLength') ? 'El RUT no puede tener más de 9 caracteres.' : '';
   }
 
   get nombreInvalid() {

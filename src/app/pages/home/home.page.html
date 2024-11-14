@@ -1,67 +1,71 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="login-content">
+  <!-- Encabezado -->
   <app-header></app-header>
 
-  <ion-list>
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
+  <!-- Formulario de inicio de sesión -->
+  <div class="login-container">
+    <h2 class="ion-text-center">Iniciar Sesión</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+      <!-- Campo de correo -->
       <ion-item>
+        <ion-label position="floating">Correo</ion-label>
         <ion-input
           formControlName="correo"
-          required
           type="email"
-          label="Correo"
-          labelPlacement="floating"
-          placeholder="Correo"
+          placeholder="Introduce tu correo"
           [class.invalid]="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched"
         ></ion-input>
-        <ion-text color="danger" *ngIf="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched">
-          <p>Correo inválido</p>
-        </ion-text>
       </ion-item>
+      <ion-text color="danger" *ngIf="loginForm.controls['correo'].invalid && loginForm.controls['correo'].touched">
+        <p>Correo inválido</p>
+      </ion-text>
 
+      <!-- Campo de contraseña -->
       <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
         <ion-input
           formControlName="contrasena"
-          required
           type="password"
-          label="Contraseña"
-          labelPlacement="floating"
-          placeholder="Contraseña"
+          placeholder="Introduce tu contraseña"
           [class.invalid]="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched"
         ></ion-input>
-        <ion-text color="danger" *ngIf="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched">
-          <p>La contraseña es requerida</p>
-        </ion-text>
       </ion-item>
+      <ion-text color="danger" *ngIf="loginForm.controls['contrasena'].invalid && loginForm.controls['contrasena'].touched">
+        <p>La contraseña es requerida</p>
+      </ion-text>
 
-      <!-- Agregar campo para el RUT -->
+      <!-- Campo de RUT -->
       <ion-item>
+        <ion-label position="floating">RUT</ion-label>
         <ion-input
           formControlName="rut"
-          required
           type="text"
-          label="RUT"
-          labelPlacement="floating"
-          placeholder="RUT"
+          placeholder="Introduce tu RUT"
           [class.invalid]="loginForm.controls['rut'].invalid && loginForm.controls['rut'].touched"
         ></ion-input>
-        <ion-text color="danger" *ngIf="loginForm.controls['rut'].invalid && loginForm.controls['rut'].touched">
-          <p>El RUT es requerido</p>
-        </ion-text>
       </ion-item>
+      <ion-text color="danger" *ngIf="loginForm.controls['rut'].invalid && loginForm.controls['rut'].touched">
+        <p>El RUT es requerido</p>
+      </ion-text>
 
-      <ion-button type="submit" expand="block" fill="solid" [disabled]="!loginForm.valid">
-        Iniciar sesión
+      <!-- Botón de iniciar sesión -->
+      <ion-button type="submit" expand="block" fill="solid" color="primary" [disabled]="!loginForm.valid">
+        Iniciar Sesión
       </ion-button>
 
-      <div *ngIf="errorMessage" style="color: red;">
-        {{ errorMessage }}
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="error-message">
+        <ion-text color="danger">{{ errorMessage }}</ion-text>
       </div>
     </form>
-    <ion-button href="recuperar" expand="block" fill="clear">
+
+    <!-- Enlaces secundarios -->
+    <ion-button href="recuperar" expand="block" fill="clear" color="primary">
       ¿Olvidaste tu contraseña?
     </ion-button>
-    <ion-button href="registro" expand="block" fill="solid">
+    <ion-button href="registro" expand="block" fill="outline" color="secondary">
       Registrarse
     </ion-button>
-  </ion-list>
+  </div>
 </ion-content>
