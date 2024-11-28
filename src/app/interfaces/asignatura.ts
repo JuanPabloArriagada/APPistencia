@@ -24,10 +24,14 @@ export interface Clase {
   horaInicio: string;
   horaFin: string;
   codigoSala: string;
-  asistentes: string[];
-  inasistentes: string[];
+  asistentes: string[]; // Lista de alumnos presentes
+  inasistentes: string[]; // Lista de alumnos ausentes
   fecha: string;
   mostrarDetalles?: boolean;
+  offlineAsistencias?: {
+    alumnoId: string;
+    estado: 'presente' | 'ausente' | 'tarde';
+  }[]; // Asistencias almacenadas localmente
 }
 export interface AsistenciaAsignatura extends Asignatura {
   cantAsistencias: number;

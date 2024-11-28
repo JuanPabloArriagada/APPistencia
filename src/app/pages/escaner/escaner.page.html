@@ -42,7 +42,6 @@
       (click)="scan()" 
       [disabled]="isScanning" 
       class="scan-btn">
-      <ion-icon *ngIf="!isScanning" name="qr-code-outline" slot="start"></ion-icon>
       <div *ngIf="isScanning" class="scan-indicator">
         <ion-spinner name="crescent"></ion-spinner>
       </div>
@@ -51,7 +50,7 @@
   </div>
 
   <!-- Botón para finalizar -->
-  <ion-button expand="full" color="secondary" (click)="navCtrl.back()" class="finish-btn">
+  <ion-button expand="full" color="secondary" (click)="router.navigate(['previous-page'])" class="finish-btn">
     Finalizar Registro
   </ion-button>
 </ion-content>

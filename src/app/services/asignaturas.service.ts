@@ -93,17 +93,27 @@ export class AsignaturaService {
   }
 
   async obtenerAsignaturaPorId(asignaturaId: string): Promise<Asignatura | undefined> {
+    // Primero intenta obtenerla de Firebase
     try {
       const doc = await this.firestore.collection('asignaturas').doc(asignaturaId).get().toPromise();
       if (doc && doc.exists) {
-        return doc.data() as Asignatura;
+        const asignatura = doc.data() as Asignatura;
+        // Guardar la asignatura en almacenamiento local
+        localStorage.setItem(`asignatura-${asignaturaId}`, JSON.stringify(asignatura));
+        return asignatura;
       } else {
         console.error(`El documento con ID ${asignaturaId} no existe en la colección 'asignaturas'.`);
         return undefined;
       }
     } catch (error) {
       console.error(`Error al obtener la asignatura ${asignaturaId}:`, error);
-      return undefined;
+      // Si hay error, intentar cargar desde localStorage
+      const asignatura = localStorage.getItem(`asignatura-${asignaturaId}`);
+      if (asignatura) {
+        return JSON.parse(asignatura);
+      } else {
+        return undefined;
+      }
     }
   }
 
@@ -202,6 +212,8 @@ export class AsignaturaService {
     console.log(`Clases obtenidas para la asignatura ${asignaturaId}:`, clases); 
     return clases;
   }
+
+  
 
 }
 

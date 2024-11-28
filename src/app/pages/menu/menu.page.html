@@ -22,9 +22,7 @@
       <ng-container *ngIf="rol === 'Profesor'">
         <!-- Generar QR -->
         <ion-col size="6" class="menu-option">
-          <ion-card 
-            [routerLink]="getRouterLinkFor('crear-qr')" 
-            [class.disabled]="!(isOnline$ | async)">
+          <ion-card [routerLink]="['/crear-qr', { rut: rut }]">
             <ion-card-content>
               <ion-icon name="qr-code-outline" size="large"></ion-icon>
               <h3>Generar QR</h3>
@@ -43,9 +41,7 @@
 
         <!-- Crear Clase -->
         <ion-col size="6" class="menu-option">
-          <ion-card 
-            [routerLink]="getRouterLinkFor('crear-clase')" 
-            [class.disabled]="!(isOnline$ | async)">
+          <ion-card [routerLink]="['/crear-clase', { rut: rut }]">
             <ion-card-content>
               <ion-icon name="create-outline" size="large"></ion-icon>
               <h3>Crear Clase</h3>
@@ -65,9 +61,7 @@
         </ion-col>
         <!-- Opción Escanear QR -->
         <ion-col size="6" class="menu-option">
-          <ion-card 
-            [routerLink]="getRouterLinkFor('escaner')" 
-            [class.disabled]="!(isOnline$ | async)">
+          <ion-card [routerLink]="['/escaner', { rut: rut }]">
             <ion-card-content>
               <ion-icon name="scan-outline" size="large"></ion-icon>
               <h3>Escanear QR</h3>

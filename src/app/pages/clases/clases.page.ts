@@ -48,15 +48,20 @@ export class ClasesPage implements OnInit {
   }
 
   async cargarClasesPorUsuario() {
-    const asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario(this.usuarioId);
-    for (const asignatura of asignaturas) {
-      for (const clase of asignatura.horarios) {
-        const dia = clase.dia as DayOfWeek;
-        clase.asignaturaId = asignatura.id;  // Agregar el id de la asignatura a la clase
-        if (this.clasesRegistradas[dia]) {
-          this.clasesRegistradas[dia].push({ clase, nombreAsignatura: asignatura.nombre });
+    try {
+      const asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario(this.usuarioId);
+      console.log('Asignaturas cargadas:', asignaturas);  // Verificar los datos de asignaturas
+      for (const asignatura of asignaturas) {
+        for (const clase of asignatura.horarios) {
+          const dia = clase.dia as DayOfWeek;
+          clase.asignaturaId = asignatura.id;  // Agregar el id de la asignatura a la clase
+          if (this.clasesRegistradas[dia]) {
+            this.clasesRegistradas[dia].push({ clase, nombreAsignatura: asignatura.nombre });
+          }
         }
       }
+    } catch (error) {
+      console.error('Error cargando clases:', error);
     }
   }
 
