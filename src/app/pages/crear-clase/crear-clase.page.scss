@@ -131,6 +131,18 @@ ion-card:hover {
   animation: showToast 0.5s forwards, hideToast 0.5s forwards 3s;
 }
 
+.asignatura-container{
+  border: #e3f2fd;
+  padding: 10px;
+  border-bottom: 2px solid rgb(255, 255, 255);
+  color: #333;
+}
+
+
+/* .asignatura-container:last-child{
+  border-bottom: none;
+} */
+
 /* Animación de entrada y salida */
 @keyframes showToast {
   0% {
