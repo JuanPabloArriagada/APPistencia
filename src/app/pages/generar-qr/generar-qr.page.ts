@@ -124,14 +124,20 @@ export class GenerarQRPage implements OnInit {
   async finalizarRegistro() {
     try {
       // Si hay conexión, actualiza los datos en el servidor
-      await this.asistenciaService.actualizarAsistencia(this.claseIdCreada, this.confirmados, this.inasistentes);
+      const status = await Network.getStatus();
+      if (status.connected) {
+        await this.asistenciaService.actualizarAsistencia(this.claseIdCreada, this.confirmados, this.inasistentes);
+      } else {
+        // Si no hay conexión, guarda los datos en el almacenamiento local
+        console.warn('Sin conexión, guardado en local');
+      }
+      // Redirigir al menú
       this.router.navigate(['/menu', { rut: this.rut }]);
     } catch (error) {
-      // Si no hay conexión, guarda los datos en el almacenamiento local
-      console.warn('Sin conexión, guardando en local:', error);
-      this.router.navigate(['/menu', { rut: this.rut }]);
+      console.error('Error al finalizar el registro:', error);
     }
   }
+  
 
   suscribirCambiosClase() {
     this.asistenciaService.obtenerClaseEnTiempoReal(this.claseIdCreada).subscribe((data) => {

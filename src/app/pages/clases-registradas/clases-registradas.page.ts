@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AsignaturaService } from '../../services/asignaturas.service';
-import { Clase } from '../../interfaces/asignatura';
 import { ActivatedRoute } from '@angular/router';
+import { Clase } from '../../interfaces/asignatura';
 import { Storage } from '@ionic/storage-angular';
 
 @Component({
@@ -9,11 +9,12 @@ import { Storage } from '@ionic/storage-angular';
   templateUrl: './clases-registradas.page.html',
   styleUrls: ['./clases-registradas.page.scss'],
 })
-export class ClasesRegistradasPage implements OnInit {
+export class ClasesRegistradasPage implements OnInit, OnDestroy {
   clases: Clase[] = [];
   asignaturaId: string = ''; 
   rut: string = '';
   porcentajeAsistenciaAsignatura: number = 0;
+  refreshInterval: any;
 
   constructor(
     private asignaturaService: AsignaturaService,
@@ -38,6 +39,11 @@ export class ClasesRegistradasPage implements OnInit {
       console.log('No se encontraron clases en storage. Cargando desde servicio...');
       this.cargarClases();
     }
+
+    // Actualización automática cada 30 segundos
+    this.refreshInterval = setInterval(() => {
+      this.cargarClases();
+    }, 5000); // 5 segundos
   }
 
   // Cargar las clases desde el servicio
@@ -53,12 +59,6 @@ export class ClasesRegistradasPage implements OnInit {
     } catch (error) {
       console.error('Error al cargar clases desde servicio:', error);
     }
-  }
-
-  // Método para forzar la actualización de las clases
-  async actualizarClases() {
-    console.log('Actualizando clases...');
-    await this.cargarClases(); // Recargar las clases desde el servicio
   }
 
   // Calcular el porcentaje de asistencia de una clase
@@ -92,5 +92,11 @@ export class ClasesRegistradasPage implements OnInit {
       clase.mostrarDetalles = false; 
     }
     clase.mostrarDetalles = !clase.mostrarDetalles; // Alternar visibilidad
+  }
+
+  ngOnDestroy() {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval); // Limpiar el intervalo cuando se destruye el componente
+    }
   }
 }

@@ -31,6 +31,7 @@ export class EscanerPage implements OnInit, OnDestroy {
   asignaturaId: string = '';
   escaneoData: Escaneo | null = null;
   isOnline$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  datosClaseUI: any = {};
   networkListener: any;
   rut: string = this.route.snapshot.paramMap.get('rut') || '';
 
@@ -107,7 +108,15 @@ export class EscanerPage implements OnInit, OnDestroy {
   }
 
   async processScannedValue(scannedValue: string) {
+    // Extraer los datos del QR
     const claseMatch = scannedValue.match(/ClaseId:\s*(\d+)/);
+    const asignaturaMatch = scannedValue.match(/Asignatura:\s*([^,]+)/);
+    const nombreAsignaturaMatch = scannedValue.match(/NombreAsignatura:\s*([^,]+)/);
+    const diaMatch = scannedValue.match(/Día:\s*([^,]+)/);
+    const horaInicioMatch = scannedValue.match(/Inicio:\s*([^,]+)/);
+    const horaFinMatch = scannedValue.match(/Fin:\s*([^,]+)/);
+    const salaMatch = scannedValue.match(/Sala:\s*([^,]+)/);
+  
     const alumnoId = this.route.snapshot.paramMap.get('rut') || '';
   
     if (!claseMatch) {
@@ -115,35 +124,64 @@ export class EscanerPage implements OnInit, OnDestroy {
       return;
     }
   
+    // Guardar datos de la clase
     this.claseId = claseMatch[1];
+    this.escaneoData = {
+      claseId: Number(claseMatch[1]),
+      asignatura: asignaturaMatch ? asignaturaMatch[1] : '',
+      nombreAsignatura: nombreAsignaturaMatch ? nombreAsignaturaMatch[1] : '',
+      dia: diaMatch ? diaMatch[1] : '',
+      horaInicio: horaInicioMatch ? horaInicioMatch[1] : '',
+      horaFin: horaFinMatch ? horaFinMatch[1] : '',
+      sala: salaMatch ? salaMatch[1] : '',
+    };
   
-    // Verificar si estamos online
+    // Mostrar los datos de la clase en pantalla
+    this.mostrarDatosDeClase();
+  
+    // Verificar conexión
     if (this.isOnline$.getValue()) {
-      // Verificar si la clase ya existe en Firebase
       const claseExiste = await this.verificarClaseEnFirebase(this.claseId);
   
       if (claseExiste) {
-        // Si la clase existe, registrar asistencia directamente
+        // Registrar asistencia online
         await this.registrarAsistenciaOnline(alumnoId);
       } else {
-        // Si la clase no existe, guardar la asistencia localmente
+        // Guardar asistencia localmente si la clase no está en Firebase
         await this.offlineService.guardarAsistenciaOffline({
           claseId: this.claseId,
           alumnoId,
-          estado: 'presente',  // Este estado puede variar según el caso
+          estado: 'presente',
         });
-        await this.presentAlert('Clase no registrada en Firebase. Asistencia guardada localmente. Se sincronizará cuando la clase esté disponible.');
+        await this.presentAlert('Clase no registrada en Firebase. Asistencia guardada localmente.');
       }
     } else {
-      // Si estamos offline, guardar la asistencia localmente
+      // Guardar asistencia localmente en modo offline
       await this.offlineService.guardarAsistenciaOffline({
         claseId: this.claseId,
         alumnoId,
         estado: 'presente',
       });
-      await this.presentAlert('Estás desconectado. Asistencia guardada localmente. Se sincronizará cuando vuelva la conexión.');
+      await this.presentAlert('Estás desconectado. Asistencia guardada localmente.');
     }
   }
+  
+  // Función para mostrar datos de la clase en la interfaz
+  mostrarDatosDeClase() {
+    if (this.escaneoData) {
+      console.log('Datos de la clase escaneada:', this.escaneoData); 
+      this.datosClaseUI = {
+        claseId: this.escaneoData.claseId,
+        asignatura: this.escaneoData.asignatura,
+        nombreAsignatura: this.escaneoData.nombreAsignatura,
+        dia: this.escaneoData.dia,
+        horaInicio: this.escaneoData.horaInicio,
+        horaFin: this.escaneoData.horaFin,
+        sala: this.escaneoData.sala,
+      };
+    }
+  }
+  
 
   async registrarAsistenciaOnline(alumnoId: string) {
     try {
@@ -193,7 +231,20 @@ export class EscanerPage implements OnInit, OnDestroy {
         },
         {
           text: 'Finalizar',
-          handler: () => {
+          handler: async () => {
+            // Verificar el estado de la conexión antes de finalizar
+            if (this.isOnline$.getValue()) {
+              // Sincronizar datos si hay conexión
+              await this.syncOfflineData();
+            } else {
+              // Si está offline, guardamos la asistencia localmente
+              await this.offlineService.guardarAsistenciaOffline({
+                claseId: this.claseId,
+                alumnoId: this.rut,
+                estado: 'presente',
+              });
+              await this.presentAlert('Estás desconectado. Asistencia guardada localmente.');
+            }
             this.router.navigate(['/menu', { rut: this.rut }]); // Redirige a la página previa
           },
         },
@@ -202,6 +253,7 @@ export class EscanerPage implements OnInit, OnDestroy {
   
     await alert.present();
   }
+  
 
   async verificarClaseEnFirebase(claseId: string): Promise<boolean> {
     try {

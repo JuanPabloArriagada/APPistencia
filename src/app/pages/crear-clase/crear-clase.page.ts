@@ -4,8 +4,10 @@ import { LocalDBService } from '../../services/dbstorage.service';
 import { Asignatura, Horario } from '../../interfaces/asignatura';
 import { Usuario } from '../../interfaces/usuario';
 import { v4 as uuidv4 } from 'uuid';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Network } from '@capacitor/network';
 import { AuthService } from '../../services/auth-service.service';
+import { OfflineService } from 'src/app/services/offline.service';
 
 @Component({
   selector: 'app-crear-clase',
@@ -24,19 +26,21 @@ export class CrearClasePage implements OnInit {
   };
 
   rut: string = '';
-  usuarioActual!: Usuario;  
+  usuarioActual!: Usuario;
   successMessage: string = ''; // Nuevo mensaje de éxito
 
   constructor(
     private asignaturaService: AsignaturaService,
+    private offlineService: OfflineService,
     private Aut: AuthService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   async ngOnInit() {
     this.rut = this.route.snapshot.paramMap.get('rut') || '';
     console.log('RUT del profesor:', this.rut);
-    
+
     this.Aut.getUsuarioActual(this.rut).subscribe(usuario => {
       if (usuario) {
         this.usuarioActual = usuario;
@@ -56,20 +60,29 @@ export class CrearClasePage implements OnInit {
 
   async guardarAsignatura() {
     this.asignatura.id = uuidv4();
-    this.asignatura.profesorId = this.usuarioActual.rut;
-
+    this.asignatura.profesorId = this.rut;
     this.asignatura.horarios.forEach(horario => {
-        horario.asignaturaId = this.asignatura.id; 
+      horario.asignaturaId = this.asignatura.id;
     });
 
-    await this.asignaturaService.guardarAsignatura(this.asignatura);
+    // Guardar asignatura localmente si está offline
+    const status = await Network.getStatus();
+    if (!status.connected) {
+      await this.offlineService.guardarAsignaturaLocal(this.asignatura);
+      console.log('Asignatura guardada localmente debido a falta de conexión');
+      this.router.navigate(['/menu', { rut: this.rut }]);
+    } else {
+      await this.asignaturaService.guardarAsignatura(this.asignatura);
+      console.log('Asignatura guardada en Firebase');
+      this.router.navigate(['/menu', { rut: this.rut }]);
+    }
 
     if (!this.usuarioActual.asignaturasCreadas) {
-        this.usuarioActual.asignaturasCreadas = [];
+      this.usuarioActual.asignaturasCreadas = [];
     }
     this.usuarioActual.asignaturasCreadas.push(this.asignatura.id);
 
- 
+
 
     // Mostrar mensaje de éxito
     this.successMessage = '¡Asignatura creada con éxito!';
@@ -79,14 +92,13 @@ export class CrearClasePage implements OnInit {
 
     // Reinicia el formulario
     this.asignatura = {
-        id: '',
-        nombre: '',
-        horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: '' }],
-        profesorId: '',
-        inscritos: [],
-        clases: [],
-        porcentajeAsistencia: 0
+      id: '',
+      nombre: '',
+      horarios: [{ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: '' }],
+      profesorId: '',
+      inscritos: [],
+      clases: [],
+      porcentajeAsistencia: 0
     };
-    console.log('Asignatura guardada y registrada en el profesor:', this.asignatura);
   }
 }
