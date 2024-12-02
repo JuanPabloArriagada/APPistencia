@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AsignaturaService } from '../../services/asignaturas.service';
 import { LocalDBService } from '../../services/dbstorage.service';
 import { Asignatura, Horario } from '../../interfaces/asignatura';
@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@capacitor/network';
 import { AuthService } from '../../services/auth-service.service';
 import { OfflineService } from 'src/app/services/offline.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-crear-clase',
@@ -15,6 +16,9 @@ import { OfflineService } from 'src/app/services/offline.service';
   styleUrls: ['./crear-clase.page.scss'],
 })
 export class CrearClasePage implements OnInit {
+
+  step: number = 1; // Control del paso actual del formulario
+
   asignatura: Asignatura = {
     id: '',
     nombre: '',
@@ -28,6 +32,7 @@ export class CrearClasePage implements OnInit {
   rut: string = '';
   usuarioActual!: Usuario;
   successMessage: string = ''; // Nuevo mensaje de éxito
+  @ViewChild('asignaturaForm') asignaturaForm!: NgForm;
 
   constructor(
     private asignaturaService: AsignaturaService,
@@ -48,7 +53,22 @@ export class CrearClasePage implements OnInit {
         console.warn(`Usuario con rut ${this.rut} no encontrado`);
       }
     });
+    this.step = 1; // Restaurar el paso actual del formulario
   }
+
+  nextStep() {
+    if (this.step < 3) {
+      this.step++;
+      ;
+    }
+  }
+  
+  previousStep() {
+    if (this.step > 1) {
+      this.step--;
+    }
+  }
+
 
   agregarHorario() {
     this.asignatura.horarios.push({ dia: '', horaInicio: '', horaFin: '', codigoSala: '', asignaturaId: this.asignatura.id });
@@ -59,6 +79,9 @@ export class CrearClasePage implements OnInit {
   }
 
   async guardarAsignatura() {
+    if (!this.asignaturaForm.valid) {
+      return;  // Ensure form is valid before saving
+    }
     this.asignatura.id = uuidv4();
     this.asignatura.profesorId = this.rut;
     this.asignatura.horarios.forEach(horario => {

@@ -6,6 +6,7 @@ import { AsignaturaService } from '../../services/asignaturas.service';
 import { OfflineService } from '../../services/offline.service';
 import { Network } from '@capacitor/network';
 import { Storage } from '@ionic/storage-angular';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-generar-qr',
@@ -34,7 +35,8 @@ export class GenerarQRPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private offlineService: OfflineService,
-    private storage: Storage // Asegúrate de tener acceso a storage
+    private storage: Storage,
+    private alertController: AlertController
   ) {}
 
   async ngOnInit() {
@@ -50,7 +52,7 @@ export class GenerarQRPage implements OnInit {
       // Intentar obtener la asignatura desde Firebase o Storage
       const asignatura = await this.obtenerAsignatura();
 
-      this.asignaturaNombre = asignatura ? asignatura.nombre : 'Asignatura no encontrada';
+      this.asignaturaNombre = asignatura ? asignatura.nombre : 'Nombre no disponible en este momento';
       this.asignaturaInscritos = asignatura ? asignatura.inscritos : [];
       await this.crearClase();
       this.suscribirCambiosClase();
@@ -64,22 +66,38 @@ export class GenerarQRPage implements OnInit {
   // Método para obtener la asignatura
   async obtenerAsignatura() {
     try {
-      // Primero intentamos obtenerla desde el servicio
-      const asignatura = await this.asignaturaService.obtenerAsignaturaPorId(this.asignaturaId);
-      // Si la asignatura se obtiene correctamente, la almacenamos en local
-      await this.storage.set(`asignatura-${this.asignaturaId}`, asignatura);
-      return asignatura;
-    } catch (error) {
-      console.warn('Error al obtener asignatura desde Firebase:', error);
-      // Si falla, intentamos obtenerla desde el almacenamiento local
-      const asignatura = await this.storage.get(`asignatura-${this.asignaturaId}`);
+      const status = await Network.getStatus();
+      let asignatura = null;
+  
+      if (status.connected) {
+        // Si estamos conectados, obtenemos la asignatura desde Firebase
+        asignatura = await this.asignaturaService.obtenerAsignaturaPorId(this.asignaturaId);
+        if (asignatura) {
+          console.log('Asignatura obtenida desde Firebase:', asignatura);
+          await this.storage.set(`asignatura-${this.asignaturaId}`, asignatura);
+        }
+      } else {
+        // Si no hay conexión, intentamos obtener la asignatura desde almacenamiento local
+        asignatura = await this.storage.get(`asignatura-${this.asignaturaId}`);
+        if (asignatura) {
+          console.log('Asignatura obtenida desde almacenamiento local:', asignatura);
+          console.log('id:', asignatura.id);
+          console.log('nombre:', asignatura.nombre);
+          console.log('asignatura:', asignatura);
+        } else {
+          console.warn('Asignatura no encontrada en almacenamiento local');
+        }
+      }
+  
       if (asignatura) {
-        console.log('Asignatura obtenida desde almacenamiento local:', asignatura);
         return asignatura;
       } else {
-        console.error('Asignatura no encontrada en almacenamiento local');
-        return null; // Si no la encuentra en ninguna parte, retorna null
+        console.error('Asignatura no encontrada');
+        return null;
       }
+    } catch (error) {
+      console.error('Error al obtener asignatura:', error);
+      return null;
     }
   }
 
@@ -127,9 +145,7 @@ export class GenerarQRPage implements OnInit {
       const status = await Network.getStatus();
       if (status.connected) {
         await this.asistenciaService.actualizarAsistencia(this.claseIdCreada, this.confirmados, this.inasistentes);
-      } else {
-        // Si no hay conexión, guarda los datos en el almacenamiento local
-        console.warn('Sin conexión, guardado en local');
+        await this.presentAlert('Asistencia actualizada correctamente.');
       }
       // Redirigir al menú
       this.router.navigate(['/menu', { rut: this.rut }]);
@@ -137,7 +153,6 @@ export class GenerarQRPage implements OnInit {
       console.error('Error al finalizar el registro:', error);
     }
   }
-  
 
   suscribirCambiosClase() {
     this.asistenciaService.obtenerClaseEnTiempoReal(this.claseIdCreada).subscribe((data) => {
@@ -171,5 +186,14 @@ export class GenerarQRPage implements OnInit {
         console.error('Error al sincronizar la clase:', error);
       }
     }
+  }
+
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Información',
+      message,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 }

@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AsignaturaService } from '../../services/asignaturas.service';
 import { Usuario } from '../../interfaces/usuario';
 import { Asignatura, Clase, Horario } from '../../interfaces/asignatura';
+import { Storage } from '@ionic/storage-angular';
+
 
 type DayOfWeek = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes';
 
@@ -29,7 +31,8 @@ export class ClasesPage implements OnInit {
   constructor(
     private asignaturaService: AsignaturaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private storage: Storage
   ) {}
 
   async ngOnInit() {
@@ -49,12 +52,24 @@ export class ClasesPage implements OnInit {
 
   async cargarClasesPorUsuario() {
     try {
-      const asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario(this.usuarioId);
-      console.log('Asignaturas cargadas:', asignaturas);  // Verificar los datos de asignaturas
+      await this.storage.create();  // Asegúrate de que Storage esté inicializado
+  
+      // Intentar cargar las asignaturas del almacenamiento local
+      let asignaturas = await this.storage.get(`asignaturas-${this.usuarioId}`);
+      if (!asignaturas || asignaturas.length === 0) {
+        console.log('Asignaturas no encontradas en storage. Cargando desde servicio...');
+        asignaturas = await this.asignaturaService.obtenerAsignaturasPorUsuario(this.usuarioId);
+        // Guardar las asignaturas en el almacenamiento local para futuras consultas
+        await this.storage.set(`asignaturas-${this.usuarioId}`, asignaturas);
+      } else {
+        console.log('Asignaturas cargadas desde storage:', asignaturas);
+      }
+  
+      // Procesar las asignaturas y clases
       for (const asignatura of asignaturas) {
         for (const clase of asignatura.horarios) {
           const dia = clase.dia as DayOfWeek;
-          clase.asignaturaId = asignatura.id;  // Agregar el id de la asignatura a la clase
+          clase.asignaturaId = asignatura.id; // Agregar ID de la asignatura
           if (this.clasesRegistradas[dia]) {
             this.clasesRegistradas[dia].push({ clase, nombreAsignatura: asignatura.nombre });
           }

@@ -25,6 +25,7 @@ interface Escaneo {
 })
 export class EscanerPage implements OnInit, OnDestroy {
   isSupported = false;
+  isScaned = false;
   barcodes: Barcode[] = [];
   claseId: string = '';
   isScanning: boolean = false;
@@ -34,6 +35,7 @@ export class EscanerPage implements OnInit, OnDestroy {
   datosClaseUI: any = {};
   networkListener: any;
   rut: string = this.route.snapshot.paramMap.get('rut') || '';
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -98,6 +100,7 @@ export class EscanerPage implements OnInit, OnDestroy {
       console.error('Error en el escáner:', error);
       await this.presentAlert('El escáner fue cerrado antes de escanear.');
     } finally {
+      this.isScaned = true;
       this.isScanning = false;
     }
   }
@@ -141,13 +144,14 @@ export class EscanerPage implements OnInit, OnDestroy {
   
     // Verificar conexión
     if (this.isOnline$.getValue()) {
+      // Verificar si la clase está registrada en Firebase
       const claseExiste = await this.verificarClaseEnFirebase(this.claseId);
   
       if (claseExiste) {
-        // Registrar asistencia online
+        // Registrar asistencia online si la clase existe
         await this.registrarAsistenciaOnline(alumnoId);
       } else {
-        // Guardar asistencia localmente si la clase no está en Firebase
+        // Guardar asistencia localmente si la clase no está registrada en Firebase
         await this.offlineService.guardarAsistenciaOffline({
           claseId: this.claseId,
           alumnoId,
@@ -195,17 +199,22 @@ export class EscanerPage implements OnInit, OnDestroy {
 
   async syncOfflineData() {
     const asistenciasSincronizadas: string[] = [];
-    
+  
     // Sincronizar las asistencias guardadas localmente
     await this.offlineService.sincronizarAsistenciasOffline(async (asistencia) => {
       try {
-        await this.asistenciaService.registrarAsistencia(asistencia.claseId, asistencia.alumnoId);
-        asistenciasSincronizadas.push(asistencia.claseId);
+        const claseExiste = await this.verificarClaseEnFirebase(asistencia.claseId);
+        if (claseExiste) {
+          await this.asistenciaService.registrarAsistencia(asistencia.claseId, asistencia.alumnoId);
+          asistenciasSincronizadas.push(asistencia.claseId);
+        } else {
+          console.log(`Clase ${asistencia.claseId} aún no registrada en Firebase. No se sincronizó.`);
+        }
       } catch (error) {
         console.error('Error al sincronizar asistencia:', error);
       }
     });
-    
+  
     if (asistenciasSincronizadas.length > 0) {
       await this.presentAlert(`¡Conexión restaurada! Se sincronizaron ${asistenciasSincronizadas.length} asistencias.`);
     }
@@ -232,20 +241,16 @@ export class EscanerPage implements OnInit, OnDestroy {
         {
           text: 'Finalizar',
           handler: async () => {
-            // Verificar el estado de la conexión antes de finalizar
-            if (this.isOnline$.getValue()) {
-              // Sincronizar datos si hay conexión
-              await this.syncOfflineData();
+            if (this.isScaned) {
+              if (this.isOnline$.getValue()) {
+                await this.syncOfflineData();
+              } else {
+                await this.presentAlert('Estás desconectado. Asistencia guardada localmente.');
+              }
             } else {
-              // Si está offline, guardamos la asistencia localmente
-              await this.offlineService.guardarAsistenciaOffline({
-                claseId: this.claseId,
-                alumnoId: this.rut,
-                estado: 'presente',
-              });
-              await this.presentAlert('Estás desconectado. Asistencia guardada localmente.');
+              await this.presentAlert('No se ha realizado ningún escaneo.');
             }
-            this.router.navigate(['/menu', { rut: this.rut }]); // Redirige a la página previa
+            this.router.navigate(['/menu', { rut: this.rut }]);
           },
         },
       ],

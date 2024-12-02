@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button color="light" ></ion-back-button>
+      <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>Escáner de Asistencia</ion-title>
   </ion-toolbar>
@@ -15,9 +15,8 @@
   </div>
 
   <!-- Resultados del escaneo -->
-  <div *ngIf="datosClaseUI">
+  <div *ngIf="datosClaseUI && escaneoData" class="scan-results">
     <h2>Datos de la Clase</h2>
-    <p><strong>Clase ID:</strong> {{ datosClaseUI.claseId }}</p>
     <p><strong>Asignatura:</strong> {{ datosClaseUI.asignatura }}</p>
     <p><strong>Nombre:</strong> {{ datosClaseUI.nombreAsignatura }}</p>
     <p><strong>Día:</strong> {{ datosClaseUI.dia }}</p>
@@ -25,26 +24,26 @@
     <p><strong>Hora Fin:</strong> {{ datosClaseUI.horaFin }}</p>
     <p><strong>Sala:</strong> {{ datosClaseUI.sala }}</p>
   </div>
-  
 
   <!-- Botón de escaneo -->
   <div *ngIf="!isScanning" class="scan-btn-container">
-    <ion-button 
-      *ngIf="!escaneoData" 
-      expand="full" 
-      color="primary" 
-      (click)="scan()" 
-      [disabled]="isScanning" 
-      class="scan-btn">
+    <ion-button
+      *ngIf="!escaneoData"
+      class="scan-btn"
+      expand="full"
+      color="primary"
+      (click)="scan()"
+      [disabled]="isScanning"
+    >
       <div *ngIf="isScanning" class="scan-indicator">
         <ion-spinner name="crescent"></ion-spinner>
       </div>
-      <span>{{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}</span>
+      <span>{{ isScanning ? 'Escaneando...' : 'Escanear Ahora' }}</span>
     </ion-button>
   </div>
 
   <!-- Botón para finalizar -->
-  <ion-button expand="full" color="secondary" (click)="router.navigate(['previous-page'])" class="finish-btn">
+  <ion-button expand="full" color="secondary" (click)="finalizarRegistro()" class="finish-btn">
     Finalizar Registro
   </ion-button>
 </ion-content>

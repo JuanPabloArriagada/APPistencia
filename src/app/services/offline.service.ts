@@ -3,88 +3,86 @@ import { Storage } from '@ionic/storage-angular';
 import { Network } from '@capacitor/network';
 import { Clase, AsistenciaAsignatura, Asignatura } from '../interfaces/asignatura';
 import { AsignaturaService } from './asignaturas.service';
+import { AsistenciaService } from './asistencia.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OfflineService {
-  constructor(private storage: Storage, private asignaturaService: AsignaturaService) {
+  constructor(private storage: Storage, private asignaturaService: AsignaturaService, private asistenciaService: AsistenciaService) {
     this.storage.create();
     this.subscribeToNetworkChanges();
   }
 
   async guardarClaseLocal(clase: Clase): Promise<void> {
-    const clasesGuardadas = await this.storage.get('clases') || [];
-    clasesGuardadas.push(clase);
-    await this.storage.set('clases', clasesGuardadas);
+    const clasesGuardadas = (await this.storage.get('clasesOffline')) || [];
+    const claseExistente = clasesGuardadas.some((c: Clase) => c.id === clase.id);
+
+    if (!claseExistente) {
+      clasesGuardadas.push(clase);
+      await this.storage.set('clasesOffline', clasesGuardadas);
+    } else {
+      console.log(`Clase con ID ${clase.id} ya existe en almacenamiento local.`);
+    }
   }
 
   async obtenerClasesNoSincronizadas(): Promise<Clase[]> {
-    return await this.storage.get('clases') || [];
+    return (await this.storage.get('clasesOffline')) || [];
   }
 
   async eliminarClaseSincronizada(claseId: string): Promise<void> {
-    const clasesGuardadas = await this.storage.get('clases') || [];
-    const clasesFiltradas: Clase[] = clasesGuardadas.filter((clase: Clase) => clase.id !== claseId);
-    await this.storage.set('clases', clasesFiltradas);
+    const clasesGuardadas = (await this.storage.get('clasesOffline')) || [];
+    const clasesFiltradas = clasesGuardadas.filter((clase: Clase) => clase.id !== claseId);
+    await this.storage.set('clasesOffline', clasesFiltradas);
   }
 
-  async guardarAsistenciaOffline(asistencia: { claseId: string; alumnoId: string; estado: 'presente' | 'ausente' | 'tarde' }) {
-    const clasesOffline = (await this.storage.get('clasesOffline')) || [];
-    const claseIndex = clasesOffline.findIndex((clase: Clase) => clase.id === asistencia.claseId);
-  
-    if (claseIndex !== -1) {
-      clasesOffline[claseIndex].offlineAsistencias = [
-        ...(clasesOffline[claseIndex].offlineAsistencias || []),
-        asistencia,
-      ];
-    } else {
-      clasesOffline.push({
-        id: asistencia.claseId,
-        asignaturaId: '', // Agregar asignaturaId si es necesario
-        dia: '',
-        horaInicio: '',
-        horaFin: '',
-        codigoSala: '',
-        asistentes: [],
-        inasistentes: [],
-        fecha: '',
-        offlineAsistencias: [asistencia],
-      });
-    }
-  
-    await this.storage.set('clasesOffline', clasesOffline);
+  async guardarAsistenciaOffline(asistencia: { claseId: string; alumnoId: string; estado: 'presente' | 'ausente' | 'tarde' }): Promise<void> {
+    const asistenciasGuardadas = (await this.storage.get('asistenciasOffline')) || [];
+    asistenciasGuardadas.push(asistencia);
+    await this.storage.set('asistenciasOffline', asistenciasGuardadas);
     console.log('Asistencia offline guardada:', asistencia);
   }
 
-  async obtenerAsistenciasNoSincronizadas(): Promise<AsistenciaAsignatura[]> {
+  async obtenerAsistenciasNoSincronizadas(): Promise<any[]> {
     return (await this.storage.get('asistenciasOffline')) || [];
   }
 
-  async eliminarAsistenciaSincronizada(asistenciaId: string) {
+  async eliminarAsistenciaSincronizada(claseId: string, alumnoId: string): Promise<void> {
     const asistenciasOffline = (await this.storage.get('asistenciasOffline')) || [];
-    const nuevasAsistencias = asistenciasOffline.filter((a: AsistenciaAsignatura) => a.id !== asistenciaId);
+    const nuevasAsistencias = asistenciasOffline.filter((a: any) => !(a.claseId === claseId && a.alumnoId === alumnoId));
     await this.storage.set('asistenciasOffline', nuevasAsistencias);
-    console.log(`Asistencia con ID ${asistenciaId} eliminada de almacenamiento offline.`);
+    console.log(`Asistencia eliminada para claseId: ${claseId}, alumnoId: ${alumnoId}`);
   }
 
-  async sincronizarAsistenciasOffline(enviarAsistencia: (asistencia: any) => Promise<void>) {
-    const clasesOffline = await this.storage.get('clasesOffline') || [];
-  
+  async sincronizarDatosOffline(enviarClase: (clase: Clase) => Promise<void>, enviarAsistencia: (asistencia: any) => Promise<void>): Promise<void> {
+    const clasesOffline = await this.obtenerClasesNoSincronizadas();
+    const asistenciasOffline = await this.obtenerAsistenciasNoSincronizadas();
+
+    // Sincronizar clases primero
     for (const clase of clasesOffline) {
-      const offlineAsistencias = clase.offlineAsistencias || [];
-  
-      for (const asistencia of offlineAsistencias) {
-        try {
-          await enviarAsistencia(asistencia);
-          clase.offlineAsistencias = clase.offlineAsistencias.filter((a: any) => a.alumnoId !== asistencia.alumnoId);
-        } catch (error) {
-          console.error('Error al sincronizar asistencia:', asistencia, error);
-        }
+      try {
+        await enviarClase(clase);
+        await this.eliminarClaseSincronizada(clase.id);
+        console.log(`Clase sincronizada: ${clase.id}`);
+      } catch (error) {
+        console.error(`Error al sincronizar clase ${clase.id}:`, error);
       }
     }
-  
-    await this.storage.set('clasesOffline', clasesOffline);
+
+    // Verificar asistencias pendientes
+    for (const asistencia of asistenciasOffline) {
+      try {
+        const claseSincronizada = !clasesOffline.some((c: Clase) => c.id === asistencia.claseId);
+
+        if (claseSincronizada) {
+          await enviarAsistencia(asistencia);
+          await this.eliminarAsistenciaSincronizada(asistencia.claseId, asistencia.alumnoId);
+          console.log(`Asistencia sincronizada: claseId ${asistencia.claseId}, alumnoId ${asistencia.alumnoId}`);
+        }
+      } catch (error) {
+        console.error('Error al sincronizar asistencia:', asistencia, error);
+      }
+    }
   }
 
   async guardarAsignaturaLocal(asignatura: Asignatura): Promise<void> {
@@ -134,14 +132,29 @@ export class OfflineService {
     await this.storage.set('asignaturasOffline', asignaturasFiltradas);
   }
 
-  // Escuchar los cambios en la conectividad de la red
-  private subscribeToNetworkChanges() {
+  private subscribeToNetworkChanges(): void {
     Network.addListener('networkStatusChange', async (status) => {
       if (status.connected) {
-        // Sincronizar datos offline cuando vuelve la conexión
-        await this.sincronizarAsignaturasOffline();
+        console.log('Conexión detectada. Sincronizando datos offline...');
+        await this.sincronizarDatosOffline(
+          (clase) => this.asistenciaService.guardarAsistencia(clase),  
+          (asistencia) => this.asistenciaService.registrarAsistencia(asistencia.claseId, asistencia.alumnoId)  
+        );
       }
     });
+  }
+
+  async sincronizarAsistenciasOffline(enviarAsistencia: (asistencia: any) => Promise<void>): Promise<void> {
+    const asistenciasOffline = await this.obtenerAsistenciasNoSincronizadas();
+    for (const asistencia of asistenciasOffline) {
+      try {
+        await enviarAsistencia(asistencia);
+        await this.eliminarAsistenciaSincronizada(asistencia.claseId, asistencia.alumnoId);
+        console.log(`Asistencia sincronizada: claseId ${asistencia.claseId}, alumnoId ${asistencia.alumnoId}`);
+      } catch (error) {
+        console.error('Error al sincronizar asistencia:', asistencia, error);
+      }
+    }
   }
 
 }
