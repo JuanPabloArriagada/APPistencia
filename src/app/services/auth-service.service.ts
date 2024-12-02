@@ -4,12 +4,17 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { Usuario } from '../interfaces/usuario';
 import { Storage } from '@ionic/storage-angular';  // Importar Storage
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
+import { Network } from '@capacitor/network';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+
+  isOnline$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  networkListener: any;
+
   constructor(
     private afAuth: AngularFireAuth,
     private firestore: AngularFirestore,
@@ -17,11 +22,24 @@ export class AuthService {
     private storage: Storage 
   ) {
     this.initStorage();
+    this.monitorNetworkStatus();
   }
 
   // Inicializar el almacenamiento
   private async initStorage() {
     await this.storage.create(); 
+  }
+
+  private monitorNetworkStatus() {
+    // Obtener el estado de la red al inicio
+    Network.getStatus().then(status => {
+      this.isOnline$.next(status.connected);
+    });
+
+    // Escuchar cambios en el estado de la red
+    this.networkListener = Network.addListener('networkStatusChange', (status) => {
+      this.isOnline$.next(status.connected);
+    });
   }
 
   async verificarRutExistente(rut: string): Promise<boolean> {
@@ -105,9 +123,13 @@ export class AuthService {
   
 
   async logout() {
-    await this.afAuth.signOut();
-    await this.storage.remove('usuario');  // Eliminar el usuario almacenado
-    this.router.navigate(['/login']); 
+    if (this.isOnline$.getValue()) {
+      await this.afAuth.signOut();
+      console.log('Usuario desconectado de Firebase');
+    } else {
+      console.log('Cierre de sesión sin conexión, datos locales aún disponibles');
+    }
+    this.router.navigate(['/login']);
   }
 
   async isAuthenticated(): Promise<boolean> {
@@ -124,4 +146,7 @@ export class AuthService {
     return await this.storage.get(`usuario_${rut}`) || null;
   }
 
+  getNetworkStatus() {
+    return this.isOnline$.asObservable();
+  }
 }

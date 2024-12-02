@@ -65,3 +65,102 @@ ion-button {
     flex-direction: row; /* Los campos estarán uno al lado del otro */
   }
 }
+
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: green;
+  animation: pulse-expand 1.5s ease-out forwards, hold-green 3s ease 1.5s forwards;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+
+body {
+  margin: 0;
+  height: 100vh;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* Evita barras de desplazamiento durante la animación */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px; /* Empieza como un círculo pequeño */
+  height: 20px;
+  background-color: #4caf50; /* Color verde */
+  border-radius: 50%;
+  transform: translate(-50%, -50%); /* Centrado en la pantalla */
+  animation: pulse-animation 1s ease-out forwards; /* Animación más rápida */
+  z-index: 1; /* Aparece debajo del ícono */
+}
+
+.check-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px; /* Tamaño del círculo del check */
+  height: 120px;
+  background-color: #fff; /* Fondo blanco para el círculo del check */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Sombra más fuerte */
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5); /* Empieza pequeño */
+  animation: fade-in-check 0.5s ease-out forwards 1s; /* Animación más rápida y aparece antes */
+  z-index: 2; /* Asegura que esté encima del pulso */
+}
+
+.check-icon {
+  font-size: 3rem; /* Ícono más grande */
+  color: #4caf50; /* Color verde para el check */
+  transform: scale(0.8);
+  z-index: 3; /* Asegura que el ícono esté encima del círculo blanco */
+}
+
+@keyframes pulse-animation {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(60); /* Expande el círculo hasta llenar toda la pantalla */
+  }
+}
+
+@keyframes fade-in-check {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

@@ -86,9 +86,14 @@ export class PerfilPage implements OnInit, OnDestroy {
 
   // Método para cerrar sesión
   cerrarSesion() {
-    this.authService.logout().then(() => {
-      this.router.navigate(['/home']); 
-    });
+    if (this.isOnline$.getValue()) {
+      this.authService.logout().then(() => {
+        this.router.navigate(['/home']);
+      });
+    } else {
+      console.log('Cierre de sesión realizado sin conexión');
+      this.router.navigate(['/home']);
+    }
   }
 
   ngOnDestroy() {

@@ -90,7 +90,11 @@
     </div>
   </form>
 
-  <div *ngIf="successMessage" class="success-message">
-    <p>{{ successMessage }}</p>
+  <div *ngIf="successMessage" class="overlay">
+    <div class="pulse"></div>
+    <div class="check-circle">
+      <div class="check-icon">✔</div>
+    </div>
   </div>
+  
 </ion-content>

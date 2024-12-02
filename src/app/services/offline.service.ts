@@ -83,6 +83,21 @@ export class OfflineService {
         console.error('Error al sincronizar asistencia:', asistencia, error);
       }
     }
+
+
+    // Sincronizar cancelaciones de clases
+    const cancelacionesOffline = await this.storage.get('cancelacionesOffline') || [];
+
+    for (const claseId of cancelacionesOffline) {
+      try {
+        await this.asistenciaService.eliminarClase(claseId);
+        const nuevasCancelaciones = cancelacionesOffline.filter((id: string) => id !== claseId);
+        await this.storage.set('cancelacionesOffline', nuevasCancelaciones);
+        console.log(`Cancelación sincronizada: claseId ${claseId}`);
+      } catch (error) {
+        console.error(`Error al sincronizar cancelación de clase ${claseId}:`, error);
+      }
+    }
   }
 
   async guardarAsignaturaLocal(asignatura: Asignatura): Promise<void> {
@@ -154,6 +169,15 @@ export class OfflineService {
       } catch (error) {
         console.error('Error al sincronizar asistencia:', asistencia, error);
       }
+    }
+  }
+
+  async registrarCancelacionClase(claseId: string): Promise<void> {
+    const cancelacionesGuardadas = (await this.storage.get('cancelacionesOffline')) || [];
+    if (!cancelacionesGuardadas.includes(claseId)) {
+      cancelacionesGuardadas.push(claseId);
+      await this.storage.set('cancelacionesOffline', cancelacionesGuardadas);
+      console.log(`Clase con ID ${claseId} registrada como cancelada offline.`);
     }
   }
 

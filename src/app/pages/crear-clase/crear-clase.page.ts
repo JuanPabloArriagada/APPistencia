@@ -80,40 +80,34 @@ export class CrearClasePage implements OnInit {
 
   async guardarAsignatura() {
     if (!this.asignaturaForm.valid) {
-      return;  // Ensure form is valid before saving
+      return;  // Asegura que el formulario sea válido antes de guardar
     }
     this.asignatura.id = uuidv4();
     this.asignatura.profesorId = this.rut;
     this.asignatura.horarios.forEach(horario => {
       horario.asignaturaId = this.asignatura.id;
     });
-
+  
     // Guardar asignatura localmente si está offline
     const status = await Network.getStatus();
     if (!status.connected) {
       await this.offlineService.guardarAsignaturaLocal(this.asignatura);
       console.log('Asignatura guardada localmente debido a falta de conexión');
-      this.router.navigate(['/menu', { rut: this.rut }]);
     } else {
       await this.asignaturaService.guardarAsignatura(this.asignatura);
       console.log('Asignatura guardada en Firebase');
-      this.router.navigate(['/menu', { rut: this.rut }]);
     }
-
-    if (!this.usuarioActual.asignaturasCreadas) {
-      this.usuarioActual.asignaturasCreadas = [];
-    }
-    this.usuarioActual.asignaturasCreadas.push(this.asignatura.id);
-
-
-
-    // Mostrar mensaje de éxito
+  
+    // Mostrar mensaje de éxito con animación
     this.successMessage = '¡Asignatura creada con éxito!';
     setTimeout(() => {
-      this.successMessage = ''; // Limpiar el mensaje después de 3 segundos
+      // Ocultar mensaje después de 3 segundos
+      this.successMessage = ''; 
+      // Redirigir al menú después de que desaparezca el mensaje
+      this.router.navigate(['/menu', { rut: this.rut }]);
     }, 3000);
-
-    // Reinicia el formulario
+  
+    // Restablecer el formulario
     this.asignatura = {
       id: '',
       nombre: '',
@@ -124,4 +118,5 @@ export class CrearClasePage implements OnInit {
       porcentajeAsistencia: 0
     };
   }
+  
 }

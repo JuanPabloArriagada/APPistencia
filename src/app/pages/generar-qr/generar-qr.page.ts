@@ -188,6 +188,45 @@ export class GenerarQRPage implements OnInit {
     }
   }
 
+  async cancelarClase() {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que deseas cancelar esta clase?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancelación abortada.');
+          },
+        },
+        {
+          text: 'Sí',
+          handler: async () => {
+            try {
+              const status = await Network.getStatus();
+              if (status.connected) {
+                // Eliminar clase de Firebase
+                await this.asistenciaService.eliminarClase(this.claseIdCreada);
+              } else {
+                // Registrar cancelación offline
+                await this.offlineService.registrarCancelacionClase(this.claseIdCreada);
+              }
+              // Redirigir al menú
+              this.router.navigate(['/menu', { rut: this.rut }]);
+              await this.presentAlert('Clase cancelada exitosamente.');
+            } catch (error) {
+              console.error('Error al cancelar la clase:', error);
+              await this.presentAlert('Hubo un error al cancelar la clase. Intenta nuevamente.');
+            }
+          },
+        },
+      ],
+    });
+  
+    await alert.present();
+  }
+
   async presentAlert(message: string) {
     const alert = await this.alertController.create({
       header: 'Información',

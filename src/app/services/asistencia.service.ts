@@ -80,4 +80,16 @@ export class AsistenciaService {
     const clases = await this.firestore.collection<Clase>('clases', ref => ref.where('asignaturaId', '==', asignaturaId)).valueChanges().toPromise();
     return clases ?? [];
   }
+
+  async eliminarClase(claseId: string): Promise<void> {
+    try {
+      await this.firestore.collection('clases').doc(claseId).delete();
+      console.log(`Clase con ID ${claseId} eliminada de Firebase.`);
+    } catch (error) {
+      console.error('Error al eliminar clase:', error);
+      throw new Error('No se pudo eliminar la clase.');
+    }
+  }
+  
+
 }
