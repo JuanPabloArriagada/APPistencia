@@ -94,7 +94,8 @@ export class AuthService {
         }
       }
     } catch (error) {
-      throw new Error('Error en la autenticación online.');
+      console.error('Error al iniciar sesión:', error);
+      throw error;
     }
     return null;
   }
