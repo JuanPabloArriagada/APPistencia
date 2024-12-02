@@ -56,34 +56,27 @@ export class AuthService {
   }
 
   async login(correo: string, contrasena: string, rut: string): Promise<Usuario | null> {
-    if (!correo || !contrasena || !rut) {
-      throw new Error('Correo, contraseña o rut vacíos');
-    }
-  
     try {
       const credenciales = await this.afAuth.signInWithEmailAndPassword(correo, contrasena);
       const user = credenciales.user;
-  
+
       if (user) {
         const usuarioDoc = await this.firestore.collection('usuarios').doc(rut).get().toPromise();
-  
         if (usuarioDoc && usuarioDoc.exists) {
           const usuario = usuarioDoc.data() as Usuario;
-  
           if (usuario.correo === correo) {
-            // Guardar los datos del usuario en el Storage
-            await this.storage.set('usuario', usuario); 
+            // Almacenar datos localmente para el uso offline
+            await this.guardarUsuarioOffline(usuario);
             return usuario;
           } else {
-            throw new Error('El correo y el RUT no coinciden');
+            throw new Error('El correo y el RUT no coinciden.');
           }
         } else {
-          throw new Error('Usuario no encontrado');
+          throw new Error('Usuario no encontrado.');
         }
       }
     } catch (error) {
-      console.error('Error al autenticar usuario:', error);
-      throw new Error('Credenciales incorrectas');
+      throw new Error('Error en la autenticación online.');
     }
     return null;
   }
@@ -122,18 +115,13 @@ export class AuthService {
     return user !== null;  // Si hay un usuario, está autenticado
   }
 
-  async getUsuarioActualOffline(rut: string): Promise<Usuario | null> {
-    const cachedUser = await this.storage.get(`usuario_${rut}`);
-    if (cachedUser) {
-      console.log(`Cargando usuario desde cache: ${rut}`);
-      return cachedUser as Usuario;
-    }
-    return null;
-  }
-  
-  async guardarUsuarioOffline(usuario: Usuario) {
+  async guardarUsuarioOffline(usuario: Usuario): Promise<void> {
     await this.storage.set(`usuario_${usuario.rut}`, usuario);
-    console.log(`Usuario ${usuario.rut} guardado en cache`);
+    console.log(`Usuario ${usuario.rut} almacenado localmente.`);
+  }
+
+  async getUsuarioActualOffline(rut: string): Promise<Usuario | null> {
+    return await this.storage.get(`usuario_${rut}`) || null;
   }
 
 }
