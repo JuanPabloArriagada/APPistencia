@@ -38,13 +38,6 @@ export class HomePage implements OnInit, OnDestroy {
     this.networkListener = Network.addListener('networkStatusChange', (status) => {
       this.isOnline$.next(status.connected);
     });
-
-    // Verificar si ya hay un usuario almacenado
-    const storedUser = await this.storage.get('usuario');
-    if (storedUser) {
-      console.log('Usuario encontrado en almacenamiento local:', storedUser);
-      this.router.navigate(['/menu', { rut: storedUser.rut }]);
-    }
   }
 
   async login() {

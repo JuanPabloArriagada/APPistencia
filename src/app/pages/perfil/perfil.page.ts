@@ -95,7 +95,6 @@ export class PerfilPage implements OnInit, OnDestroy {
       this.router.navigate(['/home']);
     }
   }
-
   ngOnDestroy() {
     if (this.networkListener) {
       this.networkListener.remove();
