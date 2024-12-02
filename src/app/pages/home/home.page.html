@@ -45,7 +45,7 @@
         <p>La contraseña es requerida</p>
       </ion-text>
 
-      <ion-button type="submit" expand="block" fill="solid" color="primary" [disabled]="!loginForm.valid || !isOnline">
+      <ion-button type="submit" expand="block" fill="solid" color="primary">
         Iniciar Sesión
       </ion-button>
 
@@ -53,6 +53,9 @@
         <ion-text color="danger">{{ errorMessage }}</ion-text>
       </div>
     </form>
+    <ion-text *ngIf="!isOnline$.value" color="warning">
+      Estás en modo offline.
+    </ion-text>
 
     <!-- Enlaces secundarios -->
     <ion-button href="recuperar" expand="block" fill="clear" color="primary" [disabled]="!isOnline">

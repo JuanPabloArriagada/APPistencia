@@ -36,7 +36,13 @@ export class AsignaturaService {
 
   async guardarAsignatura(asignatura: Asignatura): Promise<void> {
     const asignaturaRef = this.firestore.collection('asignaturas').doc(asignatura.id);
-    await asignaturaRef.set(asignatura); // Guardar o crear la asignatura
+    const docSnapshot = await asignaturaRef.get().toPromise();
+    if (!docSnapshot || !docSnapshot.exists) {
+      await asignaturaRef.set(asignatura); // Solo guarda si no existe
+      console.log('Asignatura guardada correctamente');
+    } else {
+      console.log('La asignatura ya existe en la base de datos.');
+    }
   }
 
   async obtenerAsignaturasPorUsuario(usuarioId: string): Promise<Asignatura[]> {
@@ -93,17 +99,27 @@ export class AsignaturaService {
   }
 
   async obtenerAsignaturaPorId(asignaturaId: string): Promise<Asignatura | undefined> {
+    // Primero intenta obtenerla de Firebase
     try {
       const doc = await this.firestore.collection('asignaturas').doc(asignaturaId).get().toPromise();
       if (doc && doc.exists) {
-        return doc.data() as Asignatura;
+        const asignatura = doc.data() as Asignatura;
+        // Guardar la asignatura en almacenamiento local
+        localStorage.setItem(`asignatura-${asignaturaId}`, JSON.stringify(asignatura));
+        return asignatura;
       } else {
         console.error(`El documento con ID ${asignaturaId} no existe en la colección 'asignaturas'.`);
         return undefined;
       }
     } catch (error) {
       console.error(`Error al obtener la asignatura ${asignaturaId}:`, error);
-      return undefined;
+      // Si hay error, intentar cargar desde localStorage
+      const asignatura = localStorage.getItem(`asignatura-${asignaturaId}`);
+      if (asignatura) {
+        return JSON.parse(asignatura);
+      } else {
+        return undefined;
+      }
     }
   }
 
@@ -201,6 +217,30 @@ export class AsignaturaService {
     const clases = clasesSnapshot?.docs.map(doc => doc.data() as Clase) || [];
     console.log(`Clases obtenidas para la asignatura ${asignaturaId}:`, clases); 
     return clases;
+  }
+
+  sincronizarAsignaturas(asignaturas: Asignatura[]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const asignaturasRef = this.firestore.collection('asignaturas');
+      asignaturas.forEach(asignatura => {
+        const asignaturaRef = asignaturasRef.doc(asignatura.id); // Usamos doc con el id de la asignatura
+  
+        asignaturaRef.get().toPromise().then(docSnapshot => {
+          if (docSnapshot && docSnapshot.exists) {
+            // Si la asignatura ya existe, la actualizamos
+            asignaturaRef.update(asignatura).then(() => {
+              console.log('Asignatura actualizada');
+            }).catch(reject);
+          } else {
+            // Si no existe, la agregamos como nueva
+            asignaturaRef.set(asignatura).then(() => {
+              console.log('Asignatura sincronizada');
+            }).catch(reject);
+          }
+        }).catch(reject);
+      });
+      resolve();
+    });
   }
 
 }

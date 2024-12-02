@@ -3,6 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AsistenciaService } from '../../services/asistencia.service';
 import { Clase } from '../../interfaces/asignatura';
 import { AsignaturaService } from '../../services/asignaturas.service';
+import { OfflineService } from '../../services/offline.service';
+import { Network } from '@capacitor/network';
+import { Storage } from '@ionic/storage-angular';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-generar-qr',
@@ -29,10 +33,15 @@ export class GenerarQRPage implements OnInit {
     private asistenciaService: AsistenciaService,
     private asignaturaService: AsignaturaService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private offlineService: OfflineService,
+    private storage: Storage,
+    private alertController: AlertController
   ) {}
 
   async ngOnInit() {
+    await this.storage.create(); // Crear instancia de storage
+
     this.route.queryParams.subscribe(async params => {
       this.dia = params['dia'] || '';
       this.horaInicio = params['horaInicio'] || '';
@@ -40,46 +49,108 @@ export class GenerarQRPage implements OnInit {
       this.codigoSala = params['codigoSala'] || '';
       this.asignaturaId = params['asignaturaId'] || '';
 
-      const asignatura = await this.asignaturaService.obtenerAsignaturaPorId(this.asignaturaId);
-      this.asignaturaNombre = asignatura ? asignatura.nombre : 'Asignatura no encontrada';
+      // Intentar obtener la asignatura desde Firebase o Storage
+      const asignatura = await this.obtenerAsignatura();
+
+      this.asignaturaNombre = asignatura ? asignatura.nombre : 'Nombre no disponible en este momento';
       this.asignaturaInscritos = asignatura ? asignatura.inscritos : [];
       await this.crearClase();
       this.suscribirCambiosClase();
       this.subcribirCambiosAsignatura();
     });
+
+    this.sincronizarClases();
+    this.sincronizarCuandoOnline();
   }
 
+  // Método para obtener la asignatura
+  async obtenerAsignatura() {
+    try {
+      const status = await Network.getStatus();
+      let asignatura = null;
+  
+      if (status.connected) {
+        // Si estamos conectados, obtenemos la asignatura desde Firebase
+        asignatura = await this.asignaturaService.obtenerAsignaturaPorId(this.asignaturaId);
+        if (asignatura) {
+          console.log('Asignatura obtenida desde Firebase:', asignatura);
+          await this.storage.set(`asignatura-${this.asignaturaId}`, asignatura);
+        }
+      } else {
+        // Si no hay conexión, intentamos obtener la asignatura desde almacenamiento local
+        asignatura = await this.storage.get(`asignatura-${this.asignaturaId}`);
+        if (asignatura) {
+          console.log('Asignatura obtenida desde almacenamiento local:', asignatura);
+          console.log('id:', asignatura.id);
+          console.log('nombre:', asignatura.nombre);
+          console.log('asignatura:', asignatura);
+        } else {
+          console.warn('Asignatura no encontrada en almacenamiento local');
+        }
+      }
+  
+      if (asignatura) {
+        return asignatura;
+      } else {
+        console.error('Asignatura no encontrada');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener asignatura:', error);
+      return null;
+    }
+  }
+
+  async sincronizarCuandoOnline() {
+    const status = await Network.getStatus();
+    if (status.connected) {
+      this.sincronizarClases(); // Solo sincroniza cuando haya conexión
+    }
+  }
 
   async crearClase() {
     const nuevaClase: Clase = {
-      id: Date.now().toString(),
+      id: Date.now().toString(),  // ID único
       asignaturaId: this.asignaturaId,
       dia: this.dia,
       horaInicio: this.horaInicio,
       horaFin: this.horaFin,
       codigoSala: this.codigoSala,
       asistentes: [],
-      inasistentes: [...this.asignaturaInscritos] ,
+      inasistentes: [...this.asignaturaInscritos],
       fecha: this.fechaClase
     };
 
     this.qrData = `ClaseId: ${nuevaClase.id}, Asignatura: ${this.asignaturaId}, NombreAsignatura: ${this.asignaturaNombre}, Día: ${this.dia}, Inicio: ${this.horaInicio}, Fin: ${this.horaFin}, Sala: ${this.codigoSala}`;
-
+    
     try {
-      await this.asistenciaService.guardarAsistencia(nuevaClase);
+      // Verificar el estado de la conexión antes de enviar la clase
+      const status = await Network.getStatus();
+      if (status.connected) {
+        await this.asistenciaService.guardarAsistencia(nuevaClase);  // Enviar a Firebase si hay conexión
+      } else {
+        console.warn('Sin conexión, guardando en local.');
+        await this.offlineService.guardarClaseLocal(nuevaClase);  // Guardar offline si no hay conexión
+      }
       this.claseIdCreada = nuevaClase.id;
       this.inasistentes = [...this.asignaturaInscritos];
     } catch (error) {
-      console.error('Error al crear la clase:', error);
+      console.warn('Error al crear clase:', error);
     }
   }
 
   async finalizarRegistro() {
     try {
-      await this.asistenciaService.actualizarAsistencia(this.claseIdCreada, this.confirmados, this.inasistentes);
+      // Si hay conexión, actualiza los datos en el servidor
+      const status = await Network.getStatus();
+      if (status.connected) {
+        await this.asistenciaService.actualizarAsistencia(this.claseIdCreada, this.confirmados, this.inasistentes);
+        await this.presentAlert('Asistencia actualizada correctamente.');
+      }
+      // Redirigir al menú
       this.router.navigate(['/menu', { rut: this.rut }]);
     } catch (error) {
-      console.error('Error al guardar el registro de asistencia:', error);
+      console.error('Error al finalizar el registro:', error);
     }
   }
 
@@ -102,5 +173,27 @@ export class GenerarQRPage implements OnInit {
     }, error => {
       console.error('Error al suscribirse a los cambios de la asignatura:', error);
     });
+  }
+
+  async sincronizarClases() {
+    const clasesNoSincronizadas = await this.offlineService.obtenerClasesNoSincronizadas();
+    for (const clase of clasesNoSincronizadas) {
+      try {
+        await this.asistenciaService.guardarAsistencia(clase);  // Enviar a Firebase
+        await this.offlineService.eliminarClaseSincronizada(clase.id);  // Eliminar de local
+        console.log('Clase sincronizada:', clase);
+      } catch (error) {
+        console.error('Error al sincronizar la clase:', error);
+      }
+    }
+  }
+
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Información',
+      message,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 }

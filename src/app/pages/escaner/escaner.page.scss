@@ -1,5 +1,6 @@
+/* Estilos para el header */
 ion-header {
-  --background: #4CAF50; 
+  --background: #4CAF50;
   --color: white;
 }
 
@@ -10,119 +11,64 @@ ion-title {
   text-transform: uppercase !important;
 }
 
-.menu-title {
-  font-size: 22px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.scan-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; 
-  align-items: center;
-  height: 100%;
-  gap: 20px;
-  padding: 20px;
-  text-align: center;
-}
-
+/* Contenedor del botón de escaneo */
 .scan-btn-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  flex-grow: 1; 
-  border-radius: 20px;
+  flex-grow: 1;
+  position: relative;
+  height: 70vh; /* Lo mantiene centrado en la pantalla */
 }
 
+/* Estilos del botón de escaneo */
 .scan-btn {
-  background-color: transparent !important; 
-  border-radius: 12px;
-  width: 200px;
-  height: 200px;
-  padding: 10px;
-  font-size: 1.2em;
+  width: 180px !important;
+  height: 180px !important;
+  background: linear-gradient(45deg, #4caf50, #0072ff);
+  border-radius: 50% !important;
+  color: white;
+  font-size: 1.2em !important;
   font-weight: bold;
-  text-transform: uppercase;
-  box-shadow: none !important; 
-  border: none !important; 
-  color: white; 
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .scan-btn:hover {
-  background-color: #3171e5; 
-  transform: scale(1.1); 
+  transform: scale(1.1); /* Efecto de agrandamiento */
 }
 
-.scan-btn:focus, .scan-btn:active {
-  outline: none;
-  box-shadow: none;
+.scan-btn:disabled {
+  background-color: #a6c8ff;
+  pointer-events: none;
 }
 
+/* Indicador de escaneo */
 .scan-indicator {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.3); 
-  border-radius: 50%; 
-  position: absolute;
+  font-size: 1.1em;
 }
 
-/* Estilo para el spinner */
 ion-spinner {
-  --color: #ffffff;
+  --color: white;
 }
 
-/* Resultados del escaneo */
-ion-list {
-  width: 100%;
-  max-width: 500px;
-  margin-top: 30px;
-}
-
-ion-item {
-  padding: 15px;
-  border-radius: 15px;
-  background-color: #f9f9f9;
-  margin-bottom: 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-ion-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-ion-label h2 {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #333;
-}
-
-ion-label p {
-  font-size: 1em;
-  color: #666;
-}
-
-/* Botón para finalizar */
+/* Estilos para el botón de finalizar */
 .finish-btn {
-  margin-top: 20px; 
+  margin-top: 30px; /* Espacio entre el botón de finalizar y el botón de escaneo */
+  width: 90%;
   font-size: 1.2em;
   padding: 15px;
   border-radius: 50px;
   text-transform: uppercase;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   background-color: transparent !important;
-  color: white; 
+  color: white;
   border: none;
   transition: background-color 0.3s ease;
 }
@@ -136,62 +82,3 @@ ion-label p {
   box-shadow: none;
 }
 
-/* Responsividad */
-@media (max-width: 768px) {
-  .scan-container {
-    padding: 15px;
-  }
-
-  .scan-btn {
-    width: 180px;
-    height: 180px;
-    font-size: 1.3em;
-  }
-
-  .scan-status {
-    font-size: 1em;
-  }
-
-  ion-item {
-    padding: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .scan-btn {
-    width: 150px;
-    height: 150px;
-    font-size: 1.2em;
-  }
-
-  .scan-status {
-    font-size: 0.9em;
-  }
-
-  .finish-btn {
-    font-size: 1.1em;
-    padding: 12px;
-  }
-}
-
-.finish-btn {
-  background-color: #28c76f; 
-  color: white;
-  width: 100%;
-  font-size: 1.2em;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: none;
-  border: none !important;
-  transition: background-color 0.3s ease;
-  text-transform: uppercase;
-}
-
-.finish-btn:hover {
-  background-color: #22b35e; 
-}
-
-.finish-btn:focus {
-  outline: none;
-  box-shadow: none;
-}

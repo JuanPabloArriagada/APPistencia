@@ -3,63 +3,93 @@
     <ion-buttons slot="start">
       <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>Crear Clases</ion-title>
+    <ion-title>Crear Clase</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="guardarAsignatura()">
-    <ion-item>
-      <ion-label position="floating">Nombre Asignatura</ion-label>
-      <ion-input type="text" required [(ngModel)]="asignatura.nombre" name="nombre"></ion-input>
-    </ion-item>
-
-    <div *ngFor="let horario of asignatura.horarios; let i = index">
-      <div class="asignatura-container">
-        <div>
-          <h3 class="ion-text-center">Horario {{ i + 1 }}</h3>
-          <ion-row>
-            <ion-col>
-              <ion-button expand="full" (click)="agregarHorario()">Añadir Horario</ion-button>
-            </ion-col>
-            <ion-col>
-              <ion-button expand="full" color="danger" (click)="eliminarHorario(i)">Eliminar Horario</ion-button>
-            </ion-col>
-          </ion-row>
-        </div>
-        <!-- Campos para cada horario -->
-        <ion-item>
-          <ion-label position="floating">Día</ion-label>
-          <ion-select [(ngModel)]="horario.dia" name="dia{{i}}" required>
-            <ion-select-option value="Lunes">Lunes</ion-select-option>
-            <ion-select-option value="Martes">Martes</ion-select-option>
-            <ion-select-option value="Miércoles">Miércoles</ion-select-option>
-            <ion-select-option value="Jueves">Jueves</ion-select-option>
-            <ion-select-option value="Viernes">Viernes</ion-select-option>
-          </ion-select>
-        </ion-item>
-  
-        <ion-item>
-          <ion-label position="floating">Hora Inicio</ion-label>
-          <ion-input type="time" required [(ngModel)]="horario.horaInicio" name="horaInicio{{i}}"></ion-input>
-        </ion-item>
-  
-        <ion-item>
-          <ion-label position="floating">Hora Fin</ion-label>
-          <ion-input type="time" required [(ngModel)]="horario.horaFin" name="horaFin{{i}}"></ion-input>
-        </ion-item>
-  
-        <ion-item>
-          <ion-label position="floating">Código de Sala</ion-label>
-          <ion-input type="text" required [(ngModel)]="horario.codigoSala" name="codigoSala{{i}}"></ion-input>
-        </ion-item>
-      </div>
+  <form #asignaturaForm="ngForm" (ngSubmit)="guardarAsignatura()"> 
+    <div *ngIf="step === 1">
+      <ion-item>
+        <ion-label position="floating">Nombre Asignatura</ion-label>
+        <ion-input type="text" required [(ngModel)]="asignatura.nombre" name="nombre" #nombre="ngModel"></ion-input>
+      </ion-item>
+      <ion-button (click)="nextStep()" expand="full" [disabled]="!asignaturaForm.valid">Siguiente</ion-button>
     </div>
 
-    <ion-button type="submit" expand="full" [disabled]="!asignatura.nombre">Guardar Asignatura</ion-button>
+    <!-- Paso 2: Agregar horarios -->
+    <div *ngIf="step === 2" class="horarios-container">
+      <ion-button (click)="agregarHorario()" expand="full" color="tertiary" class="add-horario-btn">
+        <ion-icon name="add-outline"></ion-icon> Agregar Horario
+      </ion-button>
+    
+      <!-- Contenedor de horarios con grilla adaptativa -->
+      <div class="horarios-grid">
+        <ion-card *ngFor="let horario of asignatura.horarios; let i = index" class="horario-card">
+          <ion-card-header>
+            <ion-card-title>Horario {{ i + 1 }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="input-row">
+              <ion-item>
+                <ion-label position="floating">Día</ion-label>
+                <ion-select [(ngModel)]="horario.dia" name="dia{{i}}" required>
+                  <ion-select-option value="Lunes">Lunes</ion-select-option>
+                  <ion-select-option value="Martes">Martes</ion-select-option>
+                  <ion-select-option value="Miércoles">Miércoles</ion-select-option>
+                  <ion-select-option value="Jueves">Jueves</ion-select-option>
+                  <ion-select-option value="Viernes">Viernes</ion-select-option>
+                </ion-select>
+              </ion-item>
+    
+              <ion-item>
+                <ion-label position="floating">Hora Inicio</ion-label>
+                <ion-input type="time" required [(ngModel)]="horario.horaInicio" name="horaInicio{{i}}"></ion-input>
+              </ion-item>
+            </div>
+    
+            <div class="input-row">
+              <ion-item>
+                <ion-label position="floating">Hora Fin</ion-label>
+                <ion-input type="time" required [(ngModel)]="horario.horaFin" name="horaFin{{i}}"></ion-input>
+              </ion-item>
+    
+              <ion-item>
+                <ion-label position="floating">Código de Sala</ion-label>
+                <ion-input type="text" required [(ngModel)]="horario.codigoSala" name="codigoSala{{i}}"></ion-input>
+              </ion-item>
+            </div>
+    
+            <ion-button fill="clear" class="delete-btn" (click)="eliminarHorario(i)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    
+      <div class="navigation-buttons">
+        <ion-button (click)="previousStep()" expand="full">Anterior</ion-button>
+        <ion-button (click)="nextStep()" expand="full" [disabled]="!asignaturaForm.valid">Siguiente</ion-button>
+      </div>
+    </div>
+    
+    
+
+    <!-- Paso 3: Revisión y Confirmación -->
+    <div *ngIf="step === 3">
+      <h2>Resumen de la Asignatura</h2>
+      <p>Nombre: {{ asignatura.nombre }}</p>
+      <p>Horarios:</p>
+      <ion-list>
+        <ion-item *ngFor="let horario of asignatura.horarios">
+          <ion-label>{{ horario.dia }} de {{ horario.horaInicio }} a {{ horario.horaFin }} en sala {{ horario.codigoSala }}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-button type="submit" expand="full" [disabled]="!asignaturaForm.valid">Guardar Asignatura</ion-button>
+      <ion-button (click)="previousStep()" expand="full">Anterior</ion-button>
+    </div>
   </form>
 
-  <!-- Mensaje de éxito -->
   <div *ngIf="successMessage" class="success-message">
     <p>{{ successMessage }}</p>
   </div>
