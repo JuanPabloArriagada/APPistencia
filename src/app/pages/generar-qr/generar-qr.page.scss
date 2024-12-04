@@ -1,121 +1,123 @@
+/* General */
 ion-header {
-  --background: #4CAF50; 
+  --background: var(--ion-color-primary, #4CAF50); /* Adaptable al tema */
   --color: white;
 }
 
 ion-content {
-    --background: #f9f9f9;
-  }
-  
+  --background: var(--ion-background-color, #f9f9f9); /* Adaptable al tema */
+}
+
+/* Título */
+.header-container h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: var(--ion-text-color, #333); /* Adaptable al tema */
+}
+
+/* Tarjeta del QR */
+.qr-card {
+  margin: 20px auto;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.qr-card ion-card-title {
+  font-size: 1.4rem;
+  color: var(--ion-color-primary, #0077ff); /* Adaptable al tema */
+}
+
+.qr-code {
+  margin: 20px auto;
+  display: block;
+  max-width: 257px;
+  border: 5px solid #ccc;
+  padding: 10px;
+}
+
+/* Detalles de la clase */
+.class-details .details-card {
+  margin: 10px;
+  padding: 10px;
+  background-color: var(--ion-background-color, #fff); /* Adaptable al tema */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details-card p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: var(--ion-text-color, #555); /* Adaptable al tema */
+}
+
+/* Contenedores de asistencia */
+.attendance-container ion-card {
+  margin: 10px;
+}
+
+.attendance-container ion-card-title {
+  font-size: 1.2rem;
+  color: var(--ion-color-primary, #0077ff); /* Adaptable al tema */
+}
+
+.attendance-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.attendance-list li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95rem;
+  color: var(--ion-text-color, #333); /* Adaptable al tema */
+}
+
+/* Total inscritos */
+.total-inscritos ion-card {
+  margin: 10px;
+  background-color: var(--ion-background-color, #fff); /* Adaptable al tema */
+  border-radius: 10px;
+  text-align: center;
+}
+
+.total-inscritos h4 {
+  font-size: 1.2rem;
+  color: var(--ion-color-primary, #0077ff); /* Adaptable al tema */
+}
+
+/* Botón Finalizar */
+.action-button {
+  margin: 20px;
+}
+
+.action-button ion-button {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
   .header-container h2 {
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Tarjeta del QR */
-  .qr-card {
-    margin: 20px auto;
-    max-width: 300px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .qr-card ion-card-title {
     font-size: 1.4rem;
-    color: #0077ff;
   }
-  
-  .qr-code {
-    margin: 20px auto;
-    display: block;
-    max-width: 257px;
-    border: 5px solid #ccc;
-    padding: 10px;
+
+  .qr-card {
+    max-width: 100%;
+    margin: 10px auto;
   }
-  
-  .class-details .details-card {
-    margin: 10px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .details-card {
+    margin: 5px;
+    padding: 5px;
   }
-  
-  .details-card p {
-    font-size: 1rem;
-    margin: 5px 0;
-    color: #555;
-  }
-  
-  /* Contenedores de asistencia */
-  .attendance-container ion-card {
-    margin: 10px;
-  }
-  
+
   .attendance-container ion-card-title {
-    font-size: 1.2rem;
-    color: #0077ff;
+    font-size: 1rem;
   }
-  
-  .attendance-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .attendance-list li {
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
-    font-size: 0.95rem;
-    color: #333;
-  }
-  
-  /* Total inscritos */
-  .total-inscritos ion-card {
-    margin: 10px;
-    background-color: #fff;
-    border-radius: 10px;
-    text-align: center;
-  }
-  
+
   .total-inscritos h4 {
-    font-size: 1.2rem;
-    color: #0077ff;
+    font-size: 1rem;
   }
-  
-  /* Botón Finalizar */
-  .action-button {
-    margin: 20px;
-  }
-  
-  .action-button ion-button {
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-  
-  @media (max-width: 480px) {
-    .header-container h2 {
-      font-size: 1.4rem;
-    }
-  
-    .qr-card {
-      max-width: 100%;
-      margin: 10px auto;
-    }
-  
-    .details-card {
-      margin: 5px;
-      padding: 5px;
-    }
-  
-    .attendance-container ion-card-title {
-      font-size: 1rem;
-    }
-  
-    .total-inscritos h4 {
-      font-size: 1rem;
-    }
-  }
-  
+}

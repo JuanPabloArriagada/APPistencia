@@ -1,7 +1,7 @@
 /* Estilos para el header */
 ion-header {
-  --background: #4CAF50;
-  --color: white;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-text-color);
 }
 
 ion-title {
@@ -25,9 +25,9 @@ ion-title {
 .scan-btn {
   width: 180px !important;
   height: 180px !important;
-  background: linear-gradient(45deg, #4caf50, #0072ff);
+  background: linear-gradient(45deg, var(--ion-color-primary), var(--ion-color-secondary));
   border-radius: 50% !important;
-  color: white;
+  color: var(--ion-text-color);
   font-size: 1.2em !important;
   font-weight: bold;
   display: flex;
@@ -55,7 +55,7 @@ ion-title {
 }
 
 ion-spinner {
-  --color: white;
+  --color: var(--ion-text-color);
 }
 
 /* Estilos para el botón de finalizar */
@@ -68,17 +68,16 @@ ion-spinner {
   text-transform: uppercase;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   background-color: transparent !important;
-  color: white;
+  color: var(--ion-text-color);
   border: none;
   transition: background-color 0.3s ease;
 }
 
 .finish-btn:hover {
-  background-color: #28c76f;
+  background-color: var(--ion-color-success);
 }
 
 .finish-btn:focus {
   outline: none;
   box-shadow: none;
 }
-

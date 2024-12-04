@@ -1,56 +1,59 @@
 /* General */
 .login-content {
-    --background: #f0f4f8;
-  }
-  
-  /* Contenedor principal */
-  .login-container {
-    margin: 20px auto;
-    max-width: 400px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-  
-  /* Título */
-  .login-container h2 {
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Formulario */
-  .login-form ion-item {
-    margin-bottom: 15px;
-  }
-  
-  .login-form ion-item .invalid {
-    border-color: var(--ion-color-danger) !important;
-  }
-  
-  /* Mensaje de error */
-  .error-message {
-    margin: 10px 0;
-    text-align: center;
-  }
-  
-  /* Botones */
-  ion-button {
-    margin-top: 15px;
-    font-size: 1rem;
-    font-weight: 500;
-  }
-  
-  ion-button[fill="solid"] {
-    --background: #0077ff;
-  }
-  
-  ion-button[fill="outline"] {
-    --border-color: #0077ff;
-    --color: #0077ff;
-  }
-  ion-label {
-    margin-bottom: 1rem !important;
-  }
+  --background: var(--ion-background-color, #f0f4f8); /* Adaptable al tema */
+}
+
+/* Contenedor principal */
+.login-container {
+  margin: 20px auto;
+  max-width: 400px;
+  background: var(--ion-background-color, #ffffff); /* Adaptable al tema */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Título */
+.login-container h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: var(--ion-text-color, #333); /* Adaptable al tema */
+}
+
+/* Formulario */
+.login-form ion-item {
+  margin-bottom: 15px;
+  --background: var(--ion-background-color, #f0f4f8);
+}
+
+.login-form ion-item .invalid {
+  border-color: var(--ion-color-danger, #e74c3c) !important; /* Adaptable al tema */
+}
+
+/* Mensaje de error */
+.error-message {
+  margin: 10px 0;
+  text-align: center;
+  color: var(--ion-text-color, #333); /* Adaptable al tema */
+}
+
+/* Botones */
+ion-button {
+  margin-top: 15px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+ion-button[fill="solid"] {
+  --background: var(--ion-color-primary, #0077ff); /* Adaptable al tema */
+}
+
+ion-button[fill="outline"] {
+  --border-color: var(--ion-color-primary, #0077ff);
+  --color: var(--ion-color-primary, #0077ff);
+}
+
+ion-label {
+  margin-bottom: 1rem !important;
+}

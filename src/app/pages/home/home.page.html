@@ -2,6 +2,12 @@
   <app-header></app-header>
 
   <div class="login-container">
+    <ion-title>Modo Oscuro</ion-title>
+    <ion-toggle
+      slot="end"
+      [checked]="isDarkMode"
+      (ionChange)="toggleDarkMode()"
+    ></ion-toggle>
     <h2 class="ion-text-center">Iniciar Sesión</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">

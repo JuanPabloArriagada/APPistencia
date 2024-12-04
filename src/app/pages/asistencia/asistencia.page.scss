@@ -1,6 +1,5 @@
-
 ion-header {
-  --background: #3880ff; 
+  --background: var(--ion-color-primary); 
 }
 
 ion-title {
@@ -23,7 +22,7 @@ ion-card.asignatura-card {
   min-height: 250px; 
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  background: #fff;
+  background: var(--ion-item-background);
   transition: transform 0.2s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -36,7 +35,7 @@ ion-card.asignatura-card:hover {
 }
 
 ion-card-header {
-  background-color: #3880ff;
+  background-color: var(--ion-color-primary);
   padding: 16px;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
@@ -64,7 +63,7 @@ ion-card-title {
 .progress-label {
   font-size: 1em;
   font-weight: 500;
-  color: #333;
+  color: var(--ion-text-color);
 }
 
 .progress-bar {
@@ -72,17 +71,18 @@ ion-card-title {
   height: 10px;
   border-radius: 8px;
   margin: 10px 0;
+  background: var(--ion-color-step-50);
 }
 
 .progress-text {
   font-size: 0.9em;
-  color: #555;
+  color: var(--ion-text-color-shade);
 }
 
 .no-asignaturas {
   text-align: center;
   font-size: 1.2em;
-  color: #888;
+  color: var(--ion-text-color-shade);
   margin-top: 30px;
 }
 

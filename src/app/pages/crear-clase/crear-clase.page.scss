@@ -1,3 +1,88 @@
+/* Estilos para el header */
+ion-header {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-text-color);
+}
+
+ion-title {
+  font-size: 20px !important;
+  font-weight: bold !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+}
+
+/* Contenedor del botón de escaneo */
+.scan-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  position: relative;
+  height: 70vh; /* Lo mantiene centrado en la pantalla */
+}
+
+/* Estilos del botón de escaneo */
+.scan-btn {
+  width: 180px !important;
+  height: 180px !important;
+  background: linear-gradient(45deg, var(--ion-color-primary), var(--ion-color-secondary));
+  border-radius: 50% !important;
+  color: var(--ion-text-color);
+  font-size: 1.2em !important;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.scan-btn:hover {
+  transform: scale(1.1); /* Efecto de agrandamiento */
+}
+
+.scan-btn:disabled {
+  background-color: #a6c8ff;
+  pointer-events: none;
+}
+
+/* Indicador de escaneo */
+.scan-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1em;
+}
+
+ion-spinner {
+  --color: var(--ion-text-color);
+}
+
+/* Estilos para el botón de finalizar */
+.finish-btn {
+  margin-top: 0px; /* Espacio entre el botón de finalizar y el botón de escaneo */
+  width: 90%;
+  font-size: 1.2em;
+  padding: 15px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background-color: transparent !important;
+  color: var(--ion-text-color);
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.finish-btn:hover {
+  background-color: var(--ion-color-success);
+}
+
+.finish-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Estilos de la lista de horarios */
 ion-item {
   --background: transparent;
   padding: 0;
@@ -27,6 +112,7 @@ ion-item {
   --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 12px;
   position: relative; /* Contenedor relativo */
+  --background: var(--ion-background-color, #f0f4f8);
 }
 
 /* Cada fila de campos dentro de la tarjeta */
@@ -41,18 +127,20 @@ ion-item {
   top: -60px;  /* Ajusta para que esté por encima del borde superior */
   right: 8px;  /* Mantiene la distancia del borde derecho */
   font-size: 16px; /* Tamaño del ícono */
-  color: #ffffff; /* Color para resaltar el botón de eliminar */
+  color: var(--ion-text-color); /* Color para resaltar el botón de eliminar */
   background: transparent; /* Fondo transparente para que no se vea */
+  color: var(--ion-color-contrast);
 }
 
 /* Botones */
 ion-button {
   --border-radius: 6px;
-  --background: #488aff;
-  --color: white;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-text-color);
   font-weight: 500;
   font-size: 14px; /* Reducido el tamaño del texto */
   padding: 8px 12px; /* Reducido el padding */
+  color: var(--ion-color-contrast)
 }
 
 /* Media Queries para pantallas más grandes */
@@ -72,7 +160,7 @@ ion-button {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: green;
+  background: var(--ion-color-success);
   animation: pulse-expand 1.5s ease-out forwards, hold-green 3s ease 1.5s forwards;
   z-index: 1000;
   display: flex;
@@ -85,7 +173,7 @@ ion-button {
 body {
   margin: 0;
   height: 100vh;
-  background-color: #f4f4f4;
+  background-color: var(--ion-background-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -111,7 +199,7 @@ body {
   left: 50%;
   width: 20px; /* Empieza como un círculo pequeño */
   height: 20px;
-  background-color: #4caf50; /* Color verde */
+  background-color: var(--ion-color-primary); /* Color verde */
   border-radius: 50%;
   transform: translate(-50%, -50%); /* Centrado en la pantalla */
   animation: pulse-animation 1s ease-out forwards; /* Animación más rápida */
@@ -124,7 +212,7 @@ body {
   left: 50%;
   width: 120px; /* Tamaño del círculo del check */
   height: 120px;
-  background-color: #fff; /* Fondo blanco para el círculo del check */
+  background-color: var(--ion-background-color); /* Fondo blanco para el círculo del check */
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -138,7 +226,7 @@ body {
 
 .check-icon {
   font-size: 3rem; /* Ícono más grande */
-  color: #4caf50; /* Color verde para el check */
+  color: var(--ion-color-primary); /* Color verde para el check */
   transform: scale(0.8);
   z-index: 3; /* Asegura que el ícono esté encima del círculo blanco */
 }

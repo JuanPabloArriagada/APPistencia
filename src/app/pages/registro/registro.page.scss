@@ -1,5 +1,5 @@
 .registro-content {
-  background: linear-gradient(45deg, #3a7bd5, #00d2ff);
+  background: linear-gradient(45deg, var(--ion-color-primary), var(--ion-color-secondary));
   height: 100%;
   display: flex;
   justify-content: center;
@@ -13,31 +13,36 @@ ion-label {
 }
 
 @keyframes backgroundAnimation {
-  0% { background: linear-gradient(45deg, #3a7bd5, #00d2ff); }
-  100% { background: linear-gradient(45deg, #3a7bd5, #00b7ff); }
+  0% { background: linear-gradient(45deg, var(--ion-color-primary), var(--ion-color-secondary)); }
+  100% { background: linear-gradient(45deg, var(--ion-color-primary-shade), var(--ion-color-secondary-shade)); }
 }
-
 
 .form-container {
   width: 100%;
-  max-width: 500px; 
-  background: rgba(255, 255, 255, 0.9); 
+  max-width: 500px;
+  background: var(--ion-background-color);
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 6px 12px var(--ion-shadow-color, rgba(0, 0, 0, 0.1));
+}
+
+ion-list{
+  background: var(--ion-background-color);
 }
 
 ion-item {
   --padding-start: 16px;
   --padding-end: 16px;
   --border-radius: 10px;
+  --background: var(--ion-background-color);
+  --color: var(--ion-text-color);
   margin-bottom: 16px;
   transition: all 0.3s ease-in-out;
 }
 
 .submit-btn {
-  --background: #3a7bd5;
-  --color: white;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
   --border-radius: 50px;
   font-size: 1.2rem;
   padding: 12px;
@@ -45,23 +50,23 @@ ion-item {
 }
 
 .submit-btn:hover {
-  --background: #2c6fae;
+  --background: var(--ion-color-primary-shade);
   transform: scale(1.05);
 }
 
 .submit-btn:disabled {
-  --background: #d3d3d3;
+  --background: var(--ion-color-medium);
 }
 
 .success-message {
-  background-color: #28a745; /* Color verde */
-  color: white;
+  background-color: var(--ion-color-success);
+  color: var(--ion-color-success-contrast);
   padding: 10px;
   border-radius: 5px;
   text-align: center;
   margin: 10px 0;
   font-size: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px var(--ion-shadow-color, rgba(0, 0, 0, 0.1));
   transition: opacity 0.5s ease-out;
 }
 
@@ -70,15 +75,16 @@ ion-item {
 }
 
 .error-message {
-  background-color: #dc3545; /* Color rojo */
-  color: white;
+  background-color: var(--ion-color-danger);
+  color: var(--ion-color-danger-contrast);
   padding: 10px;
   border-radius: 5px;
   text-align: center;
   margin: 10px 0;
   font-size: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px var(--ion-shadow-color, rgba(0, 0, 0, 0.1));
 }
+
 .success-message.ng-enter {
   opacity: 0;
 }

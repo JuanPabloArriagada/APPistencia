@@ -1,6 +1,9 @@
 ion-header {
-  --background: #4CAF50; 
+  --background: var(--ion-color-success);  /* Usando el color primario del tema */
   --color: white;
+}
+ion-item {
+  --background: var(--ion-background-color, #f0f4f8);
 }
 
 ion-title {
@@ -8,17 +11,18 @@ ion-title {
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
+  color: var(--ion-text-color, black); /* Cambia según el tema */
 }
 
 .cerrar-sesion-btn {
-  background-color: #FF5722; 
+  background-color: var(--ion-color-danger);  /* Color de advertencia */
   color: white;
   border-radius: 25px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cerrar-sesion-btn:hover {
-  background-color: #D84315; 
+  background-color: var(--ion-color-danger-shade);  /* Color de advertencia oscuro */
 }
 
 .perfil-card, .edit-card {
@@ -34,6 +38,7 @@ ion-card {
   border-radius: 16px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
+  --background: var(--ion-background-color, #f0f4f8);
 }
 
 ion-card:hover {
@@ -41,7 +46,7 @@ ion-card:hover {
 }
 
 ion-card-header {
-  background-color: #f0f0f0;
+  background-color: var(--ion-background-color-step-200, #f0f0f0);  /* Color claro por defecto */
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   padding: 15px;
@@ -50,7 +55,7 @@ ion-card-header {
 
 ion-card-title {
   font-size: 22px;
-  color: #333;
+  color: var(--ion-text-color-step-600, #333);  /* Color oscuro para texto */
 }
 
 ion-card-content {
@@ -75,21 +80,21 @@ ion-button {
 }
 
 .save-btn {
-  background-color: #4CAF50; 
+  background-color: var(--ion-color-success);  /* Color primario del tema */
   color: white;
 }
 
 .cancel-btn {
-  background-color: #f5f5f5; 
-  color: #888;
+  background-color: var(--ion-color-light);  /* Color de fondo claro */
+  color: var(--ion-text-color-step-600, #888);
 }
 
 .save-btn:hover {
-  background-color: #45a049; 
+  background-color: var(--ion-color-success-shade);  /* Color de éxito más oscuro */
 }
 
 .cancel-btn:hover {
-  background-color: #e0e0e0; 
+  background-color: var(--ion-background-color-step-100, #e0e0e0);  /* Fondo claro en hover */
 }
 
 ion-content {

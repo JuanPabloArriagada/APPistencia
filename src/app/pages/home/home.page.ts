@@ -17,6 +17,9 @@ export class HomePage implements OnInit, OnDestroy {
   isOnline$: BehaviorSubject<boolean> = new BehaviorSubject(true);
   networkListener: any;
 
+  // Agregado: Propiedad y lógica para modo oscuro
+  isDarkMode = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -28,7 +31,7 @@ export class HomePage implements OnInit, OnDestroy {
       rut: new FormControl('', [Validators.required]),
     });
   }
-  
+
   async ngOnInit() {
     // Verificar el estado de red
     const status = await Network.getStatus();
@@ -37,6 +40,25 @@ export class HomePage implements OnInit, OnDestroy {
     // Escuchar cambios de red
     this.networkListener = Network.addListener('networkStatusChange', (status) => {
       this.isOnline$.next(status.connected);
+    });
+
+    // Lógica de inicialización para el tema oscuro
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    this.isDarkMode = prefersDark.matches;
+
+    // Restaurar preferencia del usuario (si existe)
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.isDarkMode = savedTheme === 'dark';
+    }
+
+    // Aplicar el tema inicial
+    this.applyTheme();
+
+    // Escuchar cambios en las preferencias del sistema
+    prefersDark.addEventListener('change', (event) => {
+      this.isDarkMode = event.matches;
+      this.applyTheme();
     });
   }
 
@@ -78,6 +100,20 @@ export class HomePage implements OnInit, OnDestroy {
 
   get isOnline() {
     return this.isOnline$.getValue();
+  }
+
+  // Métodos para manejar el tema oscuro
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    this.applyTheme();
+
+    // Guardar la preferencia del usuario
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+  }
+
+  applyTheme() {
+    document.body.classList.toggle('dark', this.isDarkMode);
+    document.body.classList.toggle('light', !this.isDarkMode);
   }
 
   ngOnDestroy() {
