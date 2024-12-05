@@ -4,7 +4,9 @@ APPistencia es una aplicación móvil desarrollada para Duoc UC con el objetivo 
 
 ## Imagenes
 
-![Texto alternativo](resources/Captura%20desde%202024-12-05%2005-31-26.png)
+![Texto alternativo](resources/Captura%20desde%202024-12-05%2005-31-26.png) ![Texto alternativo](resources/Captura%20desde%202024-12-05%2005-33-02.png) ![Texto alternativo](resources/Captura%20desde%202024-12-05%2005-36-28.png)
+
+
 
 ## Funcionalidades
 
