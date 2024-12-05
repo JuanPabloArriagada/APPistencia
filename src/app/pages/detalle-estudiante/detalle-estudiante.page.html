@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle del Estudiante</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ nombreEstudiante }}</ion-card-title>
+      <ion-card-subtitle>RUT: {{ rut }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Porcentaje de asistencia: {{ porcentajeAsistencia.toFixed(2) }}%</p>
+      
+      <!-- Descripción del total de clases -->
+      <p><strong>Total de clases:</strong> {{ totalClases }}</p>
+      <p><strong>Clases asistidas:</strong> {{ clasesAsistidas.length }}</p>
+      <p><strong>Clases no asistidas:</strong> {{ clasesInasistidas.length }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Gráfico de pie -->
+  <div *ngIf="datosGrafico.length > 0" class="chart-container">
+    <ngx-charts-pie-chart
+      [view]="[300, 300]"
+      [scheme]="'vivid'"
+      [results]="datosGrafico"
+      [doughnut]="true"
+      [labels]="true"
+      [legend]="false">
+    </ngx-charts-pie-chart>
+  </div>
+
+  <!-- Gráfico de barras -->
+  <div *ngIf="totalClases > 0" class="chart-container">
+    <ngx-charts-bar-vertical
+      [view]="[400, 300]"
+      [scheme]="'vivid'"
+      [results]="[
+        { name: 'Asistidas', value: clasesAsistidas.length },
+        { name: 'No Asistidas', value: clasesInasistidas.length }
+      ]"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="false">
+    </ngx-charts-bar-vertical>
+  </div>
+</ion-content>

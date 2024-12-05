@@ -8,21 +8,30 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
   <!-- Indicador de escaneo -->
   <div *ngIf="isScanning" class="scanning-indicator">
-    <ion-spinner name="crescent"></ion-spinner>
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
     <p>Escaneando...</p>
   </div>
 
   <!-- Resultados del escaneo -->
   <div *ngIf="datosClaseUI && escaneoData" class="scan-results">
-    <h2>Datos de la Clase</h2>
-    <p><strong>Asignatura:</strong> {{ datosClaseUI.asignatura }}</p>
-    <p><strong>Nombre:</strong> {{ datosClaseUI.nombreAsignatura }}</p>
-    <p><strong>Día:</strong> {{ datosClaseUI.dia }}</p>
-    <p><strong>Hora Inicio:</strong> {{ datosClaseUI.horaInicio }}</p>
-    <p><strong>Hora Fin:</strong> {{ datosClaseUI.horaFin }}</p>
-    <p><strong>Sala:</strong> {{ datosClaseUI.sala }}</p>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Detalles de la Clase</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="class-details">
+          <p><strong>Asignatura:</strong> {{ datosClaseUI.asignatura }}</p>
+          <p><strong>Nombre:</strong> {{ datosClaseUI.nombreAsignatura }}</p>
+          <p><strong>Día:</strong> {{ datosClaseUI.dia }}</p>
+          <p><strong>Hora Inicio:</strong> {{ datosClaseUI.horaInicio }}</p>
+          <p><strong>Hora Fin:</strong> {{ datosClaseUI.horaFin }}</p>
+          <p><strong>Sala:</strong> {{ datosClaseUI.sala }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
 
   <!-- Botón de escaneo -->
@@ -46,4 +55,6 @@
   <ion-button expand="full" color="secondary" (click)="finalizarRegistro()" class="finish-btn">
     Finalizar Registro
   </ion-button>
+
 </ion-content>
+

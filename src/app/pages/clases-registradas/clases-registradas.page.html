@@ -48,14 +48,18 @@
             <h3 class="details-title">Asistentes</h3>
             <ion-list lines="none">
               <ion-item *ngFor="let asistente of clase.asistentes">
-                <p>{{ asistente }}</p>
+                <ion-label>
+                  <a [routerLink]="['/detalle-estudiante', asistente, asignaturaId]">{{ asistente }}</a>
+                </ion-label>
               </ion-item>
             </ion-list>
             
             <h3 class="details-title">Inasistentes</h3>
             <ion-list lines="none">
               <ion-item *ngFor="let inasistente of clase.inasistentes">
-                <p>{{ inasistente }}</p>
+                <ion-label>
+                  <a [routerLink]="['/detalle-estudiante', inasistente, asignaturaId]">{{ inasistente }}</a>
+                </ion-label>
               </ion-item>
             </ion-list>
           </div>

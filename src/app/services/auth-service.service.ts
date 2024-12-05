@@ -121,6 +121,10 @@ export class AuthService {
       throw new Error('Error al actualizar el perfil');
     }
   }
+
+  buscarUsuarioPorRut(rut: string): Observable<Usuario | null> {
+    return this.firestore.collection('usuarios').doc(rut).valueChanges() as Observable<Usuario | null>;
+  }
   
 
   async logout() {

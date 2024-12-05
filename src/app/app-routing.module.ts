@@ -86,6 +86,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/clases-registradas/clases-registradas.module').then( m => m.ClasesRegistradasPageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'detalle-estudiante/:rut/:asignaturaId',
+    loadChildren: () => import('./pages/detalle-estudiante/detalle-estudiante.module').then(m => m.DetalleEstudiantePageModule),
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

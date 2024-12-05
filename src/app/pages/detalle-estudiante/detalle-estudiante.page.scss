@@ -1,0 +1,37 @@
+/* Estilos para los gráficos */
+.chart-container {
+    width: 100%;
+    max-width: 100%;  /* Se ajusta a la pantalla */
+    margin: 0 auto;  /* Centra los gráficos */
+  }
+  
+  ngx-charts-pie-chart, ngx-charts-bar-vertical {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Estilos para la leyenda (asegura que se vea correctamente en dispositivos pequeños) */
+  ::ng-deep .ngx-charts-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 12px;  /* Reduce el tamaño del texto en pantallas pequeñas */
+  }
+  
+  ::ng-deep .ngx-charts-legend-item {
+    margin: 5px;
+    padding: 5px;
+  }
+  
+  /* Responsividad para pantallas pequeñas */
+  @media (max-width: 600px) {
+    ngx-charts-pie-chart, ngx-charts-bar-vertical {
+      height: 250px;  /* Reduce la altura de los gráficos en pantallas pequeñas */
+    }
+  
+    ::ng-deep .ngx-charts-legend {
+      font-size: 10px;  /* Ajusta el tamaño de la leyenda */
+    }
+  }
+  

@@ -11,6 +11,25 @@ ion-title {
   text-transform: uppercase !important;
 }
 
+/* Estilo para los resultados del escaneo */
+.scan-results {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+/* Estilo para el indicador de escaneo */
+.scanning-indicator {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+}
+
+/* Ajustes al contenido dentro de la tarjeta */
+.class-details p {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
 /* Contenedor del botón de escaneo */
 .scan-btn-container {
   display: flex;

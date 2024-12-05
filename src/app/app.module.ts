@@ -13,6 +13,7 @@ import { AngularFirestoreModule} from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from '../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AngularFirestoreModule,
     AngularFireAuthModule,
     ReactiveFormsModule,
+    NgxChartsModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
