@@ -13,17 +13,23 @@ ion-toolbar {
 
 .welcome-section {
   padding: 20px;
-  background: var(--ion-background-color, #f0f4f8); /* Cambia con el tema */
+  background: var(--ion-background-color2); /* Cambia con el tema */
   color: var(--ion-text-color);  /* Texto adaptado al tema */
   border-bottom: 1px solid var(--ion-border-color, #ddd); /* Borde adaptado al tema */
 }
 
+h3 {
+  color: var(--ion-text-color);
+}
+
 ion-card {
   text-align: center;
-  --ion-card-background: var(--ion-background-color, #ffffff); /* Adaptable según el tema */
+  background: var(--ion-background-color2); /* Cambia con el tema */
+  /* Adaptable según el tema */
   --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 15px; 
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-bottom: 1px solid var(--ion-border-color, #ddd);
 }
 
 ion-card:hover {
